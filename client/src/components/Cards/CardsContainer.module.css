@@ -1,0 +1,14 @@
+
+.container {
+    width: 85vw;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    justify-content: space-between; 
+    grid-gap: 20px;
+    padding: 25px 0;
+    position: relative;
+    align-items: center;
+    margin-top: 0;
+    transform: none;
+}
