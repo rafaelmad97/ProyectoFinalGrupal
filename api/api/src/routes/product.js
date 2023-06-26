@@ -1,3 +1,5 @@
+
+
 const server = require('express').Router();
 const { Product, Category, Product_Category } = require('../db.js');
 const cors = require("cors");
@@ -16,14 +18,14 @@ server.get('/', (req, res, next) => {
 
 
 //si le pongo :id SEARCH PRODUCT QUERYS NO FUNCIONA
-server.get('/producto/:id', (req, res, next) => {
+server.get('/:id', (req, res, next) => {
 
 	if (req.params.id) {
 
 		var idProd = req.params.id;
-		Product.findAll({
+		Product.findOne({
 			where: {
-				id: req.params.id
+				id: idProd
 			}
 		})
 			.then(productoEncontrado => {
@@ -36,7 +38,7 @@ server.get('/producto/:id', (req, res, next) => {
 })
 
 
-
+// Crear producto
 server.post("/", (req, res, next) => {
 	Product.create({
 		name: req.body.name,
@@ -50,7 +52,7 @@ server.post("/", (req, res, next) => {
 		.catch(next);
 });
 
-
+// Modificar producto
 server.put('/:id', (req, res, next) => {
 	var productoUp = {
 		name: req.body.nombre,
@@ -82,6 +84,7 @@ server.put('/:id', (req, res, next) => {
 	})
 })
 
+// Borrar producto
 server.delete('/delete/:id', (req, res, next) => {
 	Product.destroy({
 		where: {
@@ -93,26 +96,26 @@ server.delete('/delete/:id', (req, res, next) => {
 	})
 })
 
+// posible ruta para buscar por nombre
+// server.get('/search/:id', (req, res, next) => {
 
-server.get('/search/:id', (req, res, next) => {
+// 	if (req.params.id) {
 
-	if (req.params.id) {
+// 		var idProd = req.params.id;
+// 		Product.findAll({
+// 			where: {
+// 				name: {
+// 					[Sequelize.Op.iLike]: `%${req.params.id}%`
+// 				}
+// 			}
+// 		})
+// 			.then(productoEncontrado => {
+// 				res.json(productoEncontrado);
+// 			})
+// 			.catch(next)
+// 	}
 
-		var idProd = req.params.id;
-		Product.findAll({
-			where: {
-				name: {
-					[Sequelize.Op.iLike]: `%${req.params.id}%`
-				}
-			}
-		})
-			.then(productoEncontrado => {
-				res.json(productoEncontrado);
-			})
-			.catch(next)
-	}
-
-})
+// })
 
 
 //Agrega la categoria al producto
