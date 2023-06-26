@@ -1,0 +1,12 @@
+.img{
+    height: fit-content;
+    width: fit-content;
+}
+
+.CardActions button:first-child {
+  margin-right: 10px; 
+}
+.CardActions button:last-child {
+    margin-left: 10px; 
+  }
+  

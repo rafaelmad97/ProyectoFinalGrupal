@@ -1,249 +1,161 @@
-import axios from "axios"
-import { ALL_PRODUCTS, ERROR, GET_PRODUCTS, ADD_PRODUCT } from "./types";
+import axios from "axios";
+import swal from "sweetalert";
+import {
+  ALL_PRODUCTS,
+  ERROR,
+  GET_PRODUCTS,
+  ADD_PRODUCT,
+  ALL_CATEGORY,
+  ADD_USER,
+  ALL_USER,
+} from "./types";
 
 export const getAllProducts = () => {
-    return async function(dispatch){
+  return async function (dispatch) {
+    try {
+      const response = await axios.get("http://localhost:3001/products");
+      const products = response.data;
 
-        try {
-            const response = await axios.get("http://localhost:3001/products");
-            const products = response.data
-            
-            // const products = [
-            //     {
-            //         id: 1,
-            //         image: "https://www.venex.com.ar/products_images/thumb/1590019094_1585848959_caddy_notebook.jpg",
-            //         nombre: "CADDY PARA DISCOS NB GRABADORA 9.5 MM",
-            //         modelo: "NS-CADW9 | GTIN: 700306601726",
-            //         descripcion:{
-            //             descripcion: 
-            //             "Este adaptador permite colocar discos de 2.5 (7mm o 9.5mm) SATA HDD Para instalarlo debe remover la lectora de DVD de su notebook y en su lugar colocar este adaptador con el disco de 2.5”. Está confeccionado de acero inoxidable de alta dureza, lo cual le brinda resistencia y no permite que la estructura se deforme",
-            //             AlturaDisco: "9.5mm Interfaz: SATA (ODD)-SATA (HDD)",
-            //             Bisel:" Cumple con el original Tamaño (L*W*H): 129*128*9.5mm",
-            //             TamañoDisco: 2.5,
-            //             TipoDisco: "2.5” (Pulgadas) SATA I/II/ III and SSD",    
-            //         },
-            //         categoria:"componente de pc",
-            //         marca: "intel",
-            //         precio: 25413,
-            //     },
-            //     {
-            //         id: 2,
-            //         image: "https://www.venex.com.ar/products_images/thumb/1638895373_hdd2.jpg",
-            //         nombre: "DISCO DURO HDD 3 TB SEAGATE IRONWOLF USD SATA III",
-            //         modelo: "NS-CADW9 | GTIN: 700306601726",
-            //         descripcion:{
-            //             descripcion: 
-            //             "Este adaptador permite colocar discos de 2.5 (7mm o 9.5mm) SATA HDD Para instalarlo debe remover la lectora de DVD de su notebook y en su lugar colocar este adaptador con el disco de 2.5”. Está confeccionado de acero inoxidable de alta dureza, lo cual le brinda resistencia y no permite que la estructura se deforme",
-            //             AlturaDisco: "9.5mm Interfaz: SATA (ODD)-SATA (HDD)",
-            //             Bisel:" Cumple con el original Tamaño (L*W*H): 129*128*9.5mm",
-            //             TamañoDisco: 2.5,
-            //             TipoDisco: "2.5” (Pulgadas) SATA I/II/ III and SSD",    
-            //         },
-            //         categoria:"componente de pc",
-            //         marca: "intel",
-            //         precio: 35413,
-            
-            
-            //     },
-            //     {
-            //         id: 3,
-            //         image: "https://www.venex.com.ar/products_images/thumb/1622064682_n300_gallery_images_01.jpg",
-            //         nombre: "DISCO DURO HDD 4TB TOSHIBA SATA III P/NAS N300",
-            //         modelo: "NS-CADW9 | GTIN: 700306601726",
-            //         descripcion:{
-            //             descripcion: 
-            //             "Este adaptador permite colocar discos de 2.5 (7mm o 9.5mm) SATA HDD Para instalarlo debe remover la lectora de DVD de su notebook y en su lugar colocar este adaptador con el disco de 2.5”. Está confeccionado de acero inoxidable de alta dureza, lo cual le brinda resistencia y no permite que la estructura se deforme",
-            //             AlturaDisco: "9.5mm Interfaz: SATA (ODD)-SATA (HDD)",
-            //             Bisel:" Cumple con el original Tamaño (L*W*H): 129*128*9.5mm",
-            //             TamañoDisco: 2.5,
-            //             TipoDisco: "2.5” (Pulgadas) SATA I/II/ III and SSD",    
-            //         },
-            //         categoria:"componente de pc",
-            //         marca: "intel",
-            //         precio: 15223,
-            
-            //     },
-            //     {
-            //         id: 4,
-            //         image: "https://www.venex.com.ar/products_images/thumb/1586464823_disc5.jpg",
-            //         nombre: "DISCO DURO HDD 1 TB WESTERN DIGITAL WD SATA III 64MB/S PURPLE",
-            //         modelo: "NS-CADW9 | GTIN: 700306601726",
-            //         descripcion:{
-            //             descripcion: 
-            //             "Este adaptador permite colocar discos de 2.5 (7mm o 9.5mm) SATA HDD Para instalarlo debe remover la lectora de DVD de su notebook y en su lugar colocar este adaptador con el disco de 2.5”. Está confeccionado de acero inoxidable de alta dureza, lo cual le brinda resistencia y no permite que la estructura se deforme",
-            //             AlturaDisco: "9.5mm Interfaz: SATA (ODD)-SATA (HDD)",
-            //             Bisel:" Cumple con el original Tamaño (L*W*H): 129*128*9.5mm",
-            //             TamañoDisco: 2.5,
-            //             TipoDisco: "2.5” (Pulgadas) SATA I/II/ III and SSD",    
-            //         },
-            //         categoria:"componente de pc",
-            //         marca: "intel",
-            //         precio: 38623,
-            
-            //     },
-            //     {
-            //         id: 5,
-            //         image: "https://www.venex.com.ar/products_images/thumb/1590019094_1585848959_caddy_notebook.jpg",
-            //         nombre: "CADDY PARA DISCOS NB GRABADORA 9.5 MM",
-            //         modelo: "NS-CADW9 | GTIN: 700306601726",
-            //         descripcion:{
-            //             descripcion: 
-            //             "Este adaptador permite colocar discos de 2.5 (7mm o 9.5mm) SATA HDD Para instalarlo debe remover la lectora de DVD de su notebook y en su lugar colocar este adaptador con el disco de 2.5”. Está confeccionado de acero inoxidable de alta dureza, lo cual le brinda resistencia y no permite que la estructura se deforme",
-            //             AlturaDisco: "9.5mm Interfaz: SATA (ODD)-SATA (HDD)",
-            //             Bisel:" Cumple con el original Tamaño (L*W*H): 129*128*9.5mm",
-            //             TamañoDisco: 2.5,
-            //             TipoDisco: "2.5” (Pulgadas) SATA I/II/ III and SSD",    
-            //         },
-            //         categoria:"componente de pc",
-            //         marca: "intel",
-            //         precio: 40632,
-            
-            //     },
-            //     {
-            //         id: 6,
-            //         image: "https://www.venex.com.ar/products_images/thumb/1590019094_1585848959_caddy_notebook.jpg",
-            //         nombre: "CADDY PARA DISCOS NB GRABADORA 9.5 MM",
-            //         modelo: "NS-CADW9 | GTIN: 700306601726",
-            //         descripcion:{
-            //             descripcion: 
-            //             "Este adaptador permite colocar discos de 2.5 (7mm o 9.5mm) SATA HDD Para instalarlo debe remover la lectora de DVD de su notebook y en su lugar colocar este adaptador con el disco de 2.5”. Está confeccionado de acero inoxidable de alta dureza, lo cual le brinda resistencia y no permite que la estructura se deforme",
-            //             AlturaDisco: "9.5mm Interfaz: SATA (ODD)-SATA (HDD)",
-            //             Bisel:" Cumple con el original Tamaño (L*W*H): 129*128*9.5mm",
-            //             TamañoDisco: 2.5,
-            //             TipoDisco: "2.5” (Pulgadas) SATA I/II/ III and SSD",    
-            //         },
-            //         categoria:"componente de pc",
-            //         marca: "intel",
-            
-            
-            //     },
-            //     {
-            //         id: 7,
-            //         image: "https://www.venex.com.ar/products_images/thumb/1590019094_1585848959_caddy_notebook.jpg",
-            //         nombre: "CADDY PARA DISCOS NB GRABADORA 9.5 MM",
-            //         modelo: "NS-CADW9 | GTIN: 700306601726",
-            //         descripcion:{
-            //             descripcion: 
-            //             "Este adaptador permite colocar discos de 2.5 (7mm o 9.5mm) SATA HDD Para instalarlo debe remover la lectora de DVD de su notebook y en su lugar colocar este adaptador con el disco de 2.5”. Está confeccionado de acero inoxidable de alta dureza, lo cual le brinda resistencia y no permite que la estructura se deforme",
-            //             AlturaDisco: "9.5mm Interfaz: SATA (ODD)-SATA (HDD)",
-            //             Bisel:" Cumple con el original Tamaño (L*W*H): 129*128*9.5mm",
-            //             TamañoDisco: 2.5,
-            //             TipoDisco: "2.5” (Pulgadas) SATA I/II/ III and SSD",    
-            //         },
-            //         categoria:"componente de pc",
-            //         marca: "intel",
-            
-            
-            //     },
-            //     {
-            //         id: 8,
-            //         image: "https://www.venex.com.ar/products_images/thumb/1590019094_1585848959_caddy_notebook.jpg",
-            //         nombre: "CADDY PARA DISCOS NB GRABADORA 9.5 MM",
-            //         modelo: "NS-CADW9 | GTIN: 700306601726",
-            //         descripcion:{
-            //             descripcion: 
-            //             "Este adaptador permite colocar discos de 2.5 (7mm o 9.5mm) SATA HDD Para instalarlo debe remover la lectora de DVD de su notebook y en su lugar colocar este adaptador con el disco de 2.5”. Está confeccionado de acero inoxidable de alta dureza, lo cual le brinda resistencia y no permite que la estructura se deforme",
-            //             AlturaDisco: "9.5mm Interfaz: SATA (ODD)-SATA (HDD)",
-            //             Bisel:" Cumple con el original Tamaño (L*W*H): 129*128*9.5mm",
-            //             TamañoDisco: 2.5,
-            //             TipoDisco: "2.5” (Pulgadas) SATA I/II/ III and SSD",    
-            //         },
-            //         categoria:"componente de pc",
-            //         marca: "intel",
-            
-            
-            //     },
-            //     {
-            //         id: 9,
-            //         image: "https://www.venex.com.ar/products_images/thumb/1590019094_1585848959_caddy_notebook.jpg",
-            //         nombre: "CADDY PARA DISCOS NB GRABADORA 9.5 MM",
-            //         modelo: "NS-CADW9 | GTIN: 700306601726",
-            //         descripcion:{
-            //             descripcion: 
-            //             "Este adaptador permite colocar discos de 2.5 (7mm o 9.5mm) SATA HDD Para instalarlo debe remover la lectora de DVD de su notebook y en su lugar colocar este adaptador con el disco de 2.5”. Está confeccionado de acero inoxidable de alta dureza, lo cual le brinda resistencia y no permite que la estructura se deforme",
-            //             AlturaDisco: "9.5mm Interfaz: SATA (ODD)-SATA (HDD)",
-            //             Bisel:" Cumple con el original Tamaño (L*W*H): 129*128*9.5mm",
-            //             TamañoDisco: 2.5,
-            //             TipoDisco: "2.5” (Pulgadas) SATA I/II/ III and SSD",    
-            //         },
-            //         categoria:"componente de pc",
-            //         marca: "intel",
-            
-            
-            //     },
-            //     {
-            //         id: 10,
-            //         image: "https://www.venex.com.ar/products_images/thumb/1590019094_1585848959_caddy_notebook.jpg",
-            //         nombre: "CADDY PARA DISCOS NB GRABADORA 9.5 MM",
-            //         modelo: "NS-CADW9 | GTIN: 700306601726",
-            //         descripcion:{
-            //             descripcion: 
-            //             "Este adaptador permite colocar discos de 2.5 (7mm o 9.5mm) SATA HDD Para instalarlo debe remover la lectora de DVD de su notebook y en su lugar colocar este adaptador con el disco de 2.5”. Está confeccionado de acero inoxidable de alta dureza, lo cual le brinda resistencia y no permite que la estructura se deforme",
-            //             AlturaDisco: "9.5mm Interfaz: SATA (ODD)-SATA (HDD)",
-            //             Bisel:" Cumple con el original Tamaño (L*W*H): 129*128*9.5mm",
-            //             TamañoDisco: 2.5,
-            //             TipoDisco: "2.5” (Pulgadas) SATA I/II/ III and SSD",    
-            //         },
-            //         categoria:"componente de pc",
-            //         marca: "intel",
-            
-            
-            //     }]
-            dispatch({
-                type: ALL_PRODUCTS,
-                payload: products
-            })          
-        } catch (error) {
-            dispatch({
-                type: ERROR,
-                payload: error
-            })
-        }
+      dispatch({
+        type: ALL_PRODUCTS,
+        payload: products,
+      });
+    } catch (error) {
+      dispatch({
+        type: ERROR,
+        payload: error,
+      });
     }
-}
+  };
+};
 
-export const getProducts = (idProduct) => {
-    return async function (dispatch) {
-        try {
-            const response = await axios(`http://localhost:3001/products/search/${idProduct}`)
-            const detailProduct = response.data
-            dispatch({
-                type: GET_PRODUCTS,
-                payload: detailProduct
-            })
-        } catch (error) {
-            dispatch ({
-                type: ERROR,
-                payload: error
-            })
-        }
+export const getAllCategorys = () => {
+  return async function (dispatch) {
+    try {
+      const response = await axios.get(
+        "http://localhost:3001/categoria"
+      );
+      const category = response.data;
+      dispatch({
+        type: ALL_CATEGORY,
+        payload: category,
+      });
+    } catch (error) {
+      dispatch({
+        type: ERROR,
+        payload: error,
+      });
     }
-}
+  };
+};
+
+export const getAllUsers = () => {
+  return async function (dispatch) {
+    try {
+      const response = await axios.get("http://localhost:3001/users");
+      const user = response.data;
+      dispatch({
+        type: ALL_USER,
+        payload: user,
+      });
+    } catch (error) {
+      dispatch({
+        type: ERROR,
+        payload: error,
+      });
+    }
+  };
+};
+
+export const detailProducts = (id) => {
+  return async function (dispatch) {
+    try {
+      const response = await axios.get(
+        `http://localhost:3001/products/${id}`
+      );
+      const detailProduct = response.data;
+      dispatch({
+        type: GET_PRODUCTS,
+        payload: detailProduct,
+      });
+    } catch (error) {
+      dispatch({
+        type: ERROR,
+        payload: error,
+      });
+    }
+  };
+};
 
 export function addProducts(payload) {
-    return async function (dispatch) {
-      try {
-        const response = await axios.post('http://localhost:3001/products', payload, {
+  return async function (dispatch) {
+    try {
+      const response = await axios.post(
+        "http://localhost:3001/products",
+        payload,
+        {
           headers: {
-            'Content-Type': 'application/json'
-          }
-        });
-  
-        const productId = response.data.id;
-        const categorias = payload.categoriasElegidas;
-        const direccion = `http://localhost:3001/products/${productId}/category/${categorias}`;
-  
-        await axios.post(direccion, response.data);
-  
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const productId = response.data.id;
+      const categorias = payload.category;
+      const direccion = `http://localhost:3001/products/${productId}/category/${categorias}`;
+
+      await axios.post(direccion, response.data);
+
+      dispatch({
+        type: ADD_PRODUCT,
+        payload: response.data,
+      });
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+}
+
+export function addUser(payload, email) {
+  var url2 = `http://localhost:3001/users/${payload.email}`;
+
+  return function (dispatch) {
+    fetch(url2)
+      .then((response) => response.json())
+      .then((response) => {
         dispatch({
-          type: ADD_PRODUCT,
-          payload: response.data
+          type: ADD_USER,
+          payload: response,
         });
-      } catch (error) {
-            dispatch({
-                type: ERROR,
-                payload: error
+        if (response === "ya existe un usuario con este email") {
+          return swal({
+            text: "Ya existe un usuario con este email",
+            icon: "error",
+            timer: "2000",
+          });
+        } else {
+          var url = `http://localhost:3001/users`;
+          fetch(url, {
+            method: "POST", // or 'PUT'
+            body: JSON.stringify(payload),
+            // data can be string or {object}!
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+            .then((response) => response.json())
+            .then((json) => {
+              dispatch({
+                type: ADD_USER,
+                payload: json,
+              });
             });
-      }
-    };
-  }
+          return swal({
+            text: "Se ha creado el usuario exitosamente, ahora haga click en el boton iniciar sesion para disfrutar de HenrySport",
+            icon: "success",
+            timer: "2000",
+          });
+        }
+      });
+  };
+}

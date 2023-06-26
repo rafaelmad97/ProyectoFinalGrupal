@@ -1,21 +1,25 @@
-// import React from "react";
-import { Card } from "../Card/Card";
-import styles from "./CardsContainer.module.css"
+import { Grid } from "@mui/material";
+import Cards from "../Card/Card";
 
-export const CardsContainer = ({allProducts}) => {
+export const CardsContainer = ({ allProducts }) => {
   return (
-    
-    <div className={styles.container}>
-      {allProducts.map(prod => {
-        return <Card 
-                id = {prod.id}
-                name = {prod.name}
-                description = {prod.description}
-                urlImage = {prod.urlImage}
-                price = {prod.price}
-                stock = {prod.stock}
-          />
-      })}
+    <div>
+      <Grid container direction="row" spacing={1}>
+        {allProducts.map((prod) => {
+          return (
+            <Grid item xs={12} md={4} xl={4} key={prod.id}>
+              <Cards
+                id={prod.id}
+                name={prod.name}
+                description={prod.description}
+                urlImage={prod.urlImage}
+                price={prod.price}
+                stock={prod.stock}
+              />
+            </Grid>
+          );
+        })}
+      </Grid>
     </div>
-  )
+  );
 };

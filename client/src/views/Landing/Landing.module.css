@@ -1,18 +1,18 @@
 
 .page {
-    background-image: url(https://png.pngtree.com/background/20230527/original/pngtree-computer-hardware-and-computer-technology-3d-video-picture-image_2769327.jpg);
-  background-size: cover;
+    background-image: url(https://i.postimg.cc/mrsrQ741/PRO-HARDWARE.png);
+  background-size:contain;
   background-position: center;
+  background-repeat:no-repeat;
   width: 100%;
   height: 100vh;
 }
 
 .container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  height: 100%;
 }
 
 .title {
@@ -22,15 +22,24 @@
 }
 
 .link {
-    font-size: 1.5rem;
-    color: rgb(24, 24, 24);
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    background-color: #c7ca26;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-}
-
-.link:hover {
-    background-color: yellow;
-}
+    font-family: "Nunito", sans-serif;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #f7f306;
+    color: rgb(8, 8, 8);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    font-size: 1em;
+    position: absolute;
+  bottom: 20px;
+  right: 20px;
+  }
+  
+  .link:hover {
+    background-color: #0445f7;
+    color: white;
+    transform: scale(1.1);
+  }
+ 

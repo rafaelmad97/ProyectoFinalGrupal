@@ -6,11 +6,13 @@ import {
   Container,
   Grid,
   TextField,
-  Typography,
 } from "@mui/material";
 import { useForm, Controller } from "react-hook-form";
 import * as Yup from "Yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useDispatch, useSelector } from "react-redux";
+import { addUser, getAllUsers } from "../../redux/actions";
+import { useEffect } from "react";
 
 const shemmaUsuario = Yup.object({
   name: Yup.string().required("Este campo es requerido"),
@@ -23,6 +25,15 @@ const shemmaUsuario = Yup.object({
 });
 
 const FormUsers = () => {
+  const dispatch = useDispatch();
+  const allUser = useSelector((state) => state.allUser);
+
+  useEffect(() => {
+    dispatch(getAllUsers());
+  }, [dispatch]);
+
+  console.log("users", allUser);
+
   const Formulario = useForm({
     defaultValues: {
       name: "",
@@ -37,6 +48,8 @@ const FormUsers = () => {
 
   const Submit = (data) => {
     console.log(data);
+    //Promise.resolve(dispatch(addUser(data))).then(()=> console.log("agregado")).catch(()=> console.log("error no registrado"))
+    dispatch(addUser(data));
   };
 
   return (

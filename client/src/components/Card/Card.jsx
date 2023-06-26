@@ -1,22 +1,34 @@
-// import React from "react";
-import styles from "./Card.module.css"
-import { Link } from "react-router-dom"
+import { Link } from "react-router-dom";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import "./Card.css";
 
-export const Card = (props) => {
+const Cards = (props) => {
+  const { name, urlImage, price, id } = props;
 
-  return ( 
-    <div className={styles.global}>
-            <div className={styles.container}>
-                <Link to = {`/detail/${props.id}`} >
-                    <div className= {styles.card}>
-                        <img src={props.urlImage} alt={props.name}/>
-                    </div>
-                    <div className={styles.containerInfo}>
-                        <h2>{props.name}</h2>
-                        <h4><b>precio:</b> {props.price}</h4>
-                    </div>           
-                </Link>
-            </div> 
-        </div>
-  )
+  return (
+    <Card elevation={4} sx={{ maxWidth: 345 }}>
+      <CardMedia component="img" alt={name} image={urlImage} className="img" />
+      <CardContent>
+        <Typography gutterBottom variant="h5" component="div">
+          {name}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          ${price}
+        </Typography>
+      </CardContent>
+      <CardActions>
+        <Link to={`/detail/${id}`}>
+          <Button size="small">+ Info</Button>
+        </Link>
+        <Button size="small">Añadir al carrito</Button>
+      </CardActions>
+    </Card>
+  );
 };
+
+export default Cards;

@@ -1,63 +1,100 @@
-import { useState } from "react";
-import { Button } from "@mui/material";
-import { useNavigate } from "react-router";
+import {
+  Button,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Container,
+  TextField,
+  Grid,
+  Card,
+  Link,
+} from "@mui/material";
+
+import { Controller, useForm } from "react-hook-form";
+import * as Yup from "Yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import "./Login.css";
+
+const shemmaLogin = Yup.object({
+  email: Yup.string()
+    .email("la dirección de correo electrónico debe ser valida")
+    .required("Este campo es requerido"),
+  password: Yup.string().required("Este campo es requerido"),
+});
 
 const Login = () => {
-  const Nav = useNavigate();
+  const Formulario_login = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+    resolver: yupResolver(shemmaLogin),
+  });
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Aquí puedes realizar la lógica de autenticación, como enviar los datos al servidor o verificar en una base de datos local.
-
-    setEmail("");
-    setPassword("");
-  };
-
-  const handleNavRegistro = () => {
-    Nav("/nuevousuario");
+  const handleSubmit = (data) => {
+    console.log(data);
   };
 
   return (
-    <div>
-      <h2>Iniciar sesión</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={handleEmailChange}
-            required
-          />
-        </div>
-        <div>
-          <label htmlFor="password">Contraseña:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={handlePasswordChange}
-            required
-          />
-        </div>
-        <button type="submit">Iniciar sesión</button>
-        <Button variant="text" onClick={handleNavRegistro}>
-          Nuevo usuario
-        </Button>
-      </form>
-    </div>
+    <Container fixed>
+      <Card>
+        <CardHeader title="Iniciar sesión"></CardHeader>
+        <CardContent>
+          <Grid container direction="column" spacing={1}>
+            <Grid item>
+              <Controller
+                name="email"
+                control={Formulario_login.control}
+                render={({ field, fieldState }) => (
+                  <TextField
+                    label="Correo electronico"
+                    type="email"
+                    {...field}
+                    error={Boolean(fieldState.error)}
+                    helperText={fieldState.error?.message}
+                    fullWidth
+                  />
+                )}
+              />
+            </Grid>
+            <Grid item>
+              <Controller
+                name="password"
+                control={Formulario_login.control}
+                render={({ field, fieldState }) => (
+                  <TextField
+                    label="Contraseña"
+                    type="password"
+                    {...field}
+                    error={Boolean(fieldState.error)}
+                    helperText={fieldState.error?.message}
+                    fullWidth
+                  />
+                )}
+              />
+            </Grid>
+            <Grid item className="linkUser">
+              <Link href="/nuevousuario" color="secondary" underline="hover">
+                ¿Eres nuevo?, Registrate
+              </Link>
+            </Grid>
+          </Grid>
+          <br />
+        </CardContent>
+        <form onSubmit={Formulario_login.handleSubmit(handleSubmit)}>
+          <CardActions>
+            <Button
+              type="submit"
+              variant="contained"
+              className="button"
+              size="large"
+            >
+              Iniciar sesión
+            </Button>
+          </CardActions>
+        </form>
+      </Card>
+    </Container>
   );
 };
 

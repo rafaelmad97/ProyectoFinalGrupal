@@ -1,6 +1,6 @@
 
 .container {
-    width: 85vw;
+
     margin: 0 auto;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -11,4 +11,5 @@
     align-items: center;
     margin-top: 0;
     transform: none;
+    background-color: transparent;
 }
