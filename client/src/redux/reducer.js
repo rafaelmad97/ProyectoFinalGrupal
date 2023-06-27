@@ -1,7 +1,8 @@
-import { ADD_PRODUCT, ADD_USER, ALL_CATEGORY, ALL_PRODUCTS, ALL_USER, GET_PRODUCTS } from "./types"
+import { ADD_PRODUCT, ADD_USER, ALL_CATEGORY, ALL_PRODUCTS, ALL_USER, GET_PRODUCTS, SEARCH_PRODUCT } from "./types"
 
 const initialState = {
     allProducts: [],
+    copyAllProducts: [],
     productDetail: {},
     allCategorys: [],
     allUser: []
@@ -14,7 +15,8 @@ const reducer = (state = initialState, actions) => {
         case ALL_PRODUCTS:
             return {
                 ...state,
-                allProducts: actions.payload
+                allProducts: actions.payload,
+                copyAllProducts: actions.payload
             }
 
         case ADD_PRODUCT:
@@ -46,7 +48,12 @@ const reducer = (state = initialState, actions) => {
                 ...state,
                 productDetail:actions.payload
             }
-            
+        
+        case SEARCH_PRODUCT:
+            return {
+                ...state,
+                allProducts: actions.payload
+            }
         default:
             return {
                 ...state

@@ -4,17 +4,34 @@ const server = require('express').Router();
 const { Product, Category, Product_Category } = require('../db.js');
 const cors = require("cors");
 const Sequelize = require('sequelize');
+const { Op } = require('sequelize');
 
 server.use(cors());
 
-//muestro todos los productos
-server.get('/', (req, res, next) => {
-	Product.findAll()
-		.then(products => {
-			res.send(products);
-		})
-		.catch(next);
-});
+server.get ("/", async (req, res) => {
+    try {
+        const { search } = req.query;
+		if (!search){
+            const allProducts = await Product.findAll();
+            res.status(200).json(allProducts)
+        } else {
+			// const nameProduct = await Product.findAll({
+				// 	where: {
+					// 	  name: {
+						// 		[Op.iLike]: `%${search}%`
+						// 	  }
+						// 	}
+						// })
+			const allProducts = await Product.findAll();
+            const nameProduct = allProducts.filter(product => product.name.toLowerCase().includes(search.toLowerCase()));
+
+            res.status(200).json(nameProduct)
+        }
+        
+    } catch (error) {
+        res.status(400).json({msg: error.message})
+    }
+})
 
 
 //si le pongo :id SEARCH PRODUCT QUERYS NO FUNCIONA
@@ -95,6 +112,8 @@ server.delete('/delete/:id', (req, res, next) => {
 		res.send("Producto eliminada")
 	})
 })
+
+
 
 // posible ruta para buscar por nombre
 // server.get('/search/:id', (req, res, next) => {

@@ -13,6 +13,9 @@ import SearchIcon from "@mui/icons-material/Search";
 import "./NavBar.css";
 import { useNavigate } from "react-router-dom";
 import NAVLOGO from "../../assets/logo.svg";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { getByName } from "../../redux/actions";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -57,6 +60,15 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export const NavBar = () => {
+
+  const dispatch = useDispatch()
+  const [searchValue, setSearchValue] = useState("")
+
+  const handleSearch = (event) => {
+    event.preventDefault()
+    dispatch(getByName(searchValue))
+  }
+
   const Nav = useNavigate();
 
   const handleHome = () => {
@@ -81,13 +93,15 @@ export const NavBar = () => {
           >
             Pro Hardware Market
           </Typography>
-          <Search>
-            <SearchIconWrapper>
+          <Search >
+            <IconButton color="inherit" size="large" onClick={handleSearch}>
               <SearchIcon />
-            </SearchIconWrapper>
+            </IconButton>
             <StyledInputBase
               placeholder="Search…"
               inputProps={{ "aria-label": "search" }}
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
             />
           </Search>
           <IconButton color="inherit" size="large" onClick={handleLogin}>

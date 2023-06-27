@@ -8,6 +8,7 @@ import {
   ALL_CATEGORY,
   ADD_USER,
   ALL_USER,
+  SEARCH_PRODUCT,
 } from "./types";
 
 export const getAllProducts = () => {
@@ -19,6 +20,25 @@ export const getAllProducts = () => {
       dispatch({
         type: ALL_PRODUCTS,
         payload: products,
+      });
+    } catch (error) {
+      dispatch({
+        type: ERROR,
+        payload: error,
+      });
+    }
+  };
+};
+
+export const getByName = (name) => {
+  return async function (dispatch) {
+    try {
+      const response = await axios.get(`http://localhost:3001/products?search=${name}`);
+      const nameProduct = response.data;
+
+      dispatch({
+        type: SEARCH_PRODUCT,
+        payload: nameProduct,
       });
     } catch (error) {
       dispatch({
