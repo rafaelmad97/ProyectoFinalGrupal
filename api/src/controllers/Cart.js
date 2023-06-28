@@ -42,7 +42,9 @@ module.exports = {
         try {
             const product = await Cart.findOne({ where: { ProductId: idProduct, UserId: idUser } })
             if (product != null) {
+
                 await product.destroy()
+                return res.status(200).json({ msg: "deleted product in list" })
             } else throw new Error("Product not Founded")
 
         } catch (error) {

@@ -5,7 +5,7 @@ const { RemoveProductInCart, GetCartByAUser, AddProduct } = require("../controll
 router.use(cors())
 
 router.route("/add-product").post(AddProduct)
-router.route("/:id").delete(RemoveProductInCart)
+router.route("/remove-product").delete(RemoveProductInCart)
 router.route("/user/:id").get(GetCartByAUser)
 
 module.exports = router
