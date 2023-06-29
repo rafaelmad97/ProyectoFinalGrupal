@@ -1,10 +1,13 @@
+require('dotenv').config();
 const express = require('express');
 var cors = require('cors')
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const routes = require('./routes/index.js')
-
+const passport = require("passport")
+const session = require("express-session")
+require("./config/passport.js")
 
 const { Product } = require('./db.js');
 var db = require('./db');
@@ -19,6 +22,12 @@ server.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
 server.use(bodyParser.json({ limit: '50mb' }));
 server.use(morgan('dev'));
 
+server.use(session({
+  secret: process.env.SECRET_KEY,
+  resave: false,
+  saveUninitialized: false
+}))
+
 server.use((req, res, next) => {
   res.header('Access-Control-Allow-Credentials', 'true');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
@@ -28,6 +37,8 @@ server.use((req, res, next) => {
 
 //inicializa passport y recupera el estado de autenticacion de la sesion
 
+server.use(passport.initialize())
+server.use(passport.session())
 
 // server.use(express.static('public'));
 server.use('/', routes);
