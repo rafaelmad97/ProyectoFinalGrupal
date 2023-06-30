@@ -6,6 +6,7 @@ const router = Router();
 const categoria = require("./category")
 const Cart = require("./Cart")
 const login = require("./login")
+const filter = require ("./filters")
 
 router.use('/products', productRouter);
 router.use("/users", user);
@@ -13,5 +14,6 @@ router.use("/admin", admin);
 router.use("/categoria", categoria);
 router.use("/cart", Cart)
 router.use("/login", login)
+router.use("/filters", filter)
 
 module.exports = router;
