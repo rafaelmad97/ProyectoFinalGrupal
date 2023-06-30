@@ -4,6 +4,7 @@ import { NavBar } from "./components/NavBar/NavBar";
 import FormUsers from "./components/FormUsers/FormUsers";
 import "./App.css";
 
+
 function App() {
   const location = useLocation();
 
@@ -18,6 +19,7 @@ function App() {
           <Route path="/login" element={<Login />}></Route>
           <Route path="/form" element={<Form />}></Route>
           <Route path="/nuevousuario" element={<FormUsers />} />
+          
         </Routes>
       </div>
     </div>
