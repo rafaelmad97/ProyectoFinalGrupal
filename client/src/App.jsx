@@ -2,6 +2,7 @@ import { Routes, Route, useLocation } from "react-router-dom";
 import { Home, Login, Detail, Landing, Form } from "./views";
 import { NavBar } from "./components/NavBar/NavBar";
 import FormUsers from "./components/FormUsers/FormUsers";
+import Footer from "./components/Footer/Footer";
 import "./App.css";
 
 function App() {
@@ -10,6 +11,7 @@ function App() {
   return (
     <div className="app">
       {location.pathname !== "/" && <NavBar />}
+
       <div className="content app">
         <Routes>
           <Route path="/" element={<Landing />}></Route>
@@ -20,6 +22,9 @@ function App() {
           <Route path="/nuevousuario" element={<FormUsers />} />
         </Routes>
       </div>
+      <footer>
+        <Footer />
+      </footer>
     </div>
   );
 }

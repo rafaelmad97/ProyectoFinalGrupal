@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllProducts } from "../../redux/actions";
 import { Pagination } from "@mui/material";
 import { Box, margin } from "@mui/system";
+import Banner from "../../components/Banner/Banner";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -27,6 +28,8 @@ const Home = () => {
   console.log(allProducts);
   return (
     <div>
+      <Banner />
+      <CardsContainer allProducts={currentCards} />
       <Box
         sx={{
           width: "100%",
@@ -53,7 +56,6 @@ const Home = () => {
           }}
         />
       </Box>
-      <CardsContainer allProducts={currentCards} />
     </div>
   );
 };
