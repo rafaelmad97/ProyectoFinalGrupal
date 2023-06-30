@@ -6,3 +6,12 @@
     background-color: white;
     height: 26px;
 }
+
+.Resultados {
+    margin: 16px;
+    padding: 8px;
+}
+
+.item-result {
+    height: 6em;
+}

@@ -33,18 +33,21 @@ export const getAllProducts = () => {
 export const getByName = (name) => {
   return async function (dispatch) {
     try {
-      const response = await axios.get(`http://localhost:3001/products?search=${name}`);
+      const response = await axios.get(
+        `http://localhost:3001/products?search=${name}`
+      );
       const nameProduct = response.data;
-
-      dispatch({
-        type: SEARCH_PRODUCT,
-        payload: nameProduct,
-      });
+      return nameProduct;
+      // dispatch({
+      //   type: SEARCH_PRODUCT,
+      //   payload: nameProduct,
+      // });
     } catch (error) {
-      dispatch({
-        type: ERROR,
-        payload: error,
-      });
+      return new Error("no existen resultados");
+      // dispatch({
+      //   type: ERROR,
+      //   payload: error,
+      // });
     }
   };
 };
@@ -52,9 +55,7 @@ export const getByName = (name) => {
 export const getAllCategorys = () => {
   return async function (dispatch) {
     try {
-      const response = await axios.get(
-        "http://localhost:3001/categoria"
-      );
+      const response = await axios.get("http://localhost:3001/categoria");
       const category = response.data;
       dispatch({
         type: ALL_CATEGORY,
@@ -90,9 +91,7 @@ export const getAllUsers = () => {
 export const detailProducts = (id) => {
   return async function (dispatch) {
     try {
-      const response = await axios.get(
-        `http://localhost:3001/products/${id}`
-      );
+      const response = await axios.get(`http://localhost:3001/products/${id}`);
       const detailProduct = response.data;
       dispatch({
         type: GET_PRODUCTS,

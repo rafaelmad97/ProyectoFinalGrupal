@@ -5,6 +5,17 @@ import {
   IconButton,
   Typography,
   InputBase,
+  Button,
+  List,
+  ListItemAvatar,
+  ListItemText,
+  Divider,
+  ListItemButton,
+  Menu,
+  Dialog,
+  TextField,
+  Grid,
+  CardContent,
 } from "@mui/material";
 import { styled, alpha } from "@mui/material/styles";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -13,7 +24,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import "./NavBar.css";
 import { useNavigate } from "react-router-dom";
 import NAVLOGO from "../../assets/logo.svg";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { getByName } from "../../redux/actions";
 
@@ -50,24 +61,27 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create("width"),
     width: "100%",
-    [theme.breakpoints.up("sm")]: {
-      width: "12ch",
-      "&:focus": {
-        width: "20ch",
-      },
-    },
   },
 }));
 
 export const NavBar = () => {
+  const dispatch = useDispatch();
+  const [searchValue, setSearchValue] = useState("");
+  const [Resultados, setResultados] = useState([]);
 
-  const dispatch = useDispatch()
-  const [searchValue, setSearchValue] = useState("")
+  const [open, setOpen] = useState(false);
+  const id = open ? "open-menu" : undefined;
+
+  useEffect(() => {
+    handleSearch();
+  }, [searchValue]);
 
   const handleSearch = (event) => {
-    event.preventDefault()
-    dispatch(getByName(searchValue))
-  }
+    Promise.resolve(dispatch(getByName(searchValue)))
+      .then((result) => setResultados(result))
+      .catch((err) => alert(err.message))
+      .finally();
+  };
 
   const Nav = useNavigate();
 
@@ -78,10 +92,24 @@ export const NavBar = () => {
   const handleLogin = () => {
     Nav("/login");
   };
+
+  const handleSetSearch = (e) => {
+    setSearchValue(e.target.value);
+  };
+
+  const handleOpenSearchDialog = () => {
+    setOpen(true);
+  };
+
+  const handleCloseSearchDialog = () => {
+    setOpen(false);
+    setSearchValue("");
+  };
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
-        <Toolbar>
+        <Toolbar aria-describedby={id}>
           <img src={NAVLOGO} className="logo" />
           <br />
           <Typography
@@ -93,22 +121,57 @@ export const NavBar = () => {
           >
             Pro Hardware Market
           </Typography>
-          <Search >
+
+          <Search onClick={handleOpenSearchDialog}>
             <IconButton color="inherit" size="large" onClick={handleSearch}>
               <SearchIcon />
             </IconButton>
             <StyledInputBase
               placeholder="Search…"
               inputProps={{ "aria-label": "search" }}
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
+              disabled={true}
             />
           </Search>
-          <IconButton color="inherit" size="large" onClick={handleLogin}>
+
+          <IconButton color="inherit" size="large">
             <AccountCircleIcon color="secondary" />
           </IconButton>
         </Toolbar>
       </AppBar>
+      <Dialog open={open} onClose={handleCloseSearchDialog} value={searchValue}>
+        <CardContent>
+          <Grid container direction={"column"} justifyContent="stretch">
+            <Grid item>
+              <TextField
+                label="Buscar Producto"
+                onChange={handleSetSearch}
+                fullWidth
+              />
+            </Grid>
+            <Grid item>
+              <List sx={{ width: "100%", bgcolor: "background.paper" }}>
+                {Resultados.map((value) => (
+                  <>
+                    <ListItemButton
+                      alignItems="flex-start"
+                      onClick={() => {
+                        handleCloseSearchDialog();
+                        Nav(`/detail/${value.id}`);
+                      }}
+                    >
+                      <ListItemAvatar>
+                        <img src={value.urlImage} className="item-result" />
+                      </ListItemAvatar>
+                      <ListItemText primary={value.name} />
+                    </ListItemButton>
+                    <Divider variant="inset" component="li" />
+                  </>
+                ))}
+              </List>
+            </Grid>
+          </Grid>
+        </CardContent>
+      </Dialog>
     </Box>
   );
 };
