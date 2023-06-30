@@ -5,6 +5,7 @@ import FormUsers from "./components/FormUsers/FormUsers";
 import Footer from "./components/Footer/Footer";
 import "./App.css";
 
+
 function App() {
   const location = useLocation();
 
@@ -20,6 +21,7 @@ function App() {
           <Route path="/login" element={<Login />}></Route>
           <Route path="/form" element={<Form />}></Route>
           <Route path="/nuevousuario" element={<FormUsers />} />
+          
         </Routes>
       </div>
       <footer>

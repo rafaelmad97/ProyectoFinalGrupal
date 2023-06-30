@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAllProducts } from "../../redux/actions";
 import { Pagination } from "@mui/material";
 import { Box, margin } from "@mui/system";
+import Filter from "../../components/Filter/FilterProducts";
 import Banner from "../../components/Banner/Banner";
 
 const Home = () => {
@@ -56,6 +57,7 @@ const Home = () => {
           }}
         />
       </Box>
+      <CardsContainer allProducts={currentCards} />
     </div>
   );
 };
