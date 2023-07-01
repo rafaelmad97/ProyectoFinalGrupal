@@ -225,7 +225,7 @@ server.get("/products", async (req, res) => {
       }
     }
 
-    //Filtrar por rango de precio
+    //Filtrar por rango de Precio
 
     if (priceRange) {
       const [minPrice, maxPrice] = priceRange.split("-");

@@ -6,7 +6,7 @@ const router = Router();
 const categoria = require("./category");
 const Cart = require("./Cart");
 const login = require("./login");
-const filter = require("./filters");
+const filter = require("./filterAndSort");
 const email = require("./email");
 
 router.use("/products", productRouter);
