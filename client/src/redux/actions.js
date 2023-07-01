@@ -38,16 +38,8 @@ export const getByName = (name) => {
       );
       const nameProduct = response.data;
       return nameProduct;
-      // dispatch({
-      //   type: SEARCH_PRODUCT,
-      //   payload: nameProduct,
-      // });
     } catch (error) {
       return new Error("no existen resultados");
-      // dispatch({
-      //   type: ERROR,
-      //   payload: error,
-      // });
     }
   };
 };
@@ -138,43 +130,27 @@ export function addProducts(payload) {
 export function addUser(payload, email) {
   var url2 = `http://localhost:3001/users/${payload.email}`;
 
-  return function (dispatch) {
-    fetch(url2)
-      .then((response) => response.json())
-      .then((response) => {
-        dispatch({
-          type: ADD_USER,
-          payload: response,
-        });
-        if (response === "ya existe un usuario con este email") {
-          return swal({
-            text: "Ya existe un usuario con este email",
-            icon: "error",
-            timer: "2000",
-          });
-        } else {
-          var url = `http://localhost:3001/users`;
-          fetch(url, {
-            method: "POST", // or 'PUT'
-            body: JSON.stringify(payload),
-            // data can be string or {object}!
+  return async function (dispatch) {
+    return await axios.get(url2).then(({ data }) => {
+      console.log(data);
+      if (data === "Ya existe un usuario con este email") {
+        throw Error(data);
+      } else {
+        var url = `http://localhost:3001/users`;
+        axios
+          .post(url, payload, {
             headers: {
               "Content-Type": "application/json",
             },
           })
-            .then((response) => response.json())
-            .then((json) => {
-              dispatch({
-                type: ADD_USER,
-                payload: json,
-              });
+          .then(({ data }) => {
+            dispatch({
+              type: ADD_USER,
+              payload: data,
             });
-          return swal({
-            text: "Se ha creado el usuario exitosamente, ahora haga click en el boton iniciar sesion para disfrutar de HenrySport",
-            icon: "success",
-            timer: "2000",
-          });
-        }
-      });
+          })
+          .catch((e) => new Error(e.message));
+      }
+    });
   };
 }
