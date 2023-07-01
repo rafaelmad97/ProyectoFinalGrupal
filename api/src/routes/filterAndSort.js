@@ -4,9 +4,14 @@ const cors = require("cors");
 
 server.use(cors());
 
-server.get("/categories", async (req, res) => {
+//FILTROS Y ORDENAMIENTO
+
+server.get("/products", async (req, res) => {
   try {
     const {
+      sortOrder,
+      sortBy,
+      priceRange,
       memorias,
       almacenamiento,
       motherboard,
@@ -20,8 +25,9 @@ server.get("/categories", async (req, res) => {
     } = req.query;
     let filteredProducts = [];
 
+    // Filtrar por categoría "memorias"
+
     if (memorias) {
-      // Filtrar por categoría "gabinetes"
       const memoriasProducts = await Product.findAll({
         include: {
           model: Category,
@@ -39,8 +45,9 @@ server.get("/categories", async (req, res) => {
       }
     }
 
+    // Filtrar por categoría "almacenamiento"
+
     if (almacenamiento) {
-      // Filtrar por categoría "gabinetes"
       const almacenamientoProducts = await Product.findAll({
         include: {
           model: Category,
@@ -58,8 +65,9 @@ server.get("/categories", async (req, res) => {
       }
     }
 
+    // Filtrar por categoría "motherboard"
+
     if (motherboard) {
-      // Filtrar por categoría "Motherboard"
       const motherboardProducts = await Product.findAll({
         include: {
           model: Category,
@@ -77,8 +85,9 @@ server.get("/categories", async (req, res) => {
       }
     }
 
+    // Filtrar por categoría "perifericos"
+
     if (perifericos) {
-      // Filtrar por categoría "Perifericos"
       const perifericosProducts = await Product.findAll({
         include: {
           model: Category,
@@ -96,8 +105,9 @@ server.get("/categories", async (req, res) => {
       }
     }
 
+    // Filtrar por categoría "placasDeVideo"
+
     if (placasDeVideo) {
-      // Filtrar por categoría "gabinetes"
       const placasDeVideoProducts = await Product.findAll({
         include: {
           model: Category,
@@ -115,8 +125,9 @@ server.get("/categories", async (req, res) => {
       }
     }
 
+    // Filtrar por categoría "procesadores"
+
     if (procesadores) {
-      // Filtrar por categoría "gabinetes"
       const procesadoresProducts = await Product.findAll({
         include: {
           model: Category,
@@ -134,8 +145,9 @@ server.get("/categories", async (req, res) => {
       }
     }
 
+    // Filtrar por categoría "fuentes"
+
     if (fuentes) {
-      // Filtrar por categoría "gabinetes"
       const fuentesProducts = await Product.findAll({
         include: {
           model: Category,
@@ -153,8 +165,9 @@ server.get("/categories", async (req, res) => {
       }
     }
 
+    // Filtrar por categoría "gabinetes"
+
     if (gabinetes) {
-      // Filtrar por categoría "gabinetes"
       const gabinetesProducts = await Product.findAll({
         include: {
           model: Category,
@@ -172,27 +185,9 @@ server.get("/categories", async (req, res) => {
       }
     }
 
-    if (gabinetes) {
-      // Filtrar por categoría "gabinetes"
-      const gabinetesProducts = await Product.findAll({
-        include: {
-          model: Category,
-          where: {
-            name: "gabinetes",
-          },
-        },
-      });
-      if (gabinetesProducts.length > 0) {
-        filteredProducts = filteredProducts.concat(gabinetesProducts);
-      } else {
-        return res.status(404).json({
-          msg: "No se encontraron productos para la categoría gabinetes",
-        });
-      }
-    }
+    // Filtrar por categoría "monitores"
 
     if (sillasGamer) {
-      // Filtrar por categoría "monitores"
       const sillasGamerProducts = await Product.findAll({
         include: {
           model: Category,
@@ -210,8 +205,9 @@ server.get("/categories", async (req, res) => {
       }
     }
 
+    // Filtrar por categoría "monitores"
+
     if (monitores) {
-      // Filtrar por categoría "monitores"
       const monitoresProducts = await Product.findAll({
         include: {
           model: Category,
@@ -227,6 +223,66 @@ server.get("/categories", async (req, res) => {
           msg: "No se encontraron productos para la categoría monitores",
         });
       }
+    }
+
+    //Filtrar por rango de precio
+
+    if (priceRange) {
+      const [minPrice, maxPrice] = priceRange.split("-");
+      let priceFilteredProducts = [];
+
+      if (filteredProducts.length > 0) {
+        // Si se aplicó algún filtro de categoría, filtrar por precio los productos filtrados
+        priceFilteredProducts = filteredProducts.filter((product) => {
+          const productPrice = parseFloat(product.price);
+          return productPrice >= minPrice && productPrice <= maxPrice;
+        });
+      } else {
+        // Si no se aplicó ningún filtro de categoría, filtrar por precio todos los productos
+        const allProducts = await Product.findAll();
+        priceFilteredProducts = allProducts.filter((product) => {
+          const productPrice = parseFloat(product.price);
+          return productPrice >= minPrice && productPrice <= maxPrice;
+        });
+      }
+
+      filteredProducts = priceFilteredProducts;
+    }
+
+    //Ordenar por precio BARATO-CARO CARO-BARATO si de se desea
+
+    if (sortBy === "price") {
+      let sortedProducts = [];
+
+      if (filteredProducts.length > 0) {
+        // Si se aplicó algún filtro de categoría, ordenar por precio los productos filtrados
+        sortedProducts = filteredProducts.sort((a, b) => {
+          const priceA = parseFloat(a.price);
+          const priceB = parseFloat(b.price);
+          return priceA - priceB;
+        });
+      } else {
+        // Si no se aplicó ningún filtro de categoría, ordenar por precio todos los productos
+        const allProducts = await Product.findAll();
+        sortedProducts = allProducts.sort((a, b) => {
+          const priceA = parseFloat(a.price);
+          const priceB = parseFloat(b.price);
+          return priceA - priceB;
+        });
+      }
+
+      if (sortOrder === "dsc") {
+        // Si se desea orden descendente, invertir el orden del array
+        sortedProducts.reverse();
+      }
+
+      filteredProducts = sortedProducts;
+    }
+
+    if (filteredProducts.length === 0) {
+      return res.status(404).json({
+        msg: "No se encontraron productos para los filtros seleccionados.",
+      });
     }
 
     res.status(200).json(filteredProducts);
