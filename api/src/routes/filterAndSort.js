@@ -8,219 +8,26 @@ server.use(cors());
 
 server.get("/products", async (req, res) => {
   try {
-    const {
-      sortOrder,
-      sortBy,
-      priceRange,
-      memorias,
-      almacenamiento,
-      motherboard,
-      perifericos,
-      placasDeVideo,
-      procesadores,
-      fuentes,
-      gabinetes,
-      sillasGamer,
-      monitores,
-    } = req.query;
+    const { category, sortOrder, sortBy, priceRange } = req.query;
     let filteredProducts = [];
 
-    // Filtrar por categoría "memorias"
+    // Filtrar por categoría
 
-    if (memorias) {
-      const memoriasProducts = await Product.findAll({
+    if (category) {
+      const categoryProducts = await Product.findAll({
         include: {
           model: Category,
           where: {
-            name: "memorias",
+            name: category,
           },
         },
       });
-      if (memoriasProducts.length > 0) {
-        filteredProducts = filteredProducts.concat(memoriasProducts);
+
+      if (categoryProducts.length > 0) {
+        filteredProducts = categoryProducts;
       } else {
         return res.status(404).json({
-          msg: "No se encontraron productos para la categoría memorias",
-        });
-      }
-    }
-
-    // Filtrar por categoría "almacenamiento"
-
-    if (almacenamiento) {
-      const almacenamientoProducts = await Product.findAll({
-        include: {
-          model: Category,
-          where: {
-            name: "almacenamiento",
-          },
-        },
-      });
-      if (almacenamientoProducts.length > 0) {
-        filteredProducts = filteredProducts.concat(almacenamientoProducts);
-      } else {
-        return res.status(404).json({
-          msg: "No se encontraron productos para la categoría almacenamiento",
-        });
-      }
-    }
-
-    // Filtrar por categoría "motherboard"
-
-    if (motherboard) {
-      const motherboardProducts = await Product.findAll({
-        include: {
-          model: Category,
-          where: {
-            name: "Motherboard",
-          },
-        },
-      });
-      if (motherboardProducts.length > 0) {
-        filteredProducts = filteredProducts.concat(motherboardProducts);
-      } else {
-        return res.status(404).json({
-          msg: "No se encontraron productos para la categoría Motherboard",
-        });
-      }
-    }
-
-    // Filtrar por categoría "perifericos"
-
-    if (perifericos) {
-      const perifericosProducts = await Product.findAll({
-        include: {
-          model: Category,
-          where: {
-            name: "Perifericos",
-          },
-        },
-      });
-      if (perifericosProducts.length > 0) {
-        filteredProducts = filteredProducts.concat(perifericosProducts);
-      } else {
-        return res.status(404).json({
-          msg: "No se encontraron productos para la categoría Perifericos",
-        });
-      }
-    }
-
-    // Filtrar por categoría "placasDeVideo"
-
-    if (placasDeVideo) {
-      const placasDeVideoProducts = await Product.findAll({
-        include: {
-          model: Category,
-          where: {
-            name: "placasDeVideo",
-          },
-        },
-      });
-      if (placasDeVideoProducts.length > 0) {
-        filteredProducts = filteredProducts.concat(placasDeVideoProducts);
-      } else {
-        return res.status(404).json({
-          msg: "No se encontraron productos para la categoría placasDeVideo",
-        });
-      }
-    }
-
-    // Filtrar por categoría "procesadores"
-
-    if (procesadores) {
-      const procesadoresProducts = await Product.findAll({
-        include: {
-          model: Category,
-          where: {
-            name: "procesadores",
-          },
-        },
-      });
-      if (procesadoresProducts.length > 0) {
-        filteredProducts = filteredProducts.concat(procesadoresProducts);
-      } else {
-        return res.status(404).json({
-          msg: "No se encontraron productos para la categoría procesadores",
-        });
-      }
-    }
-
-    // Filtrar por categoría "fuentes"
-
-    if (fuentes) {
-      const fuentesProducts = await Product.findAll({
-        include: {
-          model: Category,
-          where: {
-            name: "fuentes",
-          },
-        },
-      });
-      if (fuentesProducts.length > 0) {
-        filteredProducts = filteredProducts.concat(fuentesProducts);
-      } else {
-        return res.status(404).json({
-          msg: "No se encontraron productos para la categoría fuentes",
-        });
-      }
-    }
-
-    // Filtrar por categoría "gabinetes"
-
-    if (gabinetes) {
-      const gabinetesProducts = await Product.findAll({
-        include: {
-          model: Category,
-          where: {
-            name: "gabinetes",
-          },
-        },
-      });
-      if (gabinetesProducts.length > 0) {
-        filteredProducts = filteredProducts.concat(gabinetesProducts);
-      } else {
-        return res.status(404).json({
-          msg: "No se encontraron productos para la categoría gabinetes",
-        });
-      }
-    }
-
-    // Filtrar por categoría "monitores"
-
-    if (sillasGamer) {
-      const sillasGamerProducts = await Product.findAll({
-        include: {
-          model: Category,
-          where: {
-            name: "sillasGamer",
-          },
-        },
-      });
-      if (sillasGamerProducts.length > 0) {
-        filteredProducts = filteredProducts.concat(sillasGamerProducts);
-      } else {
-        return res.status(404).json({
-          msg: "No se encontraron productos para la categoría sillasGamer",
-        });
-      }
-    }
-
-    // Filtrar por categoría "monitores"
-
-    if (monitores) {
-      const monitoresProducts = await Product.findAll({
-        include: {
-          model: Category,
-          where: {
-            name: "monitores",
-          },
-        },
-      });
-      if (monitoresProducts.length > 0) {
-        filteredProducts = filteredProducts.concat(monitoresProducts);
-      } else {
-        return res.status(404).json({
-          msg: "No se encontraron productos para la categoría monitores",
+          msg: `No se encontraron productos para la categoría ${category}`,
         });
       }
     }
