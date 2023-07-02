@@ -20,9 +20,11 @@ import {
 import { styled, alpha } from "@mui/material/styles";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SearchIcon from "@mui/icons-material/Search";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+
 
 import "./NavBar.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import NAVLOGO from "../../assets/logo.svg";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -136,6 +138,13 @@ export const NavBar = () => {
           <IconButton color="inherit" size="large">
             <AccountCircleIcon color="secondary" />
           </IconButton>
+          
+          <Link to= {"/carrito"}>
+                <IconButton style={{ color: 'white' }}>
+                  <ShoppingCartIcon />
+                </IconButton> 
+            </Link>
+
         </Toolbar>
       </AppBar>
       <Dialog open={open} onClose={handleCloseSearchDialog} value={searchValue}>
