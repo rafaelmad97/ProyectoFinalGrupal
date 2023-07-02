@@ -50,12 +50,12 @@ function Detail() {
           </Typography>
         </CardContent>
         <CardActions>
-           {/* <IconButton>
+           <IconButton>
                <FavoriteIcon />
             </IconButton> 
            <IconButton>
                <ShoppingCartIcon />
-            </IconButton>  */}
+            </IconButton> 
         </CardActions>
       </Card>
 

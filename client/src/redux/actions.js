@@ -9,6 +9,11 @@ import {
   ADD_USER,
   ALL_USER,
   SEARCH_PRODUCT,
+  ADD_CARRITO,
+  CLEAN_CARRITO,
+  DELETE_ONE_ITEM_CARRITO,
+  DELETE_ALL_ITEMS_CARRITO,
+
 } from "./types";
 
 export const getAllProducts = () => {
@@ -154,3 +159,31 @@ export function addUser(payload, email) {
     });
   };
 }
+
+export const addCarrito = (id) => {
+  return {
+    type: ADD_CARRITO,
+    payload: id,
+  };
+};
+
+export const deleteOneItemCarrito = (id) => {
+  return {
+    type: DELETE_ONE_ITEM_CARRITO,
+    payload: id
+  }
+}
+
+export const deleteAllItemCarrito = (id) => {
+  return {
+    type: DELETE_ALL_ITEMS_CARRITO,
+    payload: id
+  }
+}
+
+export const cleanCarrito = ()=> {
+  return {
+    type:CLEAN_CARRITO
+  }
+}
+
