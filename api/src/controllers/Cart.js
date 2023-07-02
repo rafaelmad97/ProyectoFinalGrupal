@@ -17,7 +17,7 @@ module.exports = {
                         await Cart.create({ UserId: userData.id, ProductId: response.id })
                     }
 
-                    return res.status(200).json({ msg: "Product added to cart" })
+                    return res.status(200).json({added: true, msg: "Product added to cart" })
                 }
             }
             throw new Error("user or product isn't number")
@@ -25,11 +25,11 @@ module.exports = {
         } catch (error) {
             switch (error.message) {
                 case "user didn't found":
-                    return res.status(500).json({ msg: error.message })
+                    return res.status(500).json({added: false, msg: error.message })
                 case "user or product isn't number":
-                    return res.status(500).json({ msg: error.message })
+                    return res.status(500).json({ added: false,msg: error.message })
                 default:
-                    return res.status(500).json({ msg: error.message })
+                    return res.status(500).json({ added: false,msg: error.message })
             }
         }
 
