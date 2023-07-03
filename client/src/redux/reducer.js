@@ -1,6 +1,7 @@
 import { ADD_CARRITO, ADD_PRODUCT, ADD_USER, ALL_CATEGORY, ALL_PRODUCTS, ALL_USER, GET_PRODUCTS, SEARCH_PRODUCT, CLEAN_CARRITO,
     DELETE_ALL_ITEMS_CARRITO,
     DELETE_ONE_ITEM_CARRITO,
+    ORDER_BY_PRICE,
    } from "./types"
 
 const initialState = {
@@ -9,7 +10,7 @@ const initialState = {
     productDetail: {},
     allCategorys: [],
     allUser: [],
-    myCarrito: []
+    myCarrito: [],
     
 }
 
@@ -115,6 +116,13 @@ const reducer = (state = initialState, actions) => {
           ...state,
           myCarrito: [],
         };
+
+        case ORDER_BY_PRICE:
+          return {
+              ...state,
+              allProducts:actions.payload,
+              errors: {}
+          }
   
         default:
             return {

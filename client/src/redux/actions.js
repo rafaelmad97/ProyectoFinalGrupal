@@ -1,5 +1,6 @@
 import axios from "axios";
 import swal from "sweetalert";
+import { useNavigate } from "react-router-dom";
 import {
   ALL_PRODUCTS,
   ERROR,
@@ -13,6 +14,7 @@ import {
   CLEAN_CARRITO,
   DELETE_ONE_ITEM_CARRITO,
   DELETE_ALL_ITEMS_CARRITO,
+  ORDER_BY_PRICE,
 
 } from "./types";
 
@@ -187,3 +189,20 @@ export const cleanCarrito = ()=> {
   }
 }
 
+export const orderByPrice = (price) => {
+  return async function(dispatch){
+      try {
+          const response = await axios.get(`http://localhost:3001/filters/products?sortBy=${price}`);
+          const byPrice = response.data;
+          dispatch({
+              type: ORDER_BY_PRICE,
+              payload: byPrice
+          })
+      } catch (error) {
+          dispatch({
+              type: ERROR,
+              payload: error
+          })
+      }
+  }
+}
