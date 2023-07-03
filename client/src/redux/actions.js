@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import swal from "sweetalert";
 import { useNavigate } from "react-router-dom";
 import {
@@ -14,8 +14,10 @@ import {
   CLEAN_CARRITO,
   DELETE_ONE_ITEM_CARRITO,
   DELETE_ALL_ITEMS_CARRITO,
+  LOGIN_GOOGLE,
+  LOGIN_LOCAL,
+  LOGOUT,
   ORDER_BY_PRICE,
-
 } from "./types";
 
 export const getAllProducts = () => {
@@ -162,6 +164,92 @@ export function addUser(payload, email) {
   };
 }
 
+export const loginLocallyUser = (email, password) => {
+  return async function () {
+    return await axios
+      .post(
+        "http://localhost:3001/login",
+        {
+          email,
+          password,
+        },
+        {
+          withCredentials: true,
+          headers: {
+            "Access-Control-Allow-Origin": "http://localhost:3001/",
+          },
+        }
+      )
+      .then((res) => res.data)
+      .catch((e) => {
+        throw new Error(e);
+      })
+      .finally();
+  };
+};
+
+export const fetchUserSessionGoogle = () => {
+  return async function (dispatch) {
+    return await axios
+      .get("http://localhost:3001/authenticated", {
+        withCredentials: true,
+      })
+
+      .then((res) =>
+        dispatch({
+          type: LOGIN_GOOGLE,
+          payload: res.data,
+        })
+      )
+      .finally();
+  };
+};
+
+export const fetchUserSessionLocally = () => {
+  return async function (dispatch) {
+    await axios
+      .get("http://localhost:3001/login/authenticated", {
+        withCredentials: true,
+      })
+      .then((res) =>
+        dispatch({
+          type: LOGIN_LOCAL,
+          payload: res.data,
+        })
+      );
+  };
+};
+export const logoutUserSessionGoogle = () => {
+  return async function (dispatch) {
+    return await axios
+      .get("http://localhost:3001/logout", {
+        withCredentials: true,
+      })
+
+      .then((res) =>
+        dispatch({
+          type: LOGOUT,
+          payload: undefined,
+        })
+      );
+  };
+};
+
+export const logoutUserSessionLocal = () => {
+  return async function (dispatch) {
+    return await axios
+      .get("http://localhost:3001/login/logout", {
+        withCredentials: true,
+      })
+      .then((res) =>
+        dispatch({
+          type: LOGOUT,
+          payload: undefined,
+        })
+      );
+  };
+};
+
 export const addCarrito = (id) => {
   return {
     type: ADD_CARRITO,
@@ -172,22 +260,22 @@ export const addCarrito = (id) => {
 export const deleteOneItemCarrito = (id) => {
   return {
     type: DELETE_ONE_ITEM_CARRITO,
-    payload: id
-  }
-}
+    payload: id,
+  };
+};
 
 export const deleteAllItemCarrito = (id) => {
   return {
     type: DELETE_ALL_ITEMS_CARRITO,
-    payload: id
-  }
-}
+    payload: id,
+  };
+};
 
-export const cleanCarrito = ()=> {
+export const cleanCarrito = () => {
   return {
-    type:CLEAN_CARRITO
-  }
-}
+    type: CLEAN_CARRITO,
+  };
+};
 
 export const orderByPrice = (price) => {
   return async function(dispatch){
