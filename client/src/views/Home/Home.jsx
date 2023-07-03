@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import { CardsContainer } from "../../components/Cards/CardsContainer";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllProducts, fetchUserSession } from "../../redux/actions";
+import {
+  getAllProducts,
+  fetchUserSessionGoogle,
+  fetchUserSessionLocally,
+  logoutUserSessionGoogle,
+} from "../../redux/actions";
 import { Pagination } from "@mui/material";
 import { Box, margin } from "@mui/system";
 import Filter from "../../components/Filter/FilterProducts";
@@ -15,7 +20,8 @@ const Home = () => {
   const [cardsPerPage, setCardsPerPage] = useState(6);
 
   useEffect(() => {
-    dispatch(fetchUserSession());
+    dispatch(fetchUserSessionGoogle());
+    dispatch(fetchUserSessionLocally());
     dispatch(getAllProducts());
   }, [dispatch]);
 

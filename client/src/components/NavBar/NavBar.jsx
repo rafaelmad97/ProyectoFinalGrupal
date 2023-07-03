@@ -30,7 +30,11 @@ import { useNavigate, Link } from "react-router-dom";
 import NAVLOGO from "../../assets/logo.svg";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { logoutUserSession, getByName } from "../../redux/actions";
+import {
+  getByName,
+  logoutUserSessionGoogle,
+  logoutUserSessionLocal,
+} from "../../redux/actions";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -93,9 +97,11 @@ export const NavBar = () => {
   };
 
   const handleLogout = () => {
-    dispatch(logoutUserSession());
+    dispatch(logoutUserSessionGoogle());
+    dispatch(logoutUserSessionLocal());
     handleClose();
   };
+
   const handleSearch = (event) => {
     Promise.resolve(dispatch(getByName(searchValue)))
       .then((result) => setResultados(result))
@@ -160,14 +166,18 @@ export const NavBar = () => {
               </IconButton>
             ) : (
               <>
-                {userAuthenticated.provider === "Google" ? (
+                {userAuthenticated.user.profile?.provider === "google" ? (
                   <Avatar
                     alt={userAuthenticated.user.profile.name?.familyName}
                     src={userAuthenticated.user.profile.photos[0]?.value}
                     onClick={handleClick}
                   />
                 ) : (
-                  <></>
+                  <>
+                    <Avatar color="secondary" onClick={handleClick}>
+                      {`${userAuthenticated.user.name}`.charAt(0)}
+                    </Avatar>
+                  </>
                 )}
               </>
             )}

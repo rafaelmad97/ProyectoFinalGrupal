@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import swal from "sweetalert";
 import {
   ALL_PRODUCTS,
@@ -162,60 +162,88 @@ export function addUser(payload, email) {
   };
 }
 
-export const fetchUserSession = () => {
+export const loginLocallyUser = (email, password) => {
+  return async function () {
+    return await axios
+      .post(
+        "http://localhost:3001/login",
+        {
+          email,
+          password,
+        },
+        {
+          withCredentials: true,
+          headers: {
+            "Access-Control-Allow-Origin": "http://localhost:3001/",
+          },
+        }
+      )
+      .then((res) => res.data)
+      .catch((e) => {
+        throw new Error(e);
+      })
+      .finally();
+  };
+};
+
+export const fetchUserSessionGoogle = () => {
   return async function (dispatch) {
-    await Promise.resolve(
-      await axios.get("http://localhost:3001/authenticated", {
+    return await axios
+      .get("http://localhost:3001/authenticated", {
         withCredentials: true,
       })
-    )
+
       .then((res) =>
         dispatch({
           type: LOGIN_GOOGLE,
           payload: res.data,
         })
       )
-      .finally(
-        async () =>
-          await axios
-            .get("http://localhost:3001/login/authenticated", {
-              withCredentials: true,
-            })
-            .then((res) =>
-              dispatch({
-                type: LOGIN_LOCAL,
-                payload: res.data,
-              })
-            )
-      );
+      .finally();
   };
 };
 
-export const logoutUserSession = () => {
+export const fetchUserSessionLocally = () => {
   return async function (dispatch) {
-    await Promise.resolve(
-      await axios.get("http://localhost:3001/logout", {
+    await axios
+      .get("http://localhost:3001/login/authenticated", {
         withCredentials: true,
       })
-    )
+      .then((res) =>
+        dispatch({
+          type: LOGIN_LOCAL,
+          payload: res.data,
+        })
+      );
+  };
+};
+export const logoutUserSessionGoogle = () => {
+  return async function (dispatch) {
+    return await axios
+      .get("http://localhost:3001/logout", {
+        withCredentials: true,
+      })
+
       .then((res) =>
         dispatch({
           type: LOGOUT,
           payload: undefined,
         })
-      )
-      .finally(
-        async () =>
-          await axios
-            .get("http://localhost:3001/login/logout", {
-              withCredentials: true,
-            })
-            .then((res) =>
-              dispatch({
-                type: LOGOUT,
-                payload: undefined,
-              })
-            )
+      );
+  };
+};
+
+export const logoutUserSessionLocal = () => {
+  return async function (dispatch) {
+    return await axios
+      .get("http://localhost:3001/login/logout", {
+        withCredentials: true,
+      })
+      .then((res) =>
+        dispatch({
+          type: LOGOUT,
+          payload: undefined,
+        })
       );
   };
 };

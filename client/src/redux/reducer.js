@@ -129,7 +129,6 @@ const reducer = (state = initialState, actions) => {
       return {
         ...state,
         userAuthenticated: {
-          provider: "Google",
           user: actions.payload.user,
         },
       };
@@ -138,7 +137,6 @@ const reducer = (state = initialState, actions) => {
       return {
         ...state,
         userAuthenticated: {
-          provider: "Local",
           user: actions.payload.user,
         },
       };

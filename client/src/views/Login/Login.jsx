@@ -8,13 +8,21 @@ import {
   Grid,
   Card,
   Link,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Dialog,
 } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
-
+import { useNavigate } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
 import * as Yup from "Yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import "./Login.css";
+import { loginLocallyUser } from "../../redux/actions";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
 
 const shemmaLogin = Yup.object({
   email: Yup.string()
@@ -24,6 +32,14 @@ const shemmaLogin = Yup.object({
 });
 
 const Login = () => {
+  const dispatcher = useDispatch();
+  const [Dialogo, setDialogo] = useState({
+    open: false,
+    title: "",
+    message: "",
+    isLogged: false,
+  });
+  const Nav = useNavigate();
   const Formulario_login = useForm({
     defaultValues: {
       email: "",
@@ -33,11 +49,56 @@ const Login = () => {
   });
 
   const handleSubmit = (data) => {
-    console.log(data);
+    Promise.resolve(dispatcher(loginLocallyUser(data.email, data.password)))
+      .then(() =>
+        setDialogo({
+          open: true,
+          title: "Login Exitoso",
+          message: "Usuario autenticado correctamente",
+          isLogged: true,
+        })
+      )
+      .catch(() =>
+        setDialogo({
+          open: true,
+          title: "Error",
+          message:
+            "Usuario no se ha podido autenticar correctamente, revisa tus credenciales ingresadas. Si el problema persiste contacta a servicio técnico.",
+          isLogged: false,
+        })
+      )
+      .finally(() => Formulario_login.setValue("password", ""));
+  };
+
+  const handleCloseDialog = (isLogged) => {
+    setDialogo({
+      open: false,
+      title: "",
+      message: "",
+      isLogged: false,
+    });
+    if (isLogged) {
+      Nav("/home");
+    }
   };
 
   return (
     <Container fixed>
+      <Dialog open={Dialogo.open}>
+        <DialogTitle>{Dialogo.title}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>{Dialogo.message}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              handleCloseDialog(Dialogo.isLogged);
+            }}
+          >
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Card>
         <CardHeader title="Iniciar sesión"></CardHeader>
         <CardContent>
