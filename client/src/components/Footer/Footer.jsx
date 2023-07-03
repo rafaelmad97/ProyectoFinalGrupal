@@ -14,13 +14,13 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 const Box1 = styled(Box)({
-  width: { xs: "50%", sm: "70%" },
+  width: { xs: "60%", sm: "70%" },
   display: "flex",
   flexDirection: "column",
   justifyContent: "center",
   alignItems: "center",
   padding: "0 0.5rem",
-  paddingBottom: "3rem",
+  paddingBottom: "4rem",
 });
 
 const Box2 = styled(Typography)(({ theme }) => ({
@@ -30,7 +30,7 @@ const Box2 = styled(Typography)(({ theme }) => ({
   display: "flex",
   paddingBottom: "4rem",
   [theme.breakpoints.down("sm")]: {
-    paddingLeft: "1rem",
+    paddingLeft: "1.5rem",
   },
 }));
 
@@ -40,7 +40,10 @@ const Footer = () => {
       style={{ display: "flex", flexDirection: "column", alignItems: "center" }}
     >
       <Box1>
-        <Typography variant="h4" sx={{ marginBottom: "1rem" }}>
+        <Typography
+          variant="h5"
+          sx={{ marginBottom: "0.8rem", marginTop: "1rem" }}
+        >
           Enterate de las Novedades!
         </Typography>
         <Typography style={{ marginBottom: "1rem", textAlign: "center" }}>
@@ -48,7 +51,7 @@ const Footer = () => {
           información instantánea sobre nuevos productos!
         </Typography>
         <Box sx={{ display: "flex", width: "100%", alignItems: "center" }}>
-          <FormControl fullWidth sx={{ m: 1 }}>
+          <FormControl fullWidth sx={{ m: 2 }}>
             <TextField id="outlined-basic" label="E-mail" variant="outlined" />
           </FormControl>
           <Button sx={{ height: "55px", width: "80px" }} variant="contained">
@@ -87,7 +90,7 @@ const Footer = () => {
             flexDirection: "column",
           }}
         >
-          <h3>Follow us:</h3>
+          <h3>Seguinos :</h3>
           <ul style={{ listStyle: "none" }}>
             <li>
               <a href="https://www.instagram.com/" style={{ color: "black" }}>

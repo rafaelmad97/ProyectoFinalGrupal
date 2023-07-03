@@ -6,7 +6,7 @@ function Item({ item }) {
       <img
         src={item.image}
         alt={item.title}
-        style={{ width: "100%", height: "45vh" }}
+        style={{ width: "100%", height: "75vh" }}
       />
       <div
         className="description"
