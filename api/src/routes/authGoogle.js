@@ -21,8 +21,8 @@ Router.get("/login/federated/google", passport.authenticate("google"));
 Router.get(
   "/oauth2/redirect/google",
   passport.authenticate("google", {
-    successReturnToOrRedirect: "http://localhost:5173/home",
-    failureRedirect: "http://localhost:5173/login",
+    successReturnToOrRedirect: `${process.env.FRONTEND}/home`,
+    failureRedirect: `${process.env.FRONTEND}/login`,
   })
 );
 
