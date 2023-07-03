@@ -1,4 +1,3 @@
-
 export const ALL_PRODUCTS = "ALL_PRODUCTS";
 export const ERROR = "ERROR";
 export const GET_PRODUCTS = "GET_PRODUCTS";
@@ -11,3 +10,6 @@ export const ADD_CARRITO = "ADD_CARRITO";
 export const DELETE_ONE_ITEM_CARRITO = "DELETE_ONE_ITEM_CARRITO";
 export const DELETE_ALL_ITEMS_CARRITO = "DELETE_ALL_ITEMS_CARRITO";
 export const CLEAN_CARRITO = "CLEAN_CARRITO";
+export const LOGIN_LOCAL = "LOGIN_LOCAL";
+export const LOGIN_GOOGLE = "LOGIN_GOOGLE";
+export const LOGOUT = "LOGOUT";

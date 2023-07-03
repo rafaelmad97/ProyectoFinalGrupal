@@ -13,7 +13,9 @@ import {
   CLEAN_CARRITO,
   DELETE_ONE_ITEM_CARRITO,
   DELETE_ALL_ITEMS_CARRITO,
-
+  LOGIN_GOOGLE,
+  LOGIN_LOCAL,
+  LOGOUT,
 } from "./types";
 
 export const getAllProducts = () => {
@@ -160,6 +162,64 @@ export function addUser(payload, email) {
   };
 }
 
+export const fetchUserSession = () => {
+  return async function (dispatch) {
+    await Promise.resolve(
+      await axios.get("http://localhost:3001/authenticated", {
+        withCredentials: true,
+      })
+    )
+      .then((res) =>
+        dispatch({
+          type: LOGIN_GOOGLE,
+          payload: res.data,
+        })
+      )
+      .finally(
+        async () =>
+          await axios
+            .get("http://localhost:3001/login/authenticated", {
+              withCredentials: true,
+            })
+            .then((res) =>
+              dispatch({
+                type: LOGIN_LOCAL,
+                payload: res.data,
+              })
+            )
+      );
+  };
+};
+
+export const logoutUserSession = () => {
+  return async function (dispatch) {
+    await Promise.resolve(
+      await axios.get("http://localhost:3001/logout", {
+        withCredentials: true,
+      })
+    )
+      .then((res) =>
+        dispatch({
+          type: LOGOUT,
+          payload: undefined,
+        })
+      )
+      .finally(
+        async () =>
+          await axios
+            .get("http://localhost:3001/login/logout", {
+              withCredentials: true,
+            })
+            .then((res) =>
+              dispatch({
+                type: LOGOUT,
+                payload: undefined,
+              })
+            )
+      );
+  };
+};
+
 export const addCarrito = (id) => {
   return {
     type: ADD_CARRITO,
@@ -170,20 +230,19 @@ export const addCarrito = (id) => {
 export const deleteOneItemCarrito = (id) => {
   return {
     type: DELETE_ONE_ITEM_CARRITO,
-    payload: id
-  }
-}
+    payload: id,
+  };
+};
 
 export const deleteAllItemCarrito = (id) => {
   return {
     type: DELETE_ALL_ITEMS_CARRITO,
-    payload: id
-  }
-}
+    payload: id,
+  };
+};
 
-export const cleanCarrito = ()=> {
+export const cleanCarrito = () => {
   return {
-    type:CLEAN_CARRITO
-  }
-}
-
+    type: CLEAN_CARRITO,
+  };
+};

@@ -9,6 +9,7 @@ import {
   Card,
   Link,
 } from "@mui/material";
+import GoogleIcon from "@mui/icons-material/Google";
 
 import { Controller, useForm } from "react-hook-form";
 import * as Yup from "Yup";
@@ -83,14 +84,30 @@ const Login = () => {
         </CardContent>
         <form onSubmit={Formulario_login.handleSubmit(handleSubmit)}>
           <CardActions>
-            <Button
-              type="submit"
-              variant="contained"
-              className="button"
-              size="large"
-            >
-              Iniciar sesión
-            </Button>
+            <Grid container direction="row" spacing={1}>
+              <Grid item xs={12} md={6} xl={6}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  className="button"
+                  size="large"
+                >
+                  Iniciar sesión
+                </Button>
+              </Grid>
+              <Grid item xs={12} md={6} xl={6}>
+                <Button
+                  variant="outlined"
+                  startIcon={<GoogleIcon />}
+                  color="secondary"
+                  size="large"
+                  fullWidth
+                  href="http://localhost:3001/login/federated/google"
+                >
+                  Google
+                </Button>
+              </Grid>
+            </Grid>
           </CardActions>
         </form>
       </Card>
