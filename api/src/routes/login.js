@@ -22,16 +22,16 @@ async function deserializeUser(id, done) {
     });
 }
 
-router.use(cors());
+// router.use(cors());
 
 router.route("/").post((req, res, next) => {
   passport.serializeUser(serializeUser);
   passport.deserializeUser(deserializeUser);
   passport.authenticate("local", (err, user, info) => {
-    if (err) return next(err);
-    if (!user) return res.status(401).json({ message: "Login Failed" });
+    if (err) return res.status(500).json(err);
+    if (!user) return res.status(404).json({ message: "Login Failed" });
     req.logIn(user, (err) => {
-      if (err) return next(err);
+      if (err) return res.status(500).json(err);
       return res.status(200).json({ message: "Login with exite" });
     });
   })(req, res, next);
