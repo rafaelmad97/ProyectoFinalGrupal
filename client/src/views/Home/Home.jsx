@@ -7,7 +7,7 @@ import {
   fetchUserSessionLocally,
   logoutUserSessionGoogle,
 } from "../../redux/actions";
-import { Pagination } from "@mui/material";
+import { Grid, Pagination } from "@mui/material";
 import { Box, margin } from "@mui/system";
 import Filter from "../../components/Filter/FilterProducts";
 import Banner from "../../components/Banner/Banner";
@@ -36,35 +36,42 @@ const Home = () => {
   console.log(allProducts);
   return (
     <div>
-      <Banner />
-      <CardsContainer allProducts={currentCards} />
-      <Box
-        sx={{
-          width: "100%",
-          display: "flex",
-          justifyContent: "center",
-          marginTop: "20px",
-          marginBottom: "20px",
-        }}
-      >
-        <Pagination
-          variant="outlined"
-          color="secondary"
-          count={Math.ceil(allProducts.length / cardsPerPage)}
-          page={page}
-          onChange={handleChange}
-          size="large"
-          sx={{
-            "& .MuiPaginationItem-root": {
-              color: "yellow", // Cambiar el color de los números
-            },
-            "& .MuiPaginationItem-icon": {
-              color: "#f44336", // Cambiar el color de las flechas de "Next" y "Prev"
-            },
-          }}
-        />
-      </Box>
-      <CardsContainer allProducts={currentCards} />
+      <Grid container direction="column">
+        <Grid item>
+          <Banner />
+        </Grid>
+        <Grid item>
+          <CardsContainer allProducts={currentCards} />
+        </Grid>
+        <Grid item>
+          <Box
+            sx={{
+              width: "100%",
+              display: "flex",
+              justifyContent: "center",
+              marginTop: "20px",
+              marginBottom: "20px",
+            }}
+          >
+            <Pagination
+              variant="outlined"
+              color="secondary"
+              count={Math.ceil(allProducts.length / cardsPerPage)}
+              page={page}
+              onChange={handleChange}
+              size="large"
+              sx={{
+                "& .MuiPaginationItem-root": {
+                  color: "yellow", // Cambiar el color de los números
+                },
+                "& .MuiPaginationItem-icon": {
+                  color: "#f44336", // Cambiar el color de las flechas de "Next" y "Prev"
+                },
+              }}
+            />
+          </Box>
+        </Grid>
+      </Grid>
     </div>
   );
 };
