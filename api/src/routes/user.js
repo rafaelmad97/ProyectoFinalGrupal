@@ -24,7 +24,6 @@ server.post("/", (req, res, next) => {
     email,
     password,
     phone,
-    rol,
   })
     .then((usuario) => {
       return res.json(usuario);

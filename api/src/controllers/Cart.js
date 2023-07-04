@@ -4,20 +4,21 @@ module.exports = {
 
     //permite agregar productos al carrito de algun usuario
     AddProduct: async (req, res) => {
-        const { user, product } = req.body
+        const { user, product, quality } = req.body
         let userData = null
+
         try {
-            if (!Number.isNaN(user) && !Number.isNaN(product)) {
+            if (!Number.isNaN(user) && !Number.isNaN(product) && !Number.isInteger(quality)) {
                 userData = await User.findByPk(user)
                 if (userData == null) throw new Error("user didn't found")
                 else {
 
                     const response = await Product.findOne({ where: { id: product } })
                     if (response.stock) {
-                        await Cart.create({ UserId: userData.id, ProductId: response.id })
+                        await Cart.create({ UserId: userData.id, ProductId: response.id, Quality: quality })
                     }
 
-                    return res.status(200).json({added: true, msg: "Product added to cart" })
+                    return res.status(200).json({ added: true, msg: "Product added to cart" })
                 }
             }
             throw new Error("user or product isn't number")
@@ -25,11 +26,11 @@ module.exports = {
         } catch (error) {
             switch (error.message) {
                 case "user didn't found":
-                    return res.status(500).json({added: false, msg: error.message })
+                    return res.status(500).json({ added: false, msg: error.message })
                 case "user or product isn't number":
-                    return res.status(500).json({ added: false,msg: error.message })
+                    return res.status(500).json({ added: false, msg: error.message })
                 default:
-                    return res.status(500).json({ added: false,msg: error.message })
+                    return res.status(500).json({ added: false, msg: error.message })
             }
         }
 
