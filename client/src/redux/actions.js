@@ -303,20 +303,9 @@ export const filterByCategory = (categorys) => {
       }
   }
 }
-export const filterByDate = (date) => {
-  return async function(dispatch){
-      try {
-          const response = await axios.get(`http://localhost:3001/filters/products?sortBy=${date}`);
-          const filterDate = response.data;
-          dispatch({
-              type: FILTER_BY_DATE,
-              payload: filterDate
-          })
-      } catch (error) {
-          dispatch({
-              type: ERROR,
-              payload: error
-          })
-      }
-  }
-}
+
+export const filterByDate = () => {
+  return {
+    type: FILTER_BY_DATE
+  };
+};

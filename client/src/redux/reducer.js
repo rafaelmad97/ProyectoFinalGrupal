@@ -176,10 +176,22 @@ const reducer = (state = initialState, actions) => {
       }
 
       case FILTER_BY_DATE:
+        // Copia el arreglo de todos los productos
+        const allProductsCopy = [...state.allProducts];
+      
+        // Ordena los productos por fecha de creación de forma descendente (de más reciente a más antiguo)
+        const sortedProducts = allProductsCopy.sort((a, b) => {
+          const dateA = new Date(a.createdAt);
+          const dateB = new Date(b.createdAt);
+          return dateB - dateA;
+        });
+      
         return {
           ...state,
-          dateFilter: actions.payload
-        }
+          dateFilter: sortedProducts,
+        };
+
+
     default:
       return {
         ...state,
