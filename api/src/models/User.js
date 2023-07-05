@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 module.exports = (sequelize) => {
   sequelize
     .define(
-      "user",
+      "User",
       {
         name: {
           type: DataTypes.TEXT,
@@ -57,10 +57,11 @@ module.exports = (sequelize) => {
           type: DataTypes.STRING,
           unique: true,
         },
+
         isAdmin: {
           type: DataTypes.BOOLEAN,
-          defaultValue: false
-        }
+          defaultValue: false,
+        },
         // rol: {
         //   type: DataTypes.ENUM,
         //   values: ["user", "admin"],
