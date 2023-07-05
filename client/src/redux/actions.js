@@ -18,6 +18,8 @@ import {
   LOGIN_LOCAL,
   LOGOUT,
   ORDER_BY_PRICE,
+  FILTER_BY_CATEGORY,
+  FILTER_BY_DATE,
 } from "./types";
 
 export const getAllProducts = () => {
@@ -278,13 +280,37 @@ export const cleanCarrito = () => {
 };
 
 export const orderByPrice = (price) => {
+  return {
+      type: ORDER_BY_PRICE,
+      payload: price
+  }
+}
+
+export const filterByCategory = (categorys) => {
   return async function(dispatch){
       try {
-          const response = await axios.get(`http://localhost:3001/filters/products?sortBy=${price}`);
-          const byPrice = response.data;
+          const response = await axios.get(`http://localhost:3001/filters/products?category=${categorys}`);
+          const category = response.data;
           dispatch({
-              type: ORDER_BY_PRICE,
-              payload: byPrice
+              type: FILTER_BY_CATEGORY,
+              payload: category
+          })
+      } catch (error) {
+          dispatch({
+              type: ERROR,
+              payload: error
+          })
+      }
+  }
+}
+export const filterByDate = (date) => {
+  return async function(dispatch){
+      try {
+          const response = await axios.get(`http://localhost:3001/filters/products?sortBy=${date}`);
+          const filterDate = response.data;
+          dispatch({
+              type: FILTER_BY_DATE,
+              payload: filterDate
           })
       } catch (error) {
           dispatch({

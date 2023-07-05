@@ -35,6 +35,7 @@ import {
   logoutUserSessionGoogle,
   logoutUserSessionLocal,
 } from "../../redux/actions";
+import FilterAndSort from "../Filtros/FilterAndSort/FilterAndSort";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -133,108 +134,111 @@ export const NavBar = () => {
   };
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar aria-describedby={id}>
-          <img src={NAVLOGO} className="logo" />
-          <br />
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{ flexGrow: 1 }}
-            className="title"
-            onClick={handleHome}
-          >
-            Pro Hardware Market
-          </Typography>
+    <>
+      <Box sx={{ flexGrow: 1 }}>
+        <AppBar position="static">
+          <Toolbar aria-describedby={id}>
+            <img src={NAVLOGO} className="logo" />
+            <br />
+            <Typography
+              variant="h6"
+              component="div"
+              sx={{ flexGrow: 1 }}
+              className="title"
+              onClick={handleHome}
+            >
+              Pro Hardware Market
+            </Typography>
 
-          <Search onClick={handleOpenSearchDialog}>
-            <IconButton color="inherit" size="large" onClick={handleSearch}>
-              <SearchIcon />
-            </IconButton>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ "aria-label": "search" }}
-              disabled={true}
-            />
-          </Search>
-
-          <div className="nav-item">
-            {userAuthenticated === undefined ? (
-              <IconButton color="inherit" size="large" onClick={handleLogin}>
-                <AccountCircleIcon color="secondary" />
+            <Search onClick={handleOpenSearchDialog}>
+              <IconButton color="inherit" size="large" onClick={handleSearch}>
+                <SearchIcon />
               </IconButton>
-            ) : (
-              <>
-                {userAuthenticated.user.profile?.provider === "google" ? (
-                  <Avatar
-                    alt={userAuthenticated.user.profile.name?.familyName}
-                    src={userAuthenticated.user.profile.photos[0]?.value}
-                    onClick={handleClick}
-                  />
-                ) : (
-                  <>
-                    <Avatar color="secondary" onClick={handleClick}>
-                      {`${userAuthenticated.user.name}`.charAt(0)}
-                    </Avatar>
-                  </>
-                )}
-              </>
-            )}
-          </div>
-
-          <Link to={"/carrito"} className="nav-item">
-            <IconButton style={{ color: "white" }}>
-              <ShoppingCartIcon />
-            </IconButton>
-          </Link>
-          <Menu
-            id="basic-menu"
-            anchorEl={anchorEl}
-            open={openMenu}
-            onClose={handleClose}
-            MenuListProps={{
-              "aria-labelledby": "basic-button",
-            }}
-          >
-            <MenuItem onClick={handleLogout}>Cerrar Sesion</MenuItem>
-          </Menu>
-        </Toolbar>
-      </AppBar>
-      <Dialog open={open} onClose={handleCloseSearchDialog} value={searchValue}>
-        <CardContent>
-          <Grid container direction={"column"} justifyContent="stretch">
-            <Grid item>
-              <TextField
-                label="Buscar Producto"
-                onChange={handleSetSearch}
-                fullWidth
+              <StyledInputBase
+                placeholder="Search…"
+                inputProps={{ "aria-label": "search" }}
+                disabled={true}
               />
+            </Search>
+
+            <div className="nav-item">
+              {userAuthenticated === undefined ? (
+                <IconButton color="inherit" size="large" onClick={handleLogin}>
+                  <AccountCircleIcon color="secondary" />
+                </IconButton>
+              ) : (
+                <>
+                  {userAuthenticated.user.profile?.provider === "google" ? (
+                    <Avatar
+                      alt={userAuthenticated.user.profile.name?.familyName}
+                      src={userAuthenticated.user.profile.photos[0]?.value}
+                      onClick={handleClick}
+                    />
+                  ) : (
+                    <>
+                      <Avatar color="secondary" onClick={handleClick}>
+                        {`${userAuthenticated.user.name}`.charAt(0)}
+                      </Avatar>
+                    </>
+                  )}
+                </>
+              )}
+            </div>
+
+            <Link to={"/carrito"} className="nav-item">
+              <IconButton style={{ color: "white" }}>
+                <ShoppingCartIcon />
+              </IconButton>
+            </Link>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={openMenu}
+              onClose={handleClose}
+              MenuListProps={{
+                "aria-labelledby": "basic-button",
+              }}
+            >
+              <MenuItem onClick={handleLogout}>Cerrar Sesion</MenuItem>
+            </Menu>
+          </Toolbar>
+        </AppBar>
+        <Dialog open={open} onClose={handleCloseSearchDialog} value={searchValue}>
+          <CardContent>
+            <Grid container direction={"column"} justifyContent="stretch">
+              <Grid item>
+                <TextField
+                  label="Buscar Producto"
+                  onChange={handleSetSearch}
+                  fullWidth
+                />
+              </Grid>
+              <Grid item>
+                <List sx={{ width: "100%", bgcolor: "background.paper" }}>
+                  {Resultados.map((value) => (
+                    <>
+                      <ListItemButton
+                        alignItems="flex-start"
+                        onClick={() => {
+                          handleCloseSearchDialog();
+                          Nav(`/detail/${value.id}`);
+                        }}
+                      >
+                        <ListItemAvatar>
+                          <img src={value.urlImage} className="item-result" />
+                        </ListItemAvatar>
+                        <ListItemText primary={value.name} />
+                      </ListItemButton>
+                      <Divider variant="inset" component="li" />
+                    </>
+                  ))}
+                </List>
+              </Grid>
             </Grid>
-            <Grid item>
-              <List sx={{ width: "100%", bgcolor: "background.paper" }}>
-                {Resultados.map((value) => (
-                  <>
-                    <ListItemButton
-                      alignItems="flex-start"
-                      onClick={() => {
-                        handleCloseSearchDialog();
-                        Nav(`/detail/${value.id}`);
-                      }}
-                    >
-                      <ListItemAvatar>
-                        <img src={value.urlImage} className="item-result" />
-                      </ListItemAvatar>
-                      <ListItemText primary={value.name} />
-                    </ListItemButton>
-                    <Divider variant="inset" component="li" />
-                  </>
-                ))}
-              </List>
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Dialog>
-    </Box>
+          </CardContent>
+        </Dialog>
+      </Box>
+      <FilterAndSort />
+    </>
   );
 };

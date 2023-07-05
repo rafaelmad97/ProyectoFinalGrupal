@@ -13,4 +13,6 @@ export const CLEAN_CARRITO = "CLEAN_CARRITO";
 export const LOGIN_LOCAL = "LOGIN_LOCAL";
 export const LOGIN_GOOGLE = "LOGIN_GOOGLE";
 export const LOGOUT = "LOGOUT";
-export const ORDER_BY_PRICE = "ORDER_BY_PRICE"
+export const ORDER_BY_PRICE = "ORDER_BY_PRICE";
+export const FILTER_BY_CATEGORY = "FILTER_BY_CATEGORY";
+export const FILTER_BY_DATE = "FILTER_BY_DATE";

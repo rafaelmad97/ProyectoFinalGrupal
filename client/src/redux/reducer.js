@@ -14,6 +14,8 @@ import {
   LOGIN_LOCAL,
   LOGOUT,
   ORDER_BY_PRICE,
+  FILTER_BY_CATEGORY,
+  FILTER_BY_DATE,
 } from "./types";
 
 const initialState = {
@@ -24,6 +26,9 @@ const initialState = {
   allUser: [],
   myCarrito: [],
   userAuthenticated: undefined,
+  categoryFilter: [],
+  copyCategoryFilter: [],
+  dateFilter: [],
 };
 
 const reducer = (state = initialState, actions) => {
@@ -148,13 +153,33 @@ const reducer = (state = initialState, actions) => {
         userAuthenticated: undefined,
       };
 
-      case ORDER_BY_PRICE:
+    case FILTER_BY_CATEGORY:
         return {
-            ...state,
-            allProducts:actions.payload,
-            errors: {}
+          ...state,
+          categoryFilter: actions.payload,
+          copyCategoryFilter: actions.payload
         }
 
+    case ORDER_BY_PRICE:
+        const orderByPrice = state.copyCategoryFilter.sort((a,b) => {
+          if (a.price > b.price) {
+              return actions.payload === "asc" ? 1 : -1
+          }
+          if (a.price < b.price) {
+              return actions.payload === "desc" ? 1 : -1
+          }
+          return 0
+      })
+      return {
+          ...state,
+          categoryFilter: orderByPrice
+      }
+
+      case FILTER_BY_DATE:
+        return {
+          ...state,
+          dateFilter: actions.payload
+        }
     default:
       return {
         ...state,

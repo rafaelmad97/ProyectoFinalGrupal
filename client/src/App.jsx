@@ -4,6 +4,7 @@ import { NavBar } from "./components/NavBar/NavBar";
 import FormUsers from "./components/FormUsers/FormUsers";
 import Footer from "./components/Footer/Footer";
 import "./App.css";
+import Filtros from "./components/Filtros/Filtros";
 
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
           <Route path="/form" element={<Form />}></Route>
           <Route path="/nuevousuario" element={<FormUsers />} />
           <Route path="/carrito" element={<Carrito />} />
+          <Route path="/filtros" element={<Filtros />} />
           
         </Routes>
       </div>

@@ -5,16 +5,17 @@ import {
   getAllProducts,
   fetchUserSessionGoogle,
   fetchUserSessionLocally,
-  logoutUserSessionGoogle,
+  getAllCategorys,
 } from "../../redux/actions";
 import { Pagination } from "@mui/material";
-import { Box, margin } from "@mui/system";
-import Filter from "../../components/Filter/FilterProducts";
+import { Box } from "@mui/system";
 import Banner from "../../components/Banner/Banner";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { allProducts } = useSelector((state) => state);
+  const navigate = useNavigate()
+  const { allProducts, allCategorys } = useSelector((state) => state);
 
   const [page, setPage] = useState(1);
   const [cardsPerPage, setCardsPerPage] = useState(6);
@@ -23,11 +24,15 @@ const Home = () => {
     dispatch(fetchUserSessionGoogle());
     dispatch(fetchUserSessionLocally());
     dispatch(getAllProducts());
+    dispatch(getAllCategorys());
   }, [dispatch]);
+
+  console.log("categorias", allCategorys);
 
   const handleChange = (event, value) => {
     setPage(value);
   };
+
 
   const indexOfLastCard = page * cardsPerPage;
   const indexOfFirstCard = indexOfLastCard - cardsPerPage;
@@ -64,7 +69,6 @@ const Home = () => {
           }}
         />
       </Box>
-      <CardsContainer allProducts={currentCards} />
     </div>
   );
 };
