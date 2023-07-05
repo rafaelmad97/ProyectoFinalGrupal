@@ -1,4 +1,3 @@
-
 // import React from 'react'
 import { Link } from "react-router-dom";
 import Card from "@mui/material/Card";
@@ -7,11 +6,7 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import {
-  addCarrito,
-  filterByDate,
-  orderByPrice,
-} from "../../redux/actions";
+import { addCarrito, filterByDate, orderByPrice } from "../../redux/actions";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { Grid, Pagination } from "@mui/material";
@@ -28,13 +23,19 @@ const Novedades = () => {
     setPage(value);
   };
 
-
   const indexOfLastCard = page * cardsPerPage;
   const indexOfFirstCard = indexOfLastCard - cardsPerPage;
   const currentCards = dateFilter.slice(indexOfFirstCard, indexOfLastCard);
 
   return (
     <div>
+      <Box sx={{ width: "100%" }}>
+        <img
+          src="https://pbs.twimg.com/media/DTP8W1JXUAALxIC.jpg"
+          alt=""
+          style={{ width: "100%", maxHeight: "300px" }}
+        />
+      </Box>
 
       <Grid container direction="row" spacing={1}>
         {dateFilter?.map((cat) => {

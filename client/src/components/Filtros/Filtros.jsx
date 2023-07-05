@@ -19,7 +19,7 @@ import { useState } from "react";
 
 const Filtros = () => {
   const dispatch = useDispatch();
-  const categoryFilter = useSelector((state) => state.categoryFilter);
+  const { categoryFilter } = useSelector((state) => state);
   const [page, setPage] = useState(1);
   const [cardsPerPage, setCardsPerPage] = useState(6);
   const [orderPrice, setOrderPrice] = useState("");
@@ -39,6 +39,16 @@ const Filtros = () => {
 
   return (
     <div>
+      {categoryFilter.length > 0 && (
+        <Typography
+          variant="h2"
+          component="div"
+          sx={{ flexGrow: 1 }}
+          className="title"
+        >
+          {categoryFilter[0].categories[0].name}
+        </Typography>
+      )}
       <Box
         sx={{
           display: "flex",
