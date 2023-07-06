@@ -27,4 +27,6 @@ async function sendEmail(from, to, subject, html) {
   }
 }
 
+//PLANTILLA DE REGISTRO
+
 module.exports = sendEmail;

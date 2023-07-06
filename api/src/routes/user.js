@@ -3,7 +3,9 @@ const cors = require("cors");
 const { User } = require("../db");
 const sendEmail = require("../controllers/Email");
 const { EMAILACCOUNT } = process.env;
-
+const welcomeEmail = require("../email-templates/welcome");
+const paymentEmail = require("../email-templates/payment");
+const changePEmail = require("../email-templates/changePassword");
 server.use(cors());
 
 //TRAER TODOS LOS USUARIOS
@@ -32,7 +34,7 @@ server.post("/", (req, res, next) => {
       const from = EMAILACCOUNT;
       const to = email; // Dirección de correo electrónico del destinatario
       const subject = "¡Registro exitoso!"; // Asunto del correo
-      const html = "<p>Gracias por registrarte en nuestro sitio.</p>"; // Contenido en HTML del cuerpo del correo
+      const html = welcomeEmail; // Contenido en HTML del cuerpo del correo
       sendEmail(from, to, subject, html);
 
       return res.json(usuario);
