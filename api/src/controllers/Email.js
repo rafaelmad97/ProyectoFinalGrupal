@@ -2,7 +2,7 @@ const nodemailer = require("nodemailer");
 
 const { EMAILACCOUNT, PASSWORDEMAIL, SMTPHOST, SMTPPORT } = process.env;
 
-async function sendEmail(from, to) {
+async function sendEmail(from, to, subject, html) {
   const client = nodemailer.createTransport({
     host: SMTPHOST,
     port: SMTPPORT,
@@ -13,20 +13,18 @@ async function sendEmail(from, to) {
     requireTLS: true,
   });
 
-  return await client.sendMail(
-    {
+  try {
+    await client.sendMail({
       to,
       from,
-      html: "<div>hola mundo</div>",
-      subject: "HENRY ESCLAVISTA XD",
-    },
-    (error) => {
-      if (error) {
-        throw Error(error);
-      }
-      return true;
-    }
-  );
+      subject,
+      html,
+    });
+    return true;
+  } catch (error) {
+    console.error("Error al enviar el correo electrónico:", error);
+    throw error;
+  }
 }
 
 module.exports = sendEmail;
