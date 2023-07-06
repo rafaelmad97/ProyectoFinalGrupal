@@ -20,6 +20,7 @@ import {
   ORDER_BY_PRICE,
   FILTER_BY_CATEGORY,
   FILTER_BY_DATE,
+  ORDER_BY_DATE,
 } from "./types";
 
 export const getAllProducts = () => {
@@ -309,3 +310,50 @@ export const filterByDate = () => {
     type: FILTER_BY_DATE
   };
 };
+
+export const orderByDate = (order) => {
+  return {
+    type: ORDER_BY_DATE,
+    payload: order
+  }
+}
+
+// action de reviews
+
+export function getReviews(id) {
+  return function (dispatch) {
+    const url = `http://localhost:3001/reviews?productId=${id}`;
+    console.log(id + " actions")
+    return axios.get(url)
+      .then(res => res.data)
+      .then(data => {
+        dispatch({ type: VIEW_REVIEW, payload: data })
+      })
+  }
+}
+
+export function addReview(reviewData) {
+  return function (dispatch) {
+    const url = 'http://localhost:3001/reviews';
+    return axios.post(url, reviewData)
+      .then(data => {
+        dispatch({ type: ADD_REVIEW, payload: data });
+        swal({
+          icon: "success",
+          title: "Modificación",
+          text: "Se modificó el producto correctamente",
+        });
+      })
+      .catch((error) => {
+        let errorMessage = "Ha ocurrido un error";
+        if (error.response && error.response.data && error.response.data.message) {
+          errorMessage = error.response.data.message;
+        }
+        swal({
+          icon: "error",
+          title: "Oops...",
+          text: errorMessage,
+        });
+      });
+  };
+}
