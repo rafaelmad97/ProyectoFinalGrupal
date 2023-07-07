@@ -6,6 +6,7 @@ const { EMAILACCOUNT } = process.env;
 const welcomeEmail = require("../email-templates/welcome");
 const paymentEmail = require("../email-templates/payment");
 const changePEmail = require("../email-templates/changePassword");
+const bcrypt = require("bcrypt");
 server.use(cors());
 
 //TRAER TODOS LOS USUARIOS
@@ -60,6 +61,51 @@ server.get("/:email", (req, res, next) => {
       }
     })
     .catch("error");
+});
+
+//ACTUALIZAR CONTRASEÑA
+
+server.put("/password/:id", (req, res) => {
+  const { id } = req.params;
+  const { password, newPassword, email } = req.body;
+
+  User.findByPk(id)
+    .then((user) => {
+      if (!user) {
+        return res.status(404).json({ message: "Usuario no encontrado" });
+      }
+
+      if (!bcrypt.compareSync(password, user.password)) {
+        return res
+          .status(401)
+          .json({ message: "Contraseña actual incorrecta" });
+      }
+
+      const salt = bcrypt.genSaltSync(10);
+      const hashedPassword = bcrypt.hashSync(newPassword, salt);
+
+      User.update({ password: hashedPassword }, { where: { id: user.id } })
+        .then(() => {
+          res
+            .status(200)
+            .json({ message: "Contraseña actualizada correctamente" });
+          // Envía el correo de actualizacion al usuario
+          const from = EMAILACCOUNT;
+          const to = email; // Dirección de correo electrónico del destinatario
+          const subject = "¡Cambio de contraseña exitoso!"; // Asunto del correo
+          const html = changePEmail; // Contenido en HTML del cuerpo del correo
+          sendEmail(from, to, subject, html);
+        })
+
+        .catch((error) => {
+          console.error(error);
+          res.status(500).json({ message: "Error al cambiar la contraseña" });
+        });
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).json({ message: "Error al buscar el usuario" });
+    });
 });
 
 //ACTUALIZAR USUARIO
