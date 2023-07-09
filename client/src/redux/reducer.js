@@ -33,6 +33,8 @@ const initialState = {
   copyCategoryFilter: [],
   dateFilter: [],
   review: [],
+  cart: [],
+  error: null
 };
 
 const reducer = (state = initialState, actions) => {
@@ -228,6 +230,46 @@ const reducer = (state = initialState, actions) => {
         //review: state.review.filter((item) => item.id !== actions.payload),
       };
     }
+
+    case 'ADD_PRODUCT_SUCCESS':
+      // Agregar el producto al carrito en el estado
+      return {
+        ...state,
+        cart: [
+          ...state.cart,
+          {
+            user: actions.payload.user,
+            product: actions.payload.product,
+            quantity: actions.payload.quantity,
+          },
+        ],
+        error: null,
+      };
+    case 'ADD_PRODUCT_FAILURE':
+      // Manejar el error al agregar el producto al carrito
+      return {
+        ...state,
+        error: actions.payload,
+      };
+
+      case 'INCREMENT_PRODUCT_QUANTITY_SUCCESS':
+        return {
+          ...state,
+          error: null,
+        };
+      case 'INCREMENT_PRODUCT_QUANTITY_FAILURE':
+        return {
+          ...state,
+          error: actions.payload.error,
+        };
+
+        // case REMOVE_FROM_CART:
+        //   const updatedCartItems = state.cartItems.filter(item => item.id !== action.payload);
+        //   return {
+        //     ...state,
+        //     cartItems: updatedCartItems
+        //   };
+    
 
     default:
       return {

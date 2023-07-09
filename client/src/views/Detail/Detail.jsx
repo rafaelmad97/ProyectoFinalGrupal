@@ -10,7 +10,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Container } from "@mui/system";
 import styles from "./Detail.module.css";
-import { IconButton, Rating } from "@mui/material";
+import { IconButton, Rating, Grid } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
@@ -45,76 +45,89 @@ function Detail() {
 
   return (
     <div>
-      <Container className={styles.container}>
-        <Card sx={{ maxWidth: 500 }}>
+  <Container className={styles.container}>
+    <Grid container spacing={2}>
+      <Grid item xs={12} md={6}>
+        <Card sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
+          <div style={{ flexGrow: 1, padding: "16px" }}>
+            <Typography gutterBottom variant="h6" component="div">
+              {product.name}
+            </Typography>
+          </div>
           <CardMedia
             component="img"
             alt={product.name}
-            height="250"
+            height="100%"
             image={product.urlImage}
           />
+        </Card>
+      </Grid>
+      <Grid item xs={12} md={6}>
+        <Card sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
           <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              {product.name}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Descripcion: {product.description}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
+            <Typography variant="h5" color="text.secondary">
               Precio: ${product.price}
             </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Stock:{product.stock}
+            <Typography variant="h5" color="text.secondary">
+              Stock: {product.stock} unidades
             </Typography>
+            <CardActions>
+              {/* <IconButton>
+                <FavoriteIcon />
+              </IconButton> */}
+              <IconButton>
+                <ShoppingCartIcon
+                  style={{ fontSize: "3rem" }}
+                  onClick={() => dispatch(addCarrito(product.id))}
+                />
+              </IconButton>
+            </CardActions>
           </CardContent>
-          <CardActions>
-            <IconButton>
-              <FavoriteIcon />
-            </IconButton>
-            <IconButton>
-              <ShoppingCartIcon onClick={()=>dispatch(addCarrito(product.id))} />
-            </IconButton>
-          </CardActions>
-          <Container className={styles.container}>
-            <Rating
-              name="rating"
-              value={rating}
-              onChange={(event, newRating) => handleRatingChange(newRating)}
-            />
-            <Card sx={{ maxWidth: 500 }}>
-              {reviews.length > 0 ? (
-                reviews.map((review) => (
-                  <div
-                    className="bg-gray-100 drop-shadow-lg rounded p-6 mt-4"
-                    key={review.id}
-                  >
-                    <div>
-                      <div className="rating">
-                        {Array.from({ length: Math.min(review.rating, 5) }).map(
-                          (_, index) => (
-                            <FontAwesomeIcon
-                              icon={faStar}
-                              key={index}
-                              style={{ color: "#FFD700" }}
-                            />
-                          )
-                        )}
-                      </div>
-                      <h3 style={{ color: "#000000" }}>{review.description}</h3>
-                      {/* <p>{review.user.name}</p> */}
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <h3 style={{ color: "#000000" }}>
-                  No hay opiniones disponibles
-                </h3>
-              )}
-            </Card>
-          </Container>
         </Card>
-      </Container>
-    </div>
+      </Grid>
+    </Grid>
+  </Container>
+
+  <Container className={styles.container}>
+      <Typography gutterBottom variant="h6" component="div">
+                  Opiniones del producto
+                </Typography>
+                <Rating
+                  name="rating"
+                  value={rating}
+                  onChange={(event, newRating) => handleRatingChange(newRating)}
+                />
+    <Card sx={{ height: "100%", marginTop: "16px" }}>
+      {reviews.length > 0 ? (
+        reviews.map((review) => (
+          <div
+          className="bg-gray-100 drop-shadow-lg rounded p-6 mt-4"
+          key={review.id}
+          >
+            <div>
+              <div className="rating">
+                {Array.from({ length: Math.min(review.rating, 5) }).map(
+                  (_, index) => (
+                    <FontAwesomeIcon
+                    icon={faStar}
+                    key={index}
+                    style={{ color: "#FFD700" }}
+                    />
+                    )
+                    )}
+              </div>
+              <h3 style={{ color: "#000000" }}>{review.description}</h3>
+              {/* <p>{review.user.name}</p> */}
+            </div>
+          </div>
+        ))
+      ) : (
+        <h3 style={{ color: "#000000" }}>No hay opiniones disponibles</h3>
+      )}
+    </Card>
+  </Container>
+</div>
+
   );
 }
 

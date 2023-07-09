@@ -21,34 +21,38 @@ import {
   cleanCarrito,
   deleteAllItemCarrito,
   deleteOneItemCarrito,
+  incrementProductQuantity,
 } from "../../redux/actions";
 import DeleteIcon from "@mui/icons-material/Delete";
+//import Dashboard from "../../components/Dashboard.jsx";
 
 function Carrito() {
-  const { myCarrito } = useSelector((state) => state);
+  const { cart, userAuthenticated } = useSelector((state) => state);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    localStorage.setItem("carrito", JSON.stringify(myCarrito));
-  }, [myCarrito]);
-
-  const subtotal = myCarrito.reduce(
-    (acc, car) => acc + car.price * car.quantity,
+  const subtotal = cart.reduce(
+    (acc, car) => acc + car.product.product.price * car.product.product.quantity,
     0
   );
   const total = subtotal + (18 * subtotal) / 100;
 
-  const handleIncrement = (productId) => {
-    dispatch(addCarrito(productId));
+  useEffect(() => {
+    localStorage.setItem("carrito", JSON.stringify(cart));
+  }, [cart]);
+
+  const handleIncrement = ( userId, productId) => {
+    dispatch(incrementProductQuantity( productId));
   };
 
   const handleDecrement = (productId) => {
-    dispatch(deleteOneItemCarrito(productId));
+    dispatch(deleteOneItemCarrito(userId, {id: productId}));
   };
 
   const handlePagar = () => {
     console.log("Procesando el pago del carrito...");
   };
+
+  console.log("carrito", cart);
 
   return (
     <Container fixed>
@@ -67,29 +71,53 @@ function Carrito() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {myCarrito?.map((car) => (
-                <TableRow key={car.id}>
+              {cart?.map((car) => (
+                <TableRow key={car.product.product.id}>
                   <TableCell>
                     <img
-                      src={car.urlImage}
-                      alt={car.name}
+                      src={car.product.product.urlImage}
+                      alt={car.product.product.name}
                       style={{ width: "50px" }}
                     />
                   </TableCell>
-                  <TableCell>{car.name}</TableCell>
-                  <TableCell>$/{car.price}.00</TableCell>
+                  <TableCell>{car.product.product.name}</TableCell>
+                  <TableCell>$/{car.product.product.price}.00</TableCell>
                   <TableCell>
                     <div>
-                      <IconButton onClick={() => handleDecrement(car.id)}>
+                      <IconButton onClick={() => handleDecrement(car.user.id, car.product.id)}>
                         <RemoveIcon />
                       </IconButton>
-                      {car.quantity}
+                      {car.product.product.quantity}
                       <IconButton onClick={() => handleIncrement(car.id)}>
                         <AddIcon />
                       </IconButton>
+                      {/* {userAuthenticated === undefined} ? 
+                      (
+                      (
+                        {userAuthenticated.user.profile?.provider === "google"} ? 
+                        (
+                          <IconButton onClick={() => handleDecrement(car.id)}>
+                           <RemoveIcon />
+                          </IconButton>
+                          {car.quantity}
+                          <IconButton onClick={() => handleIncrement(car.id)}>
+                            <AddIcon />
+                          </IconButton>
+                        ) :
+                        (
+                          <IconButton onClick={() => handleDecrement(car.id)}>
+                            <RemoveIcon />
+                          </IconButton>
+                          {car.quantity}
+                          <IconButton onClick={() => handleIncrement(userAuthenticated.user.id, car.id)}>
+                            <AddIcon />
+                          </IconButton>
+                        )
+                      ) */}
+                      
                     </div>
                   </TableCell>
-                  <TableCell>$/{car.price * car.quantity}.00</TableCell>
+                  <TableCell>$/{car.product.product.price * car.product.product.quantity}.00</TableCell>
                   <TableCell>
                     <div>
                       <IconButton
@@ -149,3 +177,5 @@ function Carrito() {
 }
 
 export default Carrito;
+
+

@@ -8,7 +8,9 @@ const Cart = require("./Cart");
 const login = require("./login");
 const filter = require("./filterAndSort");
 const email = require("./email");
-const payment = require("./payment")
+const payment = require("./payment");
+const authGoogle = require("./authGoogle");
+const productByCategory = require("./productByCategory");
 
 router.use("/", authGoogle);
 router.use("/products", productRouter);
@@ -20,4 +22,6 @@ router.use("/login", login);
 router.use("/filters", filter);
 router.use("/email", email);
 router.use("/payment", payment)
+router.use("/authGoogle", authGoogle)
+router.use("/productsCategory", productByCategory)
 module.exports = router;

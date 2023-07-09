@@ -6,6 +6,7 @@ import Footer from "./components/Footer/Footer";
 import "./App.css";
 import Filtros from "./components/Filtros/Filtros";
 import Novedades from "./components/Filtros/Novedades";
+import Dashboard from "./components/Dashboard/Dashboard";
 
 
 function App() {
@@ -13,7 +14,9 @@ function App() {
 
   return (
     <div className="app">
-      {location.pathname !== "/" && <NavBar />}
+     {location.pathname !== "/" && location.pathname !== "/dashboard" && <NavBar />}
+
+
 
       <div className="content app">
         <Routes>
@@ -26,11 +29,12 @@ function App() {
           <Route path="/carrito" element={<Carrito />} />
           <Route path="/filtros" element={<Filtros />} />
           <Route path="/novedades" element={<Novedades />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           
         </Routes>
       </div>
       <footer>
-        <Footer />
+      {location.pathname !== "/" && location.pathname !== "/dashboard" && <Footer />}
       </footer>
     </div>
   );

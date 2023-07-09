@@ -215,7 +215,7 @@ export const NavBar = () => {
               </Grid>
               <Grid item>
                 <List sx={{ width: "100%", bgcolor: "background.paper" }}>
-                  {Resultados.map((value) => (
+                  {Resultados?.map((value) => (
                     <>
                       <ListItemButton
                         alignItems="flex-start"
