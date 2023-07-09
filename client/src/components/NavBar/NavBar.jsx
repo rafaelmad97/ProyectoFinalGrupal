@@ -35,6 +35,7 @@ import {
   logoutUserSessionGoogle,
   logoutUserSessionLocal,
 } from "../../redux/actions";
+import FilterAndSort from "../Filtros/FilterAndSort/FilterAndSort";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -133,6 +134,7 @@ export const NavBar = () => {
   };
 
   return (
+    <>
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar aria-describedby={id}>
@@ -236,5 +238,7 @@ export const NavBar = () => {
         </CardContent>
       </Dialog>
     </Box>
+    <FilterAndSort/>
+  </>
   );
 };

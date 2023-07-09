@@ -16,6 +16,10 @@ import {
   LOGIN_GOOGLE,
   LOGIN_LOCAL,
   LOGOUT,
+  ORDER_BY_PRICE,
+  FILTER_BY_CATEGORY,
+  FILTER_BY_DATE,
+  ORDER_BY_DATE,
 } from "./types";
 
 export const getAllProducts = () => {
@@ -272,5 +276,151 @@ export const deleteAllItemCarrito = (id) => {
 export const cleanCarrito = () => {
   return {
     type: CLEAN_CARRITO,
+  };
+};
+
+export const orderByPrice = (price) => {
+  return {
+      type: ORDER_BY_PRICE,
+      payload: price
+  }
+}
+
+export const filterByCategory = (categorys) => {
+  return async function(dispatch){
+      try {
+          const response = await axios.get(`http://localhost:3001/filters/products?category=${categorys}`);
+          const category = response.data;
+          dispatch({
+              type: FILTER_BY_CATEGORY,
+              payload: category
+          })
+      } catch (error) {
+          dispatch({
+              type: ERROR,
+              payload: error
+          })
+      }
+  }
+}
+
+export const filterByDate = () => {
+  return {
+    type: FILTER_BY_DATE
+  };
+};
+
+export const orderByDate = (order) => {
+  return {
+    type: ORDER_BY_DATE,
+    payload: order
+  }
+}
+
+// action de reviews
+
+export function getReviews(id) {
+  return function (dispatch) {
+    const url = `http://localhost:3001/reviews?productId=${id}`;
+    console.log(id + " actions")
+    return axios.get(url)
+      .then(res => res.data)
+      .then(data => {
+        dispatch({ type: VIEW_REVIEW, payload: data })
+      })
+  }
+}
+
+export function addReview(reviewData) {
+  return function (dispatch) {
+    const url = 'http://localhost:3001/reviews';
+    return axios.post(url, reviewData)
+      .then(data => {
+        dispatch({ type: ADD_REVIEW, payload: data });
+        swal({
+          icon: "success",
+          title: "Modificación",
+          text: "Se modificó el producto correctamente",
+        });
+      })
+      .catch((error) => {
+        let errorMessage = "Ha ocurrido un error";
+        if (error.response && error.response.data && error.response.data.message) {
+          errorMessage = error.response.data.message;
+        }
+        swal({
+          icon: "error",
+          title: "Oops...",
+          text: errorMessage,
+        });
+      });
+  };
+}
+
+export const addProductToCart = (user, product, quantity) => {
+  return async (dispatch) => {
+    try {
+      const response = await fetch('http://localhost:3001/cart/add-product', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ user, product, quantity }),
+      });
+
+      if (response.ok) {
+        const addedProduct = await response.json()
+        //dispatch({ type: 'ADD_PRODUCT_SUCCESS', payload: { user, product, quantity } });
+        dispatch({ type: 'ADD_PRODUCT_SUCCESS', payload: { product: addedProduct } });
+      } else {
+        throw new Error('Failed to add product to cart');
+      }
+    } catch (error) {
+      dispatch({ type: 'ADD_PRODUCT_FAILURE', payload: error.message });
+    }
+  };
+};
+
+export const incrementProductQuantity = (user, product) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.put('http://localhost:3001/cart/addProductOne', { user, product });
+      const { updated, msg } = response.data;
+
+      if (updated) {
+        // La cantidad del producto se incrementó correctamente
+        dispatch({ type: 'INCREMENT_PRODUCT_QUANTITY_SUCCESS', payload: { product, msg } });
+      } else {
+        // Ocurrió un error al incrementar la cantidad del producto
+        dispatch({ type: 'INCREMENT_PRODUCT_QUANTITY_FAILURE', payload: { error: msg } });
+      }
+    } catch (error) {
+      // Ocurrió un error en la solicitud
+      dispatch({ type: 'INCREMENT_PRODUCT_QUANTITY_FAILURE', payload: { error: error.message } });
+    }
+  };
+};
+
+export const removeFromCart = (idProduct, idUser) => {
+  return async (dispatch) => {
+    try {
+      const response = await fetch(`/api/removeProductInCart/${idProduct}/${idUser}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Producto eliminado del carrito:', data.msg);
+        // Realizar acciones adicionales si es necesario
+      } else {
+        throw new Error('Error al eliminar el producto del carrito');
+      }
+    } catch (error) {
+      console.error('Error en la solicitud:', error.message);
+      // Realizar acciones adicionales si es necesario
+    }
   };
 };
