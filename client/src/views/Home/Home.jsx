@@ -36,7 +36,7 @@ const Home = () => {
   console.log(allProducts);
   return (
     <div>
-      <Grid container direction="column">
+      <Grid container direction="column" >
         <Grid item>
           <Banner />
         </Grid>
