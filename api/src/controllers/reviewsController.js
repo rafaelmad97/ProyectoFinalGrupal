@@ -1,5 +1,3 @@
-
-
 const { User, Review, Product } = require("../db.js");
 const Sequelize = require("sequelize");
 const Op = Sequelize.Op;

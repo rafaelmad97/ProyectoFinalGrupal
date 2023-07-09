@@ -5,7 +5,7 @@ import {
   CardHeader,
   Container,
   Grid,
-  TextField,
+
   Dialog,
   DialogContent,
   DialogContentText,
@@ -13,14 +13,15 @@ import {
   DialogActions,
 } from "@mui/material";
 import { useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
 import * as Yup from "Yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser, getAllUsers } from "../../redux/actions";
 import { useEffect } from "react";
+import UserInfo from "./UserInfo";
 
-const shemmaUsuario = Yup.object({
+export const shemmaUsuario = Yup.object({
   name: Yup.string().required("Este campo es requerido"),
   lastName: Yup.string().required("Este campo es requerido"),
   email: Yup.string().email().required("Este campo es requerido"),
@@ -103,84 +104,9 @@ const FormUsers = () => {
         <CardHeader title="Registro de usuario" />
         <CardContent>
           <Grid container direction="row" spacing={1}>
-            <Grid item xs={12} md={6} xl={4}>
-              <Controller
-                name="name"
-                control={Formulario.control}
-                render={({ field, fieldState }) => (
-                  <TextField
-                    label="Nombres"
-                    {...field}
-                    error={Boolean(fieldState.error)}
-                    helperText={fieldState.error?.message}
-                    fullWidth
-                  />
-                )}
-              />
-            </Grid>
-            <Grid item xs={12} md={6} xl={4}>
-              <Controller
-                name="lastName"
-                control={Formulario.control}
-                render={({ field, fieldState }) => (
-                  <TextField
-                    label="Apellidos"
-                    {...field}
-                    error={Boolean(fieldState.error)}
-                    helperText={fieldState.error?.message}
-                    fullWidth
-                  />
-                )}
-              />
-            </Grid>
-            <Grid item xs={12} md={6} xl={4}>
-              <Controller
-                name="email"
-                control={Formulario.control}
-                render={({ field, fieldState }) => (
-                  <TextField
-                    label="Correo electronico"
-                    type="email"
-                    {...field}
-                    error={Boolean(fieldState.error)}
-                    helperText={fieldState.error?.message}
-                    fullWidth
-                  />
-                )}
-              />
-            </Grid>
-            <Grid item xs={12} md={6} xl={4}>
-              <Controller
-                name="password"
-                control={Formulario.control}
-                render={({ field, fieldState }) => (
-                  <TextField
-                    label="Contraseña"
-                    type="password"
-                    {...field}
-                    error={Boolean(fieldState.error)}
-                    helperText={fieldState.error?.message}
-                    fullWidth
-                  />
-                )}
-              />
-            </Grid>
-            <Grid item xs={12} md={6} xl={4}>
-              <Controller
-                name="phone"
-                control={Formulario.control}
-                render={({ field, fieldState }) => (
-                  <TextField
-                    label="Telefono"
-                    type="number"
-                    {...field}
-                    error={Boolean(fieldState.error)}
-                    helperText={fieldState.error?.message}
-                    fullWidth
-                  />
-                )}
-              />
-            </Grid>
+            <FormProvider {...Formulario}>
+                <UserInfo />
+            </FormProvider>
 
             <Grid item xs={12} md={12} xl={12}>
               <form onSubmit={Formulario.handleSubmit(Submit)}>

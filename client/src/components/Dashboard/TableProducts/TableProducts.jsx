@@ -15,21 +15,42 @@ import {
   Card,
   CardContent,
   TextField,
+  Dialog,
+  DialogContent,
+  DialogActions,
+  DialogTitle,
 } from "@mui/material";
 
 import SearchIcon from "@mui/icons-material/Search";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import FormModal from "./FormModal";
-import { getByName, orderByDate, orderByPrice } from "../../../redux/actions";
+import { getByName, orderByDate, orderByPrice, editProducts } from "../../../redux/actions";
+import { schemmaProducto } from "./FormModal"
+import { FormProvider, useForm } from "react-hook-form";
+import { yupResolver} from "@hookform/resolvers/yup"
+import InformacionProducto from "./InformacionProducto";
 
 function TableProducts() {
   const { allProducts } = useSelector((state) => state);
   const [open, setOpen] = useState(false);
+  const [openEdit, setEdit] = useState(false);
   const dispatch = useDispatch();
   const [searchValue, setSearchValue] = useState("");
   const [orderPrice, setOrderPrice] = useState("");
   const [orderDate, setOrderDate] = useState("");
+
+  const Formulario = useForm({
+    defaultValues: {
+      name: "",
+      urlImage: "",
+      description: "",
+      stock: 0,
+      price: 0,
+      categoryId: -1,
+    },
+    resolver: yupResolver(schemmaProducto),
+  });
 
   const handleOrderPrice = (event) => {
     dispatch(orderByPrice(event.target.value));
@@ -56,10 +77,43 @@ function TableProducts() {
   };
   const handleClose = () => {
     setOpen(false);
-  };
+    Formulario.reset();
+    };
 
+  const handleUpdateProduct = (product) =>{
+    Formulario.reset({...product})
+    setEdit(true)
+  }
+
+  const handleCloseUpdateProduct = () => {
+    setEdit(false)
+    Formulario.reset()
+  }
+
+  const handleSubmit = (data) => {
+    Promise.resolve(dispatch(editProducts(data))).then(()=>handleCloseUpdateProduct()).catch((e)=>console.log(e)).finally()
+  }
   return (
     <Container fixed>
+      <Dialog open={openEdit}>
+        <DialogTitle> Editar Producto</DialogTitle>
+        <DialogContent >
+        <Grid container direction="row" spacing={1}>
+
+          <FormProvider {...Formulario}>
+            <InformacionProducto />
+          </FormProvider>
+        </Grid>
+        </DialogContent>
+        <DialogActions>
+          <form onSubmit={Formulario.handleSubmit(handleSubmit)}>
+
+          <Button color="primary" type="submit">Editar</Button>
+          </form>
+          <Button color="secondary" onClick={handleCloseUpdateProduct}>Cancelar</Button>
+
+        </DialogActions>
+      </Dialog>
       <Card>
         <CardContent>
           <h2>Products</h2>
@@ -160,7 +214,8 @@ function TableProducts() {
                   <TableCell>Categoria</TableCell>
                   <TableCell>
                     <div>
-                      <IconButton>
+                      <IconButton onClick={()=>handleUpdateProduct(item)
+                      }>
                         <EditIcon />
                       </IconButton>
                     </div>

@@ -23,6 +23,7 @@ import {
   deleteOneItemCarrito,
 } from "../../redux/actions";
 import DeleteIcon from "@mui/icons-material/Delete";
+import axios from "axios";
 
 function Carrito() {
   const { myCarrito } = useSelector((state) => state);
@@ -46,8 +47,19 @@ function Carrito() {
     dispatch(deleteOneItemCarrito(productId));
   };
 
-  const handlePagar = () => {
-    console.log("Procesando el pago del carrito...");
+  
+
+  //pago de mercado pago
+  const realizarCompra = async () => {
+    try {
+      const response = await axios.post("http://localhost:3001/payment", {carrito: myCarrito}).finally(() => dispatch(cleanCarrito()));
+      const { init_point } = response.data;
+      if (init_point) {
+        window.location.href = init_point; 
+      }
+    } catch (error) {
+      console.error("Error al realizar la compra:", error);
+    }
   };
 
   return (
@@ -67,6 +79,7 @@ function Carrito() {
               </TableRow>
             </TableHead>
             <TableBody>
+              {myCarrito?.length > 0 ? <>
               {myCarrito?.map((car) => (
                 <TableRow key={car.id}>
                   <TableCell>
@@ -100,8 +113,18 @@ function Carrito() {
                     </div>
                   </TableCell>
                 </TableRow>
-              ))}
+              ))}</> : <><TableRow >
+
+                <TableCell colSpan={6} align="center">
+                  <Typography variant="body1" fontSize={18} >
+
+                  No hay productos en el carrito
+                  </Typography>
+                </TableCell>
+              </TableRow>
+              </> }
             </TableBody>
+
           </Table>
           <div>
             <Grid container direction="column" spacing={1}>
@@ -126,7 +149,7 @@ function Carrito() {
               <Grid item>
                 <Grid container direction="row" spacing={1}>
                   <Grid item>
-                    <Button variant="contained" onClick={handlePagar}>
+                    <Button variant="contained" disabled={myCarrito?.length === 0} onClick={realizarCompra}>
                       Pagar
                     </Button>
                   </Grid>

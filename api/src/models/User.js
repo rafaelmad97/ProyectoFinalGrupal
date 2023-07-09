@@ -58,10 +58,10 @@ module.exports = (sequelize) => {
           unique: true,
         },
 
-        isAdmin: {
-          type: DataTypes.BOOLEAN,
-          defaultValue: false,
-        },
+        // isAdmin: {
+        //   type: DataTypes.BOOLEAN,
+        //   defaultValue: false,
+        // },
         // rol: {
         //   type: DataTypes.ENUM,
         //   values: ["user", "admin"],

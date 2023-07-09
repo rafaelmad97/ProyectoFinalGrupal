@@ -17,13 +17,14 @@ import {
   DialogContent,
   DialogActions,
 } from "@mui/material";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, FormProvider } from "react-hook-form";
 import * as Yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
+ import { yupResolver } from "@hookform/resolvers/yup";
 import { useDispatch, useSelector } from "react-redux";
 import { addProducts, getAllCategorys } from "../../../redux/actions";
+import InformacionProducto from "./InformacionProducto";
 
-const shemmaUsuario = Yup.object({
+export const schemmaProducto = Yup.object({
   name: Yup.string().required("Este campo es requerido"),
   urlImage: Yup.string().url().required("Este campo es requerido"),
   description: Yup.string().required("Este campo es requerido"),
@@ -33,7 +34,7 @@ const shemmaUsuario = Yup.object({
 
 const FormModal = ({ open, handleClose }) => {
   const dispatch = useDispatch();
-  const allCategorys = useSelector((state) => state.allCategorys);
+  
 
   useEffect(() => {
     dispatch(getAllCategorys());
@@ -41,138 +42,40 @@ const FormModal = ({ open, handleClose }) => {
 
   const Formulario = useForm({
     defaultValues: {
+      id:1,
       name: "",
       urlImage: "",
       description: "",
       stock: 0,
       price: 0,
-      category: "",
+      categoryId: -1,
     },
-    resolver: yupResolver(shemmaUsuario),
+    resolver: yupResolver(schemmaProducto),
   });
 
   const Submit = (data) => {
     console.log(data);
     Promise.resolve(dispatch(addProducts(data)))
-      .then(() => console.log("agregado"))
+      .then(() => handleClose())
       .catch(() => console.log("error no registrado"));
   };
+
+  const handleCloseCreate = () =>{
+    handleClose()
+  }
 
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Create Products</DialogTitle>
       <DialogContent>
-        <Card>
-          <CardContent>
+     
+ 
             <Grid container direction="row" spacing={1}>
-              <Grid item xs={12} md={6} xl={4}>
-                <Controller
-                  name="name"
-                  control={Formulario.control}
-                  render={({ field, fieldState }) => (
-                    <TextField
-                      label="Nombre"
-                      {...field}
-                      onChange={(event) => {
-                        field.onChange(event);
-                        Formulario.trigger(field.name);
-                      }}
-                      error={Boolean(fieldState.error)}
-                      helperText={fieldState.error?.message}
-                      fullWidth
-                    />
-                  )}
-                />
-              </Grid>
-              <Grid item xs={12} md={6} xl={4}>
-                <Controller
-                  name="urlImage"
-                  control={Formulario.control}
-                  render={({ field, fieldState }) => (
-                    <TextField
-                      label="Image"
-                      {...field}
-                      error={Boolean(fieldState.error)}
-                      helperText={fieldState.error?.message}
-                      fullWidth
-                    />
-                  )}
-                />
-              </Grid>
-              <Grid item xs={12} md={6} xl={4}>
-                <Controller
-                  name="description"
-                  control={Formulario.control}
-                  render={({ field, fieldState }) => (
-                    <TextField
-                      label="Descripcion"
-                      type="text"
-                      {...field}
-                      error={Boolean(fieldState.error)}
-                      helperText={fieldState.error?.message}
-                      fullWidth
-                    />
-                  )}
-                />
-              </Grid>
-              <Grid item xs={12} md={6} xl={4}>
-                <Controller
-                  name="stock"
-                  control={Formulario.control}
-                  render={({ field, fieldState }) => (
-                    <TextField
-                      label="Stock"
-                      type="number"
-                      {...field}
-                      error={Boolean(fieldState.error)}
-                      helperText={fieldState.error?.message}
-                      fullWidth
-                    />
-                  )}
-                />
-              </Grid>
-              <Grid item xs={12} md={6} xl={4}>
-                <Controller
-                  name="price"
-                  control={Formulario.control}
-                  render={({ field, fieldState }) => (
-                    <TextField
-                      label="Precio"
-                      type="number"
-                      {...field}
-                      error={Boolean(fieldState.error)}
-                      helperText={fieldState.error?.message}
-                      fullWidth
-                    />
-                  )}
-                />
-              </Grid>
-              <Grid item xs={12} md={6} xl={4}>
-                <Controller
-                  name="category"
-                  control={Formulario.control}
-                  render={({ field, fieldState }) => (
-                    <>
-                      <InputLabel id="category">Categoria</InputLabel>
-                      <Select
-                        labelId="category"
-                        label="Category"
-                        fullWidth
-                        {...field}
-                      >
-                        {allCategorys.map((cat) => (
-                          <MenuItem value={cat.name} key={cat.id}>
-                            {cat.name}
-                          </MenuItem>
-                        ))}
-                      </Select>
-                    </>
-                  )}
-                />
-              </Grid>
+              <FormProvider {...Formulario}>
+                <InformacionProducto />
+              </FormProvider>
             </Grid>
-          </CardContent>
-        </Card>
+   
       </DialogContent>
       <DialogActions>
         <Button variant="outlined" onClick={handleClose}>

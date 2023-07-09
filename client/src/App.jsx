@@ -1,6 +1,6 @@
 
 import { Routes, Route, useLocation } from "react-router-dom";
-import { Home, Login, Detail, Landing, Form, Carrito } from "./views";
+import { Home, Login, Detail, Landing, Carrito } from "./views";
 import { NavBar } from "./components/NavBar/NavBar";
 import FormUsers from "./components/FormUsers/FormUsers";
 import Footer from "./components/Footer/Footer";
@@ -25,7 +25,7 @@ function App() {
           <Route path="/home" element={<Home />}></Route>
           <Route path="/detail/:id" element={<Detail />}></Route>
           <Route path="/login" element={<Login />}></Route>
-          <Route path="/form" element={<Form />}></Route>
+          
           <Route path="/nuevousuario" element={<FormUsers />} />
           <Route path="/carrito" element={<Carrito />} />
           <Route path="/filtros" element={<Filtros />} />

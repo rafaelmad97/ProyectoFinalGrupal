@@ -122,16 +122,29 @@ export function addProducts(payload) {
         }
       );
 
-      const productId = response.data.id;
-      const categorias = payload.category;
-      const direccion = `http://localhost:3001/products/${productId}/category/${categorias}`;
-
-      await axios.post(direccion, response.data);
-
       dispatch({
         type: ADD_PRODUCT,
         payload: response.data,
       });
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+}
+
+export function editProducts(payload) {
+  return async function (dispatch) {
+    try {
+      const response = await axios.put(
+        `http://localhost:3001/products/${payload.id}`,
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
     } catch (error) {
       throw new Error(error.message);
     }

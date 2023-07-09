@@ -48,16 +48,23 @@ const Filtros = () => {
 
   return (
     <div>
-      {categoryFilter.length > 0 && (
+      {categoryFilter.length > 0 ? (
         <Typography
           variant="h2"
           component="div"
           sx={{ flexGrow: 1 }}
           className="title"
         >
-          {categoryFilter[0].categories[0].name}
+          {categoryFilter[0]?.category.name}
         </Typography>
-      )}
+      ): <Typography
+      variant="h2"
+      component="div"
+      sx={{ flexGrow: 1 }}
+      className="title"
+    >
+      f en el chat
+    </Typography> }
      <Box
   sx={{
     display: "flex",
