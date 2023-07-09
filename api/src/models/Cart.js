@@ -1,12 +1,13 @@
 const { DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
-    sequelize.define("Cart", {
-        UserId: {
+    sequelize.define("cart", {
+        ProductId: {
             type: DataTypes.INTEGER(),
             allowNull: false
         },
-        ProductId: {
+        Quantity:
+        {
             type: DataTypes.INTEGER(),
             allowNull: false
         }

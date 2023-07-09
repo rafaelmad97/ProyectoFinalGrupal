@@ -1,10 +1,5 @@
 const router = require("express").Router();
 const cors = require("cors");
-const {
-  RemoveProductInCart,
-  GetCartByAUser,
-  AddProduct,
-} = require("../controllers/Cart");
 const passport = require("passport");
 
 const localStrategy = require("../config/passport-localStrategy");
@@ -37,6 +32,7 @@ router.route("/").post((req, res, next) => {
   })(req, res, next);
 });
 
+<<<<<<< HEAD
 router.get("/authenticated", (req, res) => {
   if (req.isAuthenticated()) {
     res.status(200).json({ user: req.user });
@@ -44,6 +40,14 @@ router.get("/authenticated", (req, res) => {
     res.status(404).json({ status: "no logged" });
   }
 });
+=======
+    passport.authenticate("local", (err, user, info) => {
+        if (err) return next(err)
+        if (!user) return res.status(401).json({ message: "Login Failed" })
+        req.logIn(user, (err) => {
+            if (err) return next(err)
+            return res.status(200).json({ message: "Login with exite" })
+>>>>>>> Backend
 
 router.get("/logout", async (req, res) => {
   await req.session.destroy();

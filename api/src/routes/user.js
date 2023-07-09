@@ -1,6 +1,8 @@
 const server = require("express").Router();
 const cors = require("cors");
 const { User } = require("../db");
+const sendEmail = require("../controllers/Email");
+const { EMAILACCOUNT } = process.env;
 
 server.use(cors());
 
@@ -24,9 +26,15 @@ server.post("/", (req, res, next) => {
     email,
     password,
     phone,
-    rol,
   })
     .then((usuario) => {
+      // Envía el correo de notificación al usuario registrado
+      const from = EMAILACCOUNT;
+      const to = email; // Dirección de correo electrónico del destinatario
+      const subject = "¡Registro exitoso!"; // Asunto del correo
+      const html = "<p>Gracias por registrarte en nuestro sitio.</p>"; // Contenido en HTML del cuerpo del correo
+      sendEmail(from, to, subject, html);
+
       return res.json(usuario);
     })
     .catch(next);
@@ -101,7 +109,6 @@ server.delete("/:id", (req, res, next) => {
       res.send(error.message);
     });
 });
-
 
 //AGREGAR ITEM AL CARRITO
 
