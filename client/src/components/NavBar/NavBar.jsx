@@ -12,21 +12,30 @@ import {
   Divider,
   ListItemButton,
   Menu,
+  MenuItem,
   Dialog,
   TextField,
   Grid,
   CardContent,
+  Avatar,
 } from "@mui/material";
 import { styled, alpha } from "@mui/material/styles";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import SearchIcon from "@mui/icons-material/Search";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { useSelector } from "react-redux";
 
 import "./NavBar.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import NAVLOGO from "../../assets/logo.svg";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { getByName } from "../../redux/actions";
+import {
+  getByName,
+  logoutUserSessionGoogle,
+  logoutUserSessionLocal,
+} from "../../redux/actions";
+import FilterAndSort from "../Filtros/FilterAndSort/FilterAndSort";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -68,13 +77,31 @@ export const NavBar = () => {
   const dispatch = useDispatch();
   const [searchValue, setSearchValue] = useState("");
   const [Resultados, setResultados] = useState([]);
+  const { userAuthenticated } = useSelector((state) => state);
 
   const [open, setOpen] = useState(false);
   const id = open ? "open-menu" : undefined;
 
+  const [anchorEl, setAnchorEl] = useState(null);
+  const openMenu = Boolean(anchorEl);
+
   useEffect(() => {
     handleSearch();
   }, [searchValue]);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    dispatch(logoutUserSessionGoogle());
+    dispatch(logoutUserSessionLocal());
+    handleClose();
+  };
 
   const handleSearch = (event) => {
     Promise.resolve(dispatch(getByName(searchValue)))
@@ -107,6 +134,7 @@ export const NavBar = () => {
   };
 
   return (
+    <>
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar aria-describedby={id}>
@@ -133,9 +161,46 @@ export const NavBar = () => {
             />
           </Search>
 
-          <IconButton color="inherit" size="large">
-            <AccountCircleIcon color="secondary" />
-          </IconButton>
+          <div className="nav-item">
+            {userAuthenticated === undefined ? (
+              <IconButton color="inherit" size="large" onClick={handleLogin}>
+                <AccountCircleIcon color="secondary" />
+              </IconButton>
+            ) : (
+              <>
+                {userAuthenticated.user.profile?.provider === "google" ? (
+                  <Avatar
+                    alt={userAuthenticated.user.profile.name?.familyName}
+                    src={userAuthenticated.user.profile.photos[0]?.value}
+                    onClick={handleClick}
+                  />
+                ) : (
+                  <>
+                    <Avatar color="secondary" onClick={handleClick}>
+                      {`${userAuthenticated.user.name}`.charAt(0)}
+                    </Avatar>
+                  </>
+                )}
+              </>
+            )}
+          </div>
+
+          <Link to={"/carrito"} className="nav-item">
+            <IconButton style={{ color: "white" }}>
+              <ShoppingCartIcon />
+            </IconButton>
+          </Link>
+          <Menu
+            id="basic-menu"
+            anchorEl={anchorEl}
+            open={openMenu}
+            onClose={handleClose}
+            MenuListProps={{
+              "aria-labelledby": "basic-button",
+            }}
+          >
+            <MenuItem onClick={handleLogout}>Cerrar Sesion</MenuItem>
+          </Menu>
         </Toolbar>
       </AppBar>
       <Dialog open={open} onClose={handleCloseSearchDialog} value={searchValue}>
@@ -173,5 +238,7 @@ export const NavBar = () => {
         </CardContent>
       </Dialog>
     </Box>
+    <FilterAndSort/>
+  </>
   );
 };

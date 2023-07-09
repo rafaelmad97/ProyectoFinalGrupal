@@ -5,10 +5,16 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import { addCarrito } from "../../redux/actions";
+import { useDispatch } from "react-redux";
+
+
 import "./Card.css";
 
 const Cards = (props) => {
   const { name, urlImage, price, id } = props;
+  const dispatch = useDispatch()
+
 
   return (
     <Card elevation={4} sx={{ maxWidth: 345 }}>
@@ -25,7 +31,7 @@ const Cards = (props) => {
         <Link to={`/detail/${id}`}>
           <Button size="small">+ Info</Button>
         </Link>
-        <Button size="small">Añadir al carrito</Button>
+        <Button onClick={()=>dispatch(addCarrito(id))} size="small">Añadir al carrito</Button>
       </CardActions>
     </Card>
   );

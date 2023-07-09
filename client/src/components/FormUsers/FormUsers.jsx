@@ -6,7 +6,13 @@ import {
   Container,
   Grid,
   TextField,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  DialogActions,
 } from "@mui/material";
+import { useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import * as Yup from "Yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -25,6 +31,11 @@ const shemmaUsuario = Yup.object({
 });
 
 const FormUsers = () => {
+  const [Dialogo, setDialogo] = useState({
+    open: false,
+    title: "",
+    message: "",
+  });
   const dispatch = useDispatch();
   const allUser = useSelector((state) => state.allUser);
 
@@ -48,16 +59,48 @@ const FormUsers = () => {
 
   const Submit = (data) => {
     console.log(data);
-    //Promise.resolve(dispatch(addUser(data))).then(()=> console.log("agregado")).catch(()=> console.log("error no registrado"))
-    dispatch(addUser(data));
+    Promise.resolve(dispatch(addUser(data)))
+      .then((res) =>
+        setDialogo({
+          open: true,
+          title: "Usuario Agregado",
+          message: "El usuario se agregó correctamente\n",
+        })
+      )
+      .catch((e) =>
+        setDialogo({
+          open: true,
+          title: "Error",
+          message: e.message,
+        })
+      )
+      .finally();
+  };
+
+  const handleResetDialog = () => {
+    setDialogo({
+      open: false,
+      title: "",
+      message: "",
+    });
   };
 
   return (
     <Container>
       <br />
+      <Dialog open={Dialogo.open}>
+        <DialogTitle>{Dialogo.title}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>{Dialogo.message}</DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleResetDialog} color="secondary">
+            OK
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Card>
         <CardHeader title="Registro de usuario" />
-
         <CardContent>
           <Grid container direction="row" spacing={1}>
             <Grid item xs={12} md={6} xl={4}>
