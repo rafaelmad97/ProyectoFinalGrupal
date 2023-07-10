@@ -1,6 +1,6 @@
 const server = require("express").Router();
 const cors = require("cors");
-const { User } = require("../db");
+const { User, Historial } = require("../db");
 const sendEmail = require("../controllers/Email");
 const { EMAILACCOUNT } = process.env;
 const welcomeEmail = require("../email-templates/welcome");
@@ -38,6 +38,14 @@ server.post("/", (req, res, next) => {
       const html = welcomeEmail; // Contenido en HTML del cuerpo del correo
       sendEmail(from, to, subject, html);
 
+      //Se guarda la actividad del usuario
+
+      Historial.create({
+        userId: usuario.id,
+        tipoActividad: "registro",
+        descripcion: `${name} ${lastName} se ha registrado`,
+      });
+
       return res.json(usuario);
     })
     .catch(next);
@@ -67,7 +75,7 @@ server.get("/:email", (req, res, next) => {
 
 server.put("/password/:id", (req, res) => {
   const { id } = req.params;
-  const { password, newPassword, email } = req.body;
+  const { password, newPassword } = req.body;
 
   User.findByPk(id)
     .then((user) => {
@@ -89,12 +97,22 @@ server.put("/password/:id", (req, res) => {
           res
             .status(200)
             .json({ message: "Contraseña actualizada correctamente" });
+
           // Envía el correo de actualizacion al usuario
+
           const from = EMAILACCOUNT;
-          const to = email; // Dirección de correo electrónico del destinatario
+          const to = user.email; // Dirección de correo electrónico del destinatario
           const subject = "¡Cambio de contraseña exitoso!"; // Asunto del correo
           const html = changePEmail; // Contenido en HTML del cuerpo del correo
           sendEmail(from, to, subject, html);
+
+          //Se guarda la actividad del usuario
+
+          Historial.create({
+            userId: id,
+            tipoActividad: "actualizar contraseña",
+            descripcion: `${user.name} ${user.lastName} actualizó su contraseña`,
+          });
         })
 
         .catch((error) => {
@@ -108,55 +126,62 @@ server.put("/password/:id", (req, res) => {
     });
 });
 
-//ACTUALIZAR USUARIO
-
-server.put("/:id", (req, res, next) => {
-  const { name, lastName, email, password, phone, rol } = req.body;
-  var userUpdate = {
-    name,
-    lastName,
-    email,
-    password,
-    phone,
-    rol,
-  };
-
-  User.findOne({
-    where: {
-      id: req.params.id,
-    },
-  })
-    .then((usuarioEncontrado) => {
-      usuarioEncontrado.update(userUpdate).then((newUser) => {
-        newUser.save();
-        res.status(200);
-        return res.json(newUser);
-      });
-    })
-    .catch(next);
-});
-
 //ELIMINAR USUARIO
 
 server.delete("/:id", (req, res, next) => {
   const { id } = req.params;
+  let user;
   User.findByPk(id)
-    .then((user) => {
-      if (user) {
-        return user.destroy();
-      } else {
+    .then((foundUser) => {
+      if (!foundUser) {
         throw new Error("Usuario no encontrado");
       }
+
+      user = foundUser; // Asignar el valor de foundUser a user
+
+      return foundUser.destroy();
     })
     .then(() => {
-      res.status(200);
-      res.send("Usuario eliminado");
+      res.status(200).send("Usuario eliminado");
+      Historial.create({
+        userId: id,
+        tipoActividad: "eliminar usuario",
+        descripcion: `${user.name} ${user.lastName} ha sido eliminado`,
+      });
     })
     .catch((error) => {
       res.status(404);
       res.send(error.message);
     });
 });
+
+//ACTUALIZAR USUARIO
+
+// server.put("/:id", (req, res, next) => {
+//   const { name, lastName, email, password, phone, rol } = req.body;
+//   var userUpdate = {
+//     name,
+//     lastName,
+//     email,
+//     password,
+//     phone,
+//     rol,
+//   };
+
+//   User.findOne({
+//     where: {
+//       id: req.params.id,
+//     },
+//   })
+//     .then((usuarioEncontrado) => {
+//       usuarioEncontrado.update(userUpdate).then((newUser) => {
+//         newUser.save();
+//         res.status(200);
+//         return res.json(newUser);
+//       });
+//     })
+//     .catch(next);
+// });
 
 //AGREGAR ITEM AL CARRITO
 

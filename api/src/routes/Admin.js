@@ -1,4 +1,4 @@
-const { User } = require("../db.js");
+const { User, Historial } = require("../db.js");
 const server = require("express").Router();
 const cors = require("cors");
 const Sequelize = require("sequelize");
@@ -32,6 +32,25 @@ server.put("/promote/:id", (req, res, next) => {
       });
     })
     .catch(next);
+});
+
+// OBTENER EL HISTORIAL DE UN USUARIO
+server.get("/historial/:userId", async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    const historial = await Historial.findAll({
+      where: { userId },
+      order: [["fecha", "DESC"]],
+    });
+
+    res.json(historial);
+  } catch (error) {
+    console.error("Error al obtener el historial de actividades:", error);
+    res.status(500).json({
+      error: "Ocurrió un error al obtener el historial de actividades.",
+    });
+  }
 });
 
 //BUSCAR USUARIOS
