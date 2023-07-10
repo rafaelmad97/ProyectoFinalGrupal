@@ -14,37 +14,43 @@ module.exports = {
         configMercadoPago()
 
         const { id } = req.body
+        console.log(id)
 
-        if (id != undefined) {
-            const user = await User.findByPk(id).catch(next)
-            const carts = await user.getCarts()
+        try {
+            if (id != undefined) {
+                const user = await User.findByPk(id).catch(next)
+                if (user === null) throw new Error("User isn't exist")
+                const carts = await user.getCarts()
 
-            const products = await Promise.all(carts.map(async (productInCart) => {
-                const { dataValues } = await Product.findOne({ where: { id: productInCart.ProductId } });
+                const products = await Promise.all(carts.map(async (productInCart) => {
+                    const { dataValues } = await Product.findOne({ where: { id: productInCart.ProductId } });
 
-                return {
-                    id: dataValues.id,
-                    title: dataValues.name,
-                    unit_price: Number(dataValues.price),
-                    quantity: productInCart.dataValues.Quantity,
-                    currency_id: "ARS"
-                };
-            }));
+                    return {
+                        id: dataValues.id,
+                        title: dataValues.name,
+                        unit_price: Number(dataValues.price),
+                        quantity: productInCart.dataValues.Quantity,
+                        currency_id: "ARS"
+                    };
+                }));
 
 
 
-            const result = await mercadopago.preferences.create({
-                items: products,
-                back_urls: {
-                    success: `${process.env.URLFRONT}/home`,
-                    failure: `${process.env.URLFRONT}/payment/failure`,
-                    pending: `${process.env.URLFRONT}/payment/pending`,
-                },
-                notification_url: `${process.env.URLBACK}/payment/webhook`
-            }).catch(next)
+                const result = await mercadopago.preferences.create({
+                    items: products,
+                    back_urls: {
+                        success: `${process.env.URLFRONT}/home`,
+                        failure: `${process.env.URLFRONT}/payment/failure`,
+                        pending: `${process.env.URLFRONT}/payment/pending`,
+                    },
+                    notification_url: `${process.env.URLBACK}/payment/webhook`
+                }).catch(next)
 
-            return res.status(200).json({ url: result.body.init_point })
+                return res.status(200).json({ url: result.body.init_point })
 
+            }
+        } catch (error) {
+            return next(error)
         }
 
     },

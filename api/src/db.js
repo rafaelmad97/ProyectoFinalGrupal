@@ -52,23 +52,11 @@ Review.belongsTo(Product);
 
 //relacion usuario-carrito
 User.belongsToMany(Cart, {
-  through: "Cart_User"
-})
-Cart.belongsToMany(User, {
-  through: "Cart_User"
-})
-
-
-
-//relacion usuario-carrito
-User.belongsToMany(Cart, {
   through: "Cart-User"
 })
 Cart.belongsToMany(User, {
   through: "Cart-User"
 })
-
-
 
 
 
