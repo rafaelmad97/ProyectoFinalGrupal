@@ -1,5 +1,6 @@
 const mercadopago = require("mercadopago")
-const { User, Product } = require("../db");
+const { User, Product, Historial, HistorialSells, Cart } = require("../db");
+const sendEmail = require("./Email");
 require('dotenv').config();
 
 function configMercadoPago() {
@@ -43,7 +44,8 @@ module.exports = {
                         failure: `${process.env.URLFRONT}/payment/failure`,
                         pending: `${process.env.URLFRONT}/payment/pending`,
                     },
-                    notification_url: `${process.env.URLBACK}/payment/webhook`
+                    notification_url: `${process.env.URLBACK}/payment/webhook`,
+                    external_reference: user.id.toString()
                 }).catch(next)
 
                 return res.status(200).json({ url: result.body.init_point })
@@ -59,8 +61,35 @@ module.exports = {
         console.log(req.query)
         if (req.query.type === "payment") {
             const data = await mercadopago.payment.findById(req.query['data.id'])
-            console.log(data)
+            if (data.response.status == "approved") {
+
+                const user = await User.findByPk(Number(data.response.external_reference))
+
+                const historial = await Historial.create({
+                    userId: user.id,
+                    tipoActividad: "Compra de Productos",
+                    description: user.name + "ha comprado productos"
+                })
+
+                const previousCart = await user.getCarts()
+
+                const historialSells = await HistorialSells.create({
+                    previousCart: previousCart
+                })
+
+                await historial.setHistorialSell(historialSells)
+
+                previousCart.map(async (cart) => {
+                    await user.removeCart(cart.id)
+                })
+
+
+                sendEmail(user.email, process.env.EMAILACCOUNT, "Compra Realizada", require("../email-templates/payment"))
+
+
+            }
+            return res.status(204)
         }
-        return res.json("webhook")
+        return res.status(204)
     }
 }
