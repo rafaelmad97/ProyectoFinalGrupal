@@ -73,7 +73,7 @@ const UserInfo = () => {
                 render={({ field, fieldState }) => (
                   <TextField
                     label="Telefono"
-                    type="number"
+                    
                     {...field}
                     error={Boolean(fieldState.error)}
                     helperText={fieldState.error?.message}

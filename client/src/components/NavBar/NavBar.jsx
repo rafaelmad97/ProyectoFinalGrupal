@@ -34,6 +34,7 @@ import {
   getByName,
   logoutUserSessionGoogle,
   logoutUserSessionLocal,
+  cleanCarrito
 } from "../../redux/actions";
 import FilterAndSort from "../Filtros/FilterAndSort/FilterAndSort";
 
@@ -100,6 +101,7 @@ export const NavBar = () => {
   const handleLogout = () => {
     dispatch(logoutUserSessionGoogle());
     dispatch(logoutUserSessionLocal());
+    dispatch(cleanCarrito());
     handleClose();
   };
 

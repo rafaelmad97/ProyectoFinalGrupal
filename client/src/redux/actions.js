@@ -20,6 +20,7 @@ import {
   FILTER_BY_CATEGORY,
   FILTER_BY_DATE,
   ORDER_BY_DATE,
+  VIEW_REVIEW,
 } from "./types";
 
 export const getAllProducts = () => {

@@ -72,7 +72,7 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { addCarrito, detailProducts } from "../../redux/actions";
+import { addCarrito, detailProducts, getReviews } from "../../redux/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -86,22 +86,24 @@ function Detail() {
   const dispatch = useDispatch();
   const { id } = useParams();
   const product = useSelector((state) => state.productDetail);
+  const review = useSelector((state) => state.review);
   const [reviews, setReviews] = useState([]);
   const [rating, setRating] = useState(0);
 
   console.log("detail", product);
-
+  
+  const fetchReviews = () => {
+    try {
+      dispatch(getReviews(id));
+      setReviews(review);
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
+    }
+  };
   useEffect(() => {
-    const fetchReviews = async () => {
-      try {
-        const fetchedReviews = await getReviews(id);
-        setReviews(fetchedReviews);
-      } catch (error) {
-        console.error("Error fetching reviews:", error);
-      }
-    };
+    
     fetchReviews();
-  }, [id]);
+  }, []);
 
   useEffect(() => {
     dispatch(detailProducts(id));
@@ -138,15 +140,13 @@ function Detail() {
             </Typography>
             <Typography variant="h5" color="text.secondary">
               Stock: {product.stock} unidades
-            </Typography>
+            </Typography> 
             <CardActions>
-              {/* <IconButton>
-                <FavoriteIcon />
-              </IconButton> */}
-              <IconButton>
+             
+              <IconButton onClick={() => dispatch(addCarrito(product.id))}>
                 <ShoppingCartIcon
                   style={{ fontSize: "3rem" }}
-                  onClick={() => dispatch(addCarrito(product.id))}
+                  
                 />
               </IconButton>
             </CardActions>

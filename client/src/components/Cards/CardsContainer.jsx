@@ -5,7 +5,8 @@ export const CardsContainer = ({ allProducts }) => {
   return (
     <div>
       <Grid container direction="row" spacing={1}>
-        {allProducts.map((prod) => {
+        {allProducts.filter((prod)=> prod.stock > 0 ).map((prod) => {
+         
           return (
             <Grid item xs={12} md={4} xl={4} key={prod.id}>
               <Cards
@@ -16,9 +17,9 @@ export const CardsContainer = ({ allProducts }) => {
                 price={prod.price}
                 stock={prod.stock}
               />
-            </Grid>
-          );
+            </Grid>);
         })}
+      
       </Grid>
     </div>
   );

@@ -26,7 +26,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
 
 function Carrito() {
-  const { myCarrito } = useSelector((state) => state);
+  const { myCarrito, userAuthenticated } = useSelector((state) => state);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -47,18 +47,23 @@ function Carrito() {
     dispatch(deleteOneItemCarrito(productId));
   };
 
-  
+  console.log(myCarrito);
 
   //pago de mercado pago
   const realizarCompra = async () => {
-    try {
-      const response = await axios.post("http://localhost:3001/payment", {carrito: myCarrito}).finally(() => dispatch(cleanCarrito()));
-      const { init_point } = response.data;
-      if (init_point) {
-        window.location.href = init_point; 
+
+    if(userAuthenticated === undefined){
+      alert("Para comprar necesitas registarte o iniciado la sesion");
+    }else{
+      try {
+        const response = await axios.post("http://localhost:3001/payment", {carrito: myCarrito}).finally(() => dispatch(cleanCarrito()));
+        const { init_point } = response.data;
+        if (init_point) {
+          window.location.href = init_point; 
+        }
+      } catch (error) {
+        console.error("Error al realizar la compra:", error);
       }
-    } catch (error) {
-      console.error("Error al realizar la compra:", error);
     }
   };
 
@@ -93,11 +98,11 @@ function Carrito() {
                   <TableCell>$/{car.price}.00</TableCell>
                   <TableCell>
                     <div>
-                      <IconButton onClick={() => handleDecrement(car.id)}>
+                      <IconButton disabled={car.quantity === 1} onClick={() => handleDecrement(car.id)}>
                         <RemoveIcon />
                       </IconButton>
                       {car.quantity}
-                      <IconButton onClick={() => handleIncrement(car.id)}>
+                      <IconButton disabled={car.stock<= car.quantity} onClick={() => handleIncrement(car.id)}>
                         <AddIcon />
                       </IconButton>
                     </div>
@@ -106,7 +111,7 @@ function Carrito() {
                   <TableCell>
                     <div>
                       <IconButton
-                        onClick={() => dispatch(deleteAllItemCarrito(car.id))}
+                        onClick={() => {alert("Estas seguro que quieres borrar el elemento del carrito"); dispatch(deleteAllItemCarrito(car.id))}}
                       >
                         <DeleteIcon />
                       </IconButton>
@@ -149,13 +154,13 @@ function Carrito() {
               <Grid item>
                 <Grid container direction="row" spacing={1}>
                   <Grid item>
-                    <Button variant="contained" disabled={myCarrito?.length === 0} onClick={realizarCompra}>
+                    <Button  variant="contained" disabled={myCarrito?.length === 0} onClick={realizarCompra}>
                       Pagar
                     </Button>
                   </Grid>
                   <Grid item>
                     <Button
-                      onClick={() => dispatch(cleanCarrito())}
+                      onClick={() => {alert("Estas por eliminar tu carrito"); dispatch(cleanCarrito())}}
                       variant="contained"
                     >
                       Limpiar Carrito
