@@ -5,7 +5,7 @@ export const CardsContainer = ({ allProducts }) => {
   return (
     <div>
       <Grid container direction="row" spacing={1}>
-        {allProducts.filter((prod)=> prod.stock > 0 ).map((prod) => {
+        {allProducts.filter((prod)=> prod.stock > 0 ).filter((prod)=>Boolean(prod.isactive)).map((prod) => {
          
           return (
             <Grid item xs={12} md={4} xl={4} key={prod.id}>

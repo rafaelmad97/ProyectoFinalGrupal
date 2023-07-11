@@ -49,6 +49,7 @@ const FormModal = ({ open, handleClose }) => {
       stock: 0,
       price: 0,
       categoryId: -1,
+      isactive: true,
     },
     resolver: yupResolver(schemmaProducto),
   });

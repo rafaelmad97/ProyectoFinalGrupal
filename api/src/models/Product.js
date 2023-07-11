@@ -60,7 +60,9 @@ module.exports = (sequelize) => {
       // }
     }
 ,    
-    
+   isactive: {
+    type: DataTypes.BOOLEAN,
+   }, 
 
 
   });

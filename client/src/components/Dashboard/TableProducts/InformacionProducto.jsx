@@ -1,4 +1,4 @@
-import {Grid, InputLabel, MenuItem, Select, TextField } from "@mui/material"
+import {Grid, InputLabel, MenuItem, Select, TextField, Switch, FormControlLabel } from "@mui/material"
 import { useFormContext, Controller } from "react-hook-form";
 import {  useSelector } from "react-redux";
 
@@ -89,6 +89,7 @@ const InformacionProducto = () => {
                   )}
                 />
               </Grid>
+              
               <Grid item xs={12} md={6} xl={4}>
                 <Controller
                   name="categoryId"
@@ -109,6 +110,15 @@ const InformacionProducto = () => {
                         ))}
                       </Select>
                     </>
+                  )}
+                />
+              </Grid>
+              <Grid item xs={12} md={6} xl={4}>
+                <Controller
+                  name="isactive"
+                  control={Formulario.control}
+                  render={({ field }) => (
+                    <FormControlLabel control={<Switch defaultChecked checked={field.value} {...field}/>} label={`${field.value ? "Desactivar":"Activar"} Producto`}/>
                   )}
                 />
               </Grid>
