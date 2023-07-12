@@ -21,6 +21,7 @@ import {
   FILTER_BY_DATE,
   ORDER_BY_DATE,
   VIEW_REVIEW,
+  
 } from "./types";
 
 export const getAllProducts = () => {
@@ -151,6 +152,29 @@ export function editProducts(payload) {
     }
   };
 }
+
+/////////////////////////////////////////////////
+// Modificar Usuario
+export function editUser(payload) {
+  return async function (dispatch) {
+    try {
+      const response = await axios.put(
+        `http://localhost:3001/users/${payload.id}`,
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+}
+
+/////////////////////////////////////////////////
 
 export function addUser(payload, email) {
   var url2 = `http://localhost:3001/users/${payload.email}`;

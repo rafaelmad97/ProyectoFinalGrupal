@@ -53,7 +53,7 @@ router.post("/", (req, res) => {
       unit_price: Number (carrito.price),
     });
   }
-  console.log(carrito);
+  console.log("este es el carrito",carrito);
   mercadopago.preferences
     .create(preference)
     .then((response) => {
@@ -100,8 +100,6 @@ function calcularMontoTotal(items) {
   
   items.forEach((item) => {
     total += item.price * item.quantity;
-    
-
   });
   return total;
 }

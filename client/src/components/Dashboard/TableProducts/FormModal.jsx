@@ -18,18 +18,18 @@ import {
   DialogActions,
 } from "@mui/material";
 import { useForm, Controller, FormProvider } from "react-hook-form";
-import * as Yup from "yup";
+import {object, string, number} from "yup";
  import { yupResolver } from "@hookform/resolvers/yup";
 import { useDispatch, useSelector } from "react-redux";
 import { addProducts, getAllCategorys } from "../../../redux/actions";
 import InformacionProducto from "./InformacionProducto";
 
-export const schemmaProducto = Yup.object({
-  name: Yup.string().required("Este campo es requerido"),
-  urlImage: Yup.string().url().required("Este campo es requerido"),
-  description: Yup.string().required("Este campo es requerido"),
-  stock: Yup.number().required("Este campo es requerido"),
-  price: Yup.number().required("Este campo es requerido"),
+export const schemmaProducto = object({
+  name: string().required("Este campo es requerido"),
+  urlImage: string().url().required("Este campo es requerido"),
+  description: string().required("Este campo es requerido"),
+  stock: number().required("Este campo es requerido"),
+  price: number().required("Este campo es requerido"),
 });
 
 const FormModal = ({ open, handleClose }) => {

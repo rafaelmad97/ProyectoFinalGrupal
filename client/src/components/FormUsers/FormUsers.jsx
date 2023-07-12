@@ -14,21 +14,21 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
-import * as Yup from "Yup";
+import {string, object} from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser, getAllUsers } from "../../redux/actions";
 import { useEffect } from "react";
 import UserInfo from "./UserInfo";
 
-export const shemmaUsuario = Yup.object({
-  name: Yup.string().required("Este campo es requerido"),
-  lastName: Yup.string().required("Este campo es requerido"),
-  email: Yup.string().email().required("Este campo es requerido"),
-  password: Yup.string()
+export const shemmaUsuario = object({
+  name: string().required("Este campo es requerido"),
+  lastName: string().required("Este campo es requerido"),
+  email: string().email().required("Este campo es requerido"),
+  password: string()
     .min(8, "la Contraseña es muy corta")
     .required("Este campo es requerido"),
-  phone: Yup.string().required("Este campo es requerido"),
+  phone: string().required("Este campo es requerido"),
 });
 
 const FormUsers = () => {
@@ -53,7 +53,8 @@ const FormUsers = () => {
       email: "",
       password: "",
       phone: "",
-      rol: "User",
+      isactive: true,
+      isadmin: false
     },
     resolver: yupResolver(shemmaUsuario),
   });

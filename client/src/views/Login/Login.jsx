@@ -17,18 +17,18 @@ import {
 import GoogleIcon from "@mui/icons-material/Google";
 import { useNavigate } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
-import * as Yup from "Yup";
+import { string, object} from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import "./Login.css";
 import { loginLocallyUser } from "../../redux/actions";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 
-const shemmaLogin = Yup.object({
-  email: Yup.string()
+const shemmaLogin = object({
+  email: string()
     .email("la dirección de correo electrónico debe ser valida")
     .required("Este campo es requerido"),
-  password: Yup.string().required("Este campo es requerido"),
+  password: string().required("Este campo es requerido"),
 });
 
 const Login = () => {

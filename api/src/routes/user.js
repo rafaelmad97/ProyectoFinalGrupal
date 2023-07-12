@@ -22,13 +22,15 @@ server.get("/", (req, res, next) => {
 //CREAR USUARIO
 
 server.post("/", (req, res, next) => {
-  const { name, lastName, email, password, phone, rol } = req.body;
+  const { name, lastName, email, password, phone,isactive,isadmin} = req.body;
   User.create({
     name,
     lastName,
     email,
     password,
     phone,
+    isactive,
+    isadmin,
   })
     .then((usuario) => {
       // Envía el correo de notificación al usuario registrado
@@ -111,14 +113,15 @@ server.put("/password/:id", (req, res) => {
 //ACTUALIZAR USUARIO
 
 server.put("/:id", (req, res, next) => {
-  const { name, lastName, email, password, phone, rol } = req.body;
+  const { name, lastName, email, password, phone , isactive, isadmin} = req.body;
   var userUpdate = {
     name,
     lastName,
     email,
     password,
     phone,
-    rol,
+    isactive,
+    isadmin
   };
 
   User.findOne({
