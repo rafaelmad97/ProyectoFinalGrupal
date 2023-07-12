@@ -21,6 +21,8 @@ import {
   FILTER_BY_DATE,
   ORDER_BY_DATE,
   VIEW_REVIEW,
+  CLEAN_FILTER_CATEGORY,
+  CLEAN_DETAIL,
   
 } from "./types";
 
@@ -110,6 +112,12 @@ export const detailProducts = (id) => {
     }
   };
 };
+
+export const cleanDetail = () => {
+  return {
+    type: CLEAN_DETAIL
+  }
+}
 
 export function addProducts(payload) {
   return async function (dispatch) {
@@ -339,6 +347,12 @@ export const filterByCategory = (categorys) => {
               payload: error
           })
       }
+  }
+}
+
+export const cleanFilterCategory = () => {
+  return {
+    type: CLEAN_FILTER_CATEGORY
   }
 }
 

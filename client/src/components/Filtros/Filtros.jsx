@@ -1,5 +1,4 @@
-
-// import React from 'react'
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -7,39 +6,48 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
+import { useSelector, useDispatch } from "react-redux";
+import { Box, Grid, Pagination, Select, MenuItem } from "@mui/material";
 import {
   addCarrito,
+  cleanFilterCategory,
   filterByCategory,
   orderByDate,
   orderByPrice,
 } from "../../redux/actions";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-import { Grid, Pagination } from "@mui/material";
-import { Box } from "@mui/system";
-import { useState } from "react";
-import FilterAndSort from "./FilterAndSort/FilterAndSort";
 
 const Filtros = () => {
   const dispatch = useDispatch();
   const { categoryFilter } = useSelector((state) => state);
   const [page, setPage] = useState(1);
   const [cardsPerPage, setCardsPerPage] = useState(6);
-  const [orderPrice, setOrderPrice] = useState("");
-  const [orderDate, setOrderDate] = useState("");
+  const [combinedFilter, setCombinedFilter] = useState({
+    price: "",
+    date: "",
+  });
+
+  useEffect(() => {
+    return () => {
+      dispatch(cleanFilterCategory());
+    };
+  }, []);
 
   const handleChange = (event, value) => {
     setPage(value);
   };
 
   const handleOrderPrice = (event) => {
-    dispatch(orderByPrice(event.target.value));
-    setOrderPrice(event.target.value);
+    const price = event.target.value;
+    const newFilter = { ...combinedFilter, price };
+    setCombinedFilter(newFilter);
+    dispatch(orderByPrice(newFilter));
   };
 
   const handleOrderDate = (event) => {
-    dispatch(orderByDate(event.target.value));
-    setOrderDate(event.target.value);
+    const date = event.target.value;
+    const newFilter = { ...combinedFilter, date };
+    setCombinedFilter(newFilter);
+    dispatch(orderByDate(newFilter));
   };
 
   const indexOfLastCard = page * cardsPerPage;
@@ -50,62 +58,72 @@ const Filtros = () => {
     <div>
       {categoryFilter.length > 0 ? (
         <Typography
-          variant="h2"
+          variant="h5"
           component="div"
-          sx={{ flexGrow: 1 }}
+          sx={{ flexGrow: 1, color: "black", padding: "10px" }}
           className="title"
         >
           {categoryFilter[0]?.category.name}
         </Typography>
-      ): <Typography
-      variant="h2"
-      component="div"
-      sx={{ flexGrow: 1 }}
-      className="title"
-    >
-      f en el chat
-    </Typography> }
-     <Box
-  sx={{
-    display: "flex",
-    justifyContent: "flex-end",
-    alignItems: "center",
-    marginBottom: "20px",
-    marginLeft: "auto",
-    flexGrow: 1,
-  }}
->
-  <label htmlFor="select-order" style={{ marginRight: "5px", color: "black" }}>
-    <h3>Ordenar por fecha:</h3>
-  </label>
-  <select
-    id="select-order"
-    value={orderDate}
-    onChange={(event) => handleOrderDate(event)}
-    style={{ marginRight: "30px" }}
-  >
-    <option value="">Seleccionar</option>
-    <option value="asc">Ascendente</option>
-    <option value="desc">Descendente</option>
-  </select>
+      ) : (
+        <Typography
+          variant="h6"
+          component="div"
+          sx={{ flexGrow: 1, color: "black" }}
+          className="title"
+        >
+          No hay productos en esta categoría
+        </Typography>
+      )}
 
-  <label htmlFor="select-order" style={{ marginRight: "5px", color: "black"}}>
-    <h3>Ordenar por precio:</h3>
-  </label>
-  <select
-    id="select-order"
-    value={orderPrice}
-    onChange={(event) => handleOrderPrice(event)}
-    style={{ marginRight: "10px" }}
-  >
-    <option value="">Seleccionar</option>
-    <option value="asc">Ascendente</option>
-    <option value="desc">Descendente</option>
-  </select>
-</Box>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "flex-end",
+          alignItems: "center",
+          marginBottom: "20px",
+          marginLeft: "auto",
+          flexGrow: 1,
+        }}
+      >
+        <label
+          htmlFor="select-order-price"
+          style={{ marginRight: "5px", color: "black" }}
+        >
+          <h3>Ordenar por precio:</h3>
+        </label>
+        <Select
+          id="select-order-price"
+          value={combinedFilter.price}
+          onChange={handleOrderPrice}
+          style={{ marginRight: "10px" }}
+        >
+          <MenuItem value="">Seleccionar</MenuItem>
+          <MenuItem value="asc">Ascendente</MenuItem>
+          <MenuItem value="desc">Descendente</MenuItem>
+        </Select>
+
+        <label
+          htmlFor="select-order-date"
+          style={{ marginRight: "5px", color: "black" }}
+        >
+          <h3>Ordenar por fecha:</h3>
+        </label>
+        <Select
+          id="select-order-date"
+          value={combinedFilter.date}
+          onChange={handleOrderDate}
+          style={{ marginRight: "30px" }}
+        >
+          <MenuItem value="">Seleccionar</MenuItem>
+          <MenuItem value="asc">Ascendente</MenuItem>
+          <MenuItem value="desc">Descendente</MenuItem>
+        </Select>
+
+      </Box>
 
       <Grid container direction="row" spacing={1}>
-        {categoryFilter?.map((cat) => {
+        {currentCards.map((cat) => {
           return (
             <Grid item xs={12} md={4} xl={4} key={cat.id}>
               <Card elevation={4} sx={{ maxWidth: 345, margin: "10px" }}>

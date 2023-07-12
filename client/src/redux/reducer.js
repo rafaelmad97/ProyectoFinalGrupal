@@ -19,6 +19,8 @@ import {
   ORDER_BY_DATE,
   VIEW_REVIEW,
   ADD_REVIEW,
+  CLEAN_FILTER_CATEGORY,
+  CLEAN_DETAIL,
 } from "./types";
 
 const initialState = {
@@ -75,6 +77,12 @@ const reducer = (state = initialState, actions) => {
         ...state,
         productDetail: actions.payload,
       };
+
+    case CLEAN_DETAIL:
+      return {
+        ...state,
+        productDetail: {}
+      }
 
     case SEARCH_PRODUCT:
       return {
@@ -165,6 +173,12 @@ const reducer = (state = initialState, actions) => {
           categoryFilter: actions.payload,
           copyCategoryFilter: actions.payload,
         };
+
+      case CLEAN_FILTER_CATEGORY:
+        return {
+          ...state,
+          categoryFilter: [],
+        }
   
       case ORDER_BY_PRICE:
         const orderByPrice = state.copyCategoryFilter.sort((a, b) => {

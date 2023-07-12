@@ -57,6 +57,7 @@ server.post("/", (req, res, next) => {
     stock: req.body.stock,
     urlImage: req.body.urlImage,
     categoryId: req.body.categoryId,
+    isactive: req.body.isactive
   })
     .then((c) => {
       return res.json(c);

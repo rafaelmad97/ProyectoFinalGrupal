@@ -25,14 +25,20 @@ import SearchIcon from "@mui/icons-material/Search";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import FormModal from "./FormModal";
-import { getByName, orderByDate, orderByPrice, editProducts } from "../../../redux/actions";
-import { schemmaProducto } from "./FormModal"
+import {
+  getByName,
+  orderByDate,
+  orderByPrice,
+  editProducts,
+  getAllProducts,
+} from "../../../redux/actions";
+import { schemmaProducto } from "./FormModal";
 import { FormProvider, useForm } from "react-hook-form";
-import { yupResolver} from "@hookform/resolvers/yup"
+import { yupResolver } from "@hookform/resolvers/yup";
 import InformacionProducto from "./InformacionProducto";
 
 function TableProducts() {
-  const { allProducts } = useSelector((state) => state);
+  const { allProducts, allCategorys } = useSelector((state) => state);
   const [open, setOpen] = useState(false);
   const [openEdit, setEdit] = useState(false);
   const dispatch = useDispatch();
@@ -52,6 +58,10 @@ function TableProducts() {
     resolver: yupResolver(schemmaProducto),
   });
 
+  useEffect(() => {
+    dispatch(getAllProducts());
+  }, []);
+
   const handleOrderPrice = (event) => {
     dispatch(orderByPrice(event.target.value));
     setOrderPrice(event.target.value);
@@ -69,7 +79,7 @@ function TableProducts() {
   const handleSearchSubmit = (event) => {
     event.preventDefault();
     dispatch(getByName(searchValue));
-    // setSearchValue("")
+    setSearchValue("");
   };
 
   const handleOpen = () => {
@@ -78,40 +88,44 @@ function TableProducts() {
   const handleClose = () => {
     setOpen(false);
     Formulario.reset();
-    };
+  };
 
-  const handleUpdateProduct = (product) =>{
-    Formulario.reset({...product})
-    setEdit(true)
-  }
+  const handleUpdateProduct = (product) => {
+    Formulario.reset({ ...product });
+    setEdit(true);
+  };
 
   const handleCloseUpdateProduct = () => {
-    setEdit(false)
-    Formulario.reset()
-  }
+    setEdit(false);
+    Formulario.reset();
+  };
 
   const handleSubmit = (data) => {
-    Promise.resolve(dispatch(editProducts(data))).then(()=>handleCloseUpdateProduct()).catch((e)=>console.log(e)).finally()
-  }
+    Promise.resolve(dispatch(editProducts(data)))
+      .then(() => handleCloseUpdateProduct())
+      .catch((e) => console.log(e))
+      .finally();
+  };
   return (
     <Container fixed>
       <Dialog open={openEdit}>
         <DialogTitle> Editar Producto</DialogTitle>
-        <DialogContent >
-        <Grid container direction="row" spacing={1}>
-
-          <FormProvider {...Formulario}>
-            <InformacionProducto />
-          </FormProvider>
-        </Grid>
+        <DialogContent>
+          <Grid container direction="row" spacing={1}>
+            <FormProvider {...Formulario}>
+              <InformacionProducto />
+            </FormProvider>
+          </Grid>
         </DialogContent>
         <DialogActions>
           <form onSubmit={Formulario.handleSubmit(handleSubmit)}>
-
-          <Button color="primary" type="submit">Editar</Button>
+            <Button color="primary" type="submit">
+              Editar
+            </Button>
           </form>
-          <Button color="secondary" onClick={handleCloseUpdateProduct}>Cancelar</Button>
-
+          <Button color="secondary" onClick={handleCloseUpdateProduct}>
+            Cancelar
+          </Button>
         </DialogActions>
       </Dialog>
       <Card>
@@ -183,7 +197,7 @@ function TableProducts() {
             </div>
           </div>
 
-          <Table sx={{margin: "10px"}} >
+          <Table sx={{ margin: "10px" }}>
             <TableHead>
               <TableRow>
                 <TableCell>ID</TableCell>
@@ -211,11 +225,13 @@ function TableProducts() {
                   <TableCell>{item.name}</TableCell>
                   <TableCell>$/{item.price}.00</TableCell>
                   <TableCell>{item.stock}</TableCell>
-                  <TableCell>Categoria</TableCell>
+                  <TableCell>
+                    {allCategorys.find((cat) => cat.id === item.categoryId)?.name}
+                  </TableCell>
+
                   <TableCell>
                     <div>
-                      <IconButton onClick={()=>handleUpdateProduct(item)
-                      }>
+                      <IconButton onClick={() => handleUpdateProduct(item)}>
                         <EditIcon />
                       </IconButton>
                     </div>

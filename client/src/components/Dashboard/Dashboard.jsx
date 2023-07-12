@@ -23,7 +23,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import { Carrito, Login } from "../../views";
 import { yellow } from "@mui/material/colors";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { height } from "@mui/system";
 import TableProducts from "./TableProducts/TableProducts";
@@ -127,6 +127,11 @@ function Dashboard() {
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             Dashboard
           </Typography>
+          <NavLink to="/home" style={{ marginLeft: "20px" }}>
+            <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1}}>
+              Home
+            </Typography>
+          </NavLink>
           <IconButton
             color="inherit"
             aria-label="open drawer"
