@@ -58,12 +58,12 @@ const Login = () => {
           isLogged: true,
         })
       )
-      .catch(() =>
+      .catch((e) =>
         setDialogo({
           open: true,
           title: "Error",
           message:
-            "Usuario no se ha podido autenticar correctamente, revisa tus credenciales ingresadas. Si el problema persiste contacta a servicio técnico.",
+            "Usuario no se ha podido autenticar correctamente, revisa tus credenciales ingresadas. Si el problema persiste.\n El usuario esta deshabilitado o contacta a servicio técnico.",
           isLogged: false,
         })
       )

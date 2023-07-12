@@ -222,7 +222,7 @@ export const loginLocallyUser = (email, password) => {
       )
       .then((res) => res.data)
       .catch((e) => {
-        throw new Error(e);
+        throw new Error(e.message);
       })
       .finally();
   };
