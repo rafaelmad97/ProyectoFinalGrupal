@@ -22,6 +22,6 @@ router.use("/login", login);
 router.use("/filters", filter);
 router.use("/email", email);
 router.use("/payment", payment);
-router.use("/reviews",reviewsRouter );
+router.use("/reviews", reviewsRouter);
 
 module.exports = router;
