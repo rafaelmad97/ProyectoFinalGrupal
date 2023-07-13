@@ -33,7 +33,7 @@ router.post("/", (req, res) => {
   let preference = {
     items: [],
     back_urls: {
-      success: `${process.env.FRONTEND}/resume`,
+      success: `${process.env.FRONTEND}/home`,
       failure: `${process.env.FRONTEND}/home`,
       pending: `${process.env.FRONTEND}/home`,
     },
