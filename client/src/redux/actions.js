@@ -475,6 +475,17 @@ export const removeFromCart = (userid) => {
     }
   }
 }
+
+export const removeProduct = (id) => {
+  return async (dispatch) => {
+    try {
+      await axios.delete(`http://localhost:3001/products/delete/${id}`)
+    } catch (error) {
+      
+    }
+  }
+}
+
 export const getCartUser = (userid) => {
   return async (dispatch) => {
     try {

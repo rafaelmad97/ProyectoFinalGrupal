@@ -32,6 +32,7 @@ import {
   editProducts,
   getAllProducts,
   getAllCategorys,
+  removeProduct,
 } from "../../../redux/actions";
 import { schemmaProducto } from "./FormModal";
 import { FormProvider, useForm } from "react-hook-form";
@@ -102,6 +103,10 @@ function TableProducts() {
     Formulario.reset();
   };
 
+  const handleDeleteProduct = () => {
+    dispatch(removeProduct(productId))
+  }
+
   const handleSubmit = (data) => {
     Promise.resolve(dispatch(editProducts(data)))
       .then(() => handleCloseUpdateProduct())
@@ -139,7 +144,7 @@ function TableProducts() {
             </Button>
             <FormModal open={open} handleClose={handleClose} />
 
-            <form
+            {/* <form
               onSubmit={handleSearchSubmit}
               style={{ marginLeft: "100px", marginRight: "10px" }}
             >
@@ -196,7 +201,7 @@ function TableProducts() {
                 <option value="asc">Ascendente</option>
                 <option value="desc">Descendente</option>
               </select>
-            </div>
+            </div> */}
           </div>
 
           <Table sx={{ margin: "10px" }}>
@@ -210,7 +215,7 @@ function TableProducts() {
                 <TableCell>Categoria</TableCell>
                 <TableCell>Editar</TableCell>
                 <TableCell>Eliminar</TableCell>
-                <TableCell>Habilitar/Desabilitar</TableCell>
+              
               </TableRow>
             </TableHead>
             <TableBody>
@@ -240,7 +245,7 @@ function TableProducts() {
                   </TableCell>
                   <TableCell>
                     <div>
-                      <IconButton>
+                      <IconButton onClick={()=>handleDeleteProduct(item)} >
                         <DeleteIcon />
                       </IconButton>
                     </div>

@@ -4,7 +4,7 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { addCarrito, cleanDetail, detailProducts, getReviews } from "../../redux/actions";
+import { addCarrito, addReview, cleanDetail, detailProducts, getReviews } from "../../redux/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -64,15 +64,18 @@ function Detail() {
     setRating(newRating);
   };
 
+
   const onSubmitReview = (data) => {
     const { rating, description } = data;
     const newReview = {
       rating,
       description,
     };
-    dispatch(onSubmitReview(id, newReview));
-    reset();
+    dispatch(addReview(id, newReview));
+    Formulario_Reviews.reset(); // Reinicia el formulario después de enviar la reseña
+    setRating(0);
   };
+  
 
   return (
     <div>
@@ -146,7 +149,7 @@ function Detail() {
               />
             )}
           />
-          <Button type= "submit">Enviar Reseña</Button>
+          <Button type= "submit" sx={{backgroundColor: "#222222", color:"#ffffff"}} >Enviar Reseña</Button>
         </form>
       </Container>
 

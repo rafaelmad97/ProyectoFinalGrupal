@@ -1,4 +1,3 @@
-
 import * as React from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -96,8 +95,8 @@ function Dashboard() {
   };
 
   const clickHome = () => {
-    navigate("/home")
-  }
+    navigate("/home");
+  };
 
   const renderComponentePrincipal = () => {
     switch (componentePrincipal) {
@@ -116,8 +115,8 @@ function Dashboard() {
   const handleClickProducts = () => {
     setComponentePrincipal("products");
   };
-  if(!userAuthenticated?.user.isadmin){
-    return <Navigate to={"/home"} replace={true} />
+  if (!userAuthenticated?.user.isadmin) {
+    return <Navigate to={"/home"} replace={true} />;
   }
 
   return (
@@ -137,10 +136,29 @@ function Dashboard() {
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             Dashboard
           </Typography>
-            <Typography onClick={clickHome} variant="h6" noWrap component="div" sx={{ flexGrow: 1}}>
+          <Box
+            sx={{
+              flexGrow: 0, // Ajustar el tamaño del contenedor
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-end", // Alinear a la derecha
+              cursor: "pointer",
+              padding: "4px", // Ajustar el espacio interno
+            }}
+          >
+            <Typography
+              onClick={clickHome}
+              variant="h6"
+              noWrap
+              component="div"
+              sx={{
+                fontSize: "1.2rem", // Ajustar el tamaño de la fuente
+              }}
+            >
               Home
             </Typography>
-          
+          </Box>
+
           <IconButton
             color="inherit"
             aria-label="open drawer"
