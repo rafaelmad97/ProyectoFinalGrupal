@@ -44,8 +44,8 @@ Category.hasMany(Product, {
 
 Product.belongsTo(Category)
 
-Product.hasMany(Review);
-Review.belongsTo(Product);
+// Product.hasMany(Review);
+// Review.belongsTo(Product);
 
 User.hasMany(Cart);
 Cart.belongsTo(User);

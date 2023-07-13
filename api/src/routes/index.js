@@ -10,7 +10,7 @@ const filter = require("./filterAndSort");
 const email = require("./email");
 const authGoogle = require("./authGoogle");
 const payment = require("./payment");
-const reviewsRouter = require("./reviewsRouter")
+//const reviewsRouter = require("./reviewsRouter")
 
 router.use("/", authGoogle);
 router.use("/products", productRouter);
@@ -22,6 +22,6 @@ router.use("/login", login);
 router.use("/filters", filter);
 router.use("/email", email);
 router.use("/payment", payment);
-router.use("/reviews", reviewsRouter);
+//router.use("/reviews", reviewsRouter);
 
 module.exports = router;
