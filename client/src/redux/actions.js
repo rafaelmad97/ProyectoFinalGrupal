@@ -490,3 +490,15 @@ export const getCartUser = (userid) => {
   }
 }
 
+export function deleteProducts(payload) {
+  var id = payload;
+  var url = `http://localhost:3001/products/delete/${id}`
+
+  const borrar = axios({
+      method: 'delete',
+      url: url,
+      headers: {
+          'Content-Type': 'application/json'
+      }
+  })
+}

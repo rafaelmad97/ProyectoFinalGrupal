@@ -28,6 +28,7 @@ import {
   editProducts,
   getAllProducts,
   getAllCategorys,
+  deleteProducts,
 } from "../../../redux/actions";
 import { schemmaProducto } from "./FormModal";
 import { FormProvider, useForm } from "react-hook-form";
@@ -80,11 +81,12 @@ function TableProducts() {
     setReloadProducts(true)
   };
 
-  // const handleDeleteProduct = (productId) => {
-  //   dispatch(removeProduct(product.id))
-  //   .then(() => setReloadProducts(true)) // Establece el estado para recargar los productos
-  //     .catch((error) => console.log(error));
-  // }
+  const handleDeleteProduct = (productId) => {
+    alert("Estas seguro que quieres borrar el elemento del Dashboard")
+    dispatch(deleteProducts(productId.id))
+    .then(() => setReloadProducts(true)) // Establece el estado para recargar los productos
+      .catch((error) => console.log(error));
+  }
 
   const handleSubmit = (data) => {
     Promise.resolve(dispatch(editProducts(data)))
