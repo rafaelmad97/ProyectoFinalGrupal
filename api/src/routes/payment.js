@@ -34,7 +34,7 @@ router.post("/", (req, res) => {
     items: [],
     back_urls: {
       success: `${process.env.FRONTEND}/resume`,
-      failure: `${process.env.FRONTEND}/resume`,
+      failure: `${process.env.FRONTEND}/home`,
       pending: `${process.env.FRONTEND}/home`,
     },
     auto_return: "approved",

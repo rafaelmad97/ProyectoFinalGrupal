@@ -8,7 +8,7 @@ import Cookies from "js-cookie";
 const CompraCliente = () => {
   const [review, setReview] = useState({});
   const [showForm, setShowForm] = useState({});
-  const cart = useSelector((state) => state.cart);
+  const myCarrito = useSelector((state) => state.myCarrito);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -19,8 +19,8 @@ const CompraCliente = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cart));
-  }, [cart]);
+    localStorage.setItem("cart", JSON.stringify(myCarrito));
+  }, [myCarrito]);
 
   const userIdFromLocalStorage = localStorage.getItem("userId");
   const userIdFromCookie = Cookies.get("userId");

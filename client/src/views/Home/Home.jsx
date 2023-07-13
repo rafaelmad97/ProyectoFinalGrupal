@@ -6,6 +6,8 @@ import {
   fetchUserSessionGoogle,
   fetchUserSessionLocally,
   logoutUserSessionGoogle,
+  getCartUser,
+  addCarrito,
 } from "../../redux/actions";
 import { Grid, Pagination } from "@mui/material";
 import { Box, margin } from "@mui/system";
@@ -15,7 +17,7 @@ import FilterAndSort from "../../components/Filtros/FilterAndSort/FilterAndSort"
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { allProducts } = useSelector((state) => state);
+  const { allProducts, userAuthenticated } = useSelector((state) => state);
 
   const [page, setPage] = useState(1);
   const [cardsPerPage, setCardsPerPage] = useState(6);
@@ -26,6 +28,9 @@ const Home = () => {
     
     dispatch(getAllProducts());
   }, [dispatch]);
+
+  
+        
 
   const handleChange = (event, value) => {
     setPage(value);

@@ -1,4 +1,5 @@
 import {  useSearchParams } from "react-router-dom";
+import CompraCliente from "../Detail/CreateReviews";
 
 
 const Resumen = () => {
@@ -6,6 +7,7 @@ const Resumen = () => {
   return (
     <div>
      {JSON.stringify(params).split(",").join("\n\r\n")}
+     <CompraCliente/>
     </div>
   );
 };

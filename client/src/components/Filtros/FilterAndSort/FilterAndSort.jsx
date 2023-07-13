@@ -57,7 +57,7 @@ const FilterAndSort = () => {
         elevation={1}
       >
       
-        {allCategorys?.map((cat) => (
+        {[...allCategorys].map((cat) => (
           <MenuItem
             value={cat.name}
             key={cat.id}
