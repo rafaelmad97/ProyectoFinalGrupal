@@ -30,6 +30,7 @@ const InformacionProducto = () => {
                 <Controller
                   name="urlImage"
                   control={Formulario.control}
+                  
                   render={({ field, fieldState }) => (
                     <TextField
                       label="Image"

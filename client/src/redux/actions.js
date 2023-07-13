@@ -465,3 +465,17 @@ export const removeFromCart = (userid, productid,) => {
     }
   };
 };
+
+//Borrar Producto
+export function deleteProduct(payload) {
+  var id = payload
+  var url = `http://localhost:3001/products/delete/${id}`
+
+  const borrar = axios({
+      method: 'delete',
+      url: url,
+      headers: {
+          'Content-Type': 'application/json'
+      }
+  })
+}

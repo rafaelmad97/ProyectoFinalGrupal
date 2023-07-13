@@ -31,6 +31,7 @@ import {
   orderByPrice,
   editProducts,
   getAllProducts,
+  deleteProduct,
 } from "../../../redux/actions";
 import { schemmaProducto } from "./FormModal";
 import { FormProvider, useForm } from "react-hook-form";
@@ -106,6 +107,13 @@ function TableProducts() {
       .catch((e) => console.log(e))
       .finally();
   };
+
+
+  const handleDeleteProduct = (product) => {
+    dispatch(deleteProduct(product.id));
+    
+  };
+
   return (
     <Container fixed>
       <Dialog open={openEdit}>
@@ -238,7 +246,7 @@ function TableProducts() {
                   </TableCell>
                   <TableCell>
                     <div>
-                      <IconButton>
+                      <IconButton onClick={() => handleDeleteProduct(item)}>
                         <DeleteIcon />
                       </IconButton>
                     </div>
