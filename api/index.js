@@ -28,8 +28,8 @@ dotenv.config();
 // Syncing all the models at once..
 //el conn syncroniza nuestra database con el servidor levantado
 conn.sync({ 
-   //alter: false
-  force: true
+   alter: false
+  //force: true
  }).then(() => {
   server.listen(3001, () => {
     console.log('%s listening at 3001'); // eslint-disable-line no-console

@@ -23,6 +23,7 @@ import {
   VIEW_REVIEW,
   CLEAN_FILTER_CATEGORY,
   CLEAN_DETAIL,
+  ADD_REVIEW,
   
 } from "./types";
 
@@ -476,15 +477,6 @@ export const removeFromCart = (userid) => {
   }
 }
 
-export const removeProduct = (id) => {
-  return async (dispatch) => {
-    try {
-      await axios.delete(`http://localhost:3001/products/delete/${id}`)
-    } catch (error) {
-      
-    }
-  }
-}
 
 export const getCartUser = (userid) => {
   return async (dispatch) => {
