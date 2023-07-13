@@ -9,6 +9,7 @@ import Typography from "@mui/material/Typography";
 import { addCarrito } from "../../redux/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { Grid, Pagination, Box } from "@mui/material";
+import FilterAndSort from "./FilterAndSort/FilterAndSort";
 
 const Novedades = () => {
   const dispatch = useDispatch();
@@ -33,7 +34,7 @@ const Novedades = () => {
           style={{ width: "100%", maxHeight: "300px" }}
         />
       </Box>
-
+      <FilterAndSort/>
       <Grid container direction="row" spacing={1}>
         {currentCards.map((cat) => {
           return (

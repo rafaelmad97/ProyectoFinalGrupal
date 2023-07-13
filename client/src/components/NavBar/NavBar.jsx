@@ -248,7 +248,7 @@ export const NavBar = () => {
         </CardContent>
       </Dialog>
     </Box>
-    <FilterAndSort/>
+    {/* <FilterAndSort/> */}
   </>
   );
 };

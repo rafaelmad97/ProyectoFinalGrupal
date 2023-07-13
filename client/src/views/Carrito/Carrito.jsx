@@ -21,6 +21,7 @@ import {
   cleanCarrito,
   deleteAllItemCarrito,
   deleteOneItemCarrito,
+  incrementProductQuantity,
 } from "../../redux/actions";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
@@ -40,7 +41,9 @@ function Carrito() {
   const total = subtotal + (18 * subtotal) / 100;
 
   const handleIncrement = (productId) => {
+    const product = myCarrito.find((product) => product.id === productId)
     dispatch(addCarrito(productId));
+    dispatch(incrementProductQuantity(userAuthenticated?.user.id,  product.quantity+1))
   };
 
   const handleDecrement = (productId) => {
@@ -56,7 +59,7 @@ function Carrito() {
       alert("Para comprar necesitas registarte o iniciado la sesion");
     }else{
       try {
-        const response = await axios.post("http://localhost:3001/payment", {carrito: myCarrito}).finally(() => dispatch(cleanCarrito()));
+        const response = await axios.post("http://localhost:3001/payment", {carrito: myCarrito});
         const { init_point } = response.data;
         if (init_point) {
           window.location.href = init_point; 

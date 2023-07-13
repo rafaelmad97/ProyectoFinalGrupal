@@ -6,6 +6,11 @@ module.exports = (sequelize) => {
     .define(
       "User",
       {
+        id:{
+        type: DataTypes.DOUBLE,
+        primaryKey: true,
+        autoincrement: true,
+        },
         name: {
           type: DataTypes.TEXT,
           allowNull: false,
@@ -55,7 +60,7 @@ module.exports = (sequelize) => {
 
         phone: {
           type: DataTypes.STRING,
-          unique: true,
+      
         },
 
         isactive: {

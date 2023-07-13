@@ -11,6 +11,7 @@ import { Grid, Pagination } from "@mui/material";
 import { Box, margin } from "@mui/system";
 import Filter from "../../components/Filter/FilterProducts";
 import Banner from "../../components/Banner/Banner";
+import FilterAndSort from "../../components/Filtros/FilterAndSort/FilterAndSort";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -22,6 +23,7 @@ const Home = () => {
   useEffect(() => {
     dispatch(fetchUserSessionGoogle());
     dispatch(fetchUserSessionLocally());
+    
     dispatch(getAllProducts());
   }, [dispatch]);
 
@@ -39,6 +41,7 @@ const Home = () => {
       <Grid container direction="column" >
         <Grid item>
           <Banner />
+          <FilterAndSort/>
         </Grid>
         <Grid item>
           <CardsContainer allProducts={currentCards} />

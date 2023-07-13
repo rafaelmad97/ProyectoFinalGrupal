@@ -7,15 +7,13 @@ module.exports = {
         const { user, product, quantity } = req.body
         let userData = null
 
-        console.log(user)
-        console.log(product)
-        console.log(Number.isNaN(Number(quantity)))
+        console.log(req.body);
 
         try {
             if (!Number.isNaN(user) && !Number.isNaN(product) && !Number.isNaN(Number(quantity))) {
 
 
-                const userData = await User.findByPk(user)
+                const userData = await User.findByPk(Number(user))
                 if (userData == null) throw new Error("user didn't found")
 
                 const productData = await Product.findByPk(product)
@@ -23,7 +21,7 @@ module.exports = {
 
                 console.log(quantity)
 
-                const cart = await Cart.create({ ProductId: productData.id, Quantity: Number(quantity) })
+                const cart = await Cart.create({ productId: productData.id, Quantity: Number(quantity) })
                 userData.addCart(cart)
 
                 return res.status(200).json({ added: true, msg: "Product added to cart" })
@@ -44,25 +42,53 @@ module.exports = {
 
     },
 
+    UpdateProductCart: async (req, res, next) => {
+        const { userid, productid, quantity  } = req.body;
+      
+          try {
+            await Cart.update({  Quantity: quantity }, {
+                where: {
+                 UserId: userid,
+                 productId: productid
+                }
+              });
+            res.status(200).json(req.body);
+          } catch (e) {
+            res.status(400).json(e.message);
+          }
+
+      },
+
     //eliminar algun producto del carrito de algun usuario en especifico
     RemoveProductInCart: async (req, res) => {
         const { idProduct, idUser } = req.body
 
         try {
-            const user = await User.findByPk(idUser)
-            const product = await user.getProducts({ where: { id: idProduct } })
-            if (product != null) {
+            await Cart.destroy( {
+                where: {
+                 UserId: idUser,
+                 productId: idProduct
+                }
+              });
+            res.status(200).json(req.body);
+          } catch (e) {
+            res.status(400).json(e.message);
+          }
+    },
 
-                await product.destroy()
-                return res.status(200).json({ msg: "deleted product in list" })
-            } else throw new Error("Product not Founded")
+    RemoveProducts: async (req, res) => {
+        const { idUser } = req.body
 
-        } catch (error) {
-            switch (error.message) {
-                case "Product not Founded":
-                    return res.status(500).json({ msg: error.message })
-            }
-        }
+        try {
+            await Cart.destroy( {
+                where: {
+                 UserId: idUser,
+                }
+              });
+            res.status(200).json(req.body);
+          } catch (e) {
+            res.status(400).json(e.message);
+          }
     },
 
     //permite adquirir el carrito de algun usuario en especifico en base a su id

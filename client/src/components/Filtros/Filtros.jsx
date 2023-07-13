@@ -15,6 +15,7 @@ import {
   orderByDate,
   orderByPrice,
 } from "../../redux/actions";
+import FilterAndSort from "./FilterAndSort/FilterAndSort";
 
 const Filtros = () => {
   const dispatch = useDispatch();
@@ -56,6 +57,7 @@ const Filtros = () => {
 
   return (
     <div>
+       <FilterAndSort/>
       {categoryFilter.length > 0 ? (
         <Typography
           variant="h5"

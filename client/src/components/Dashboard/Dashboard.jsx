@@ -23,11 +23,12 @@ import MailIcon from "@mui/icons-material/Mail";
 import { Carrito, Login } from "../../views";
 import { yellow } from "@mui/material/colors";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { NavLink } from "react-router-dom";
+import { NavLink, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { height } from "@mui/system";
 import TableProducts from "./TableProducts/TableProducts";
 import TableUsers from "./TableUser/TableUsers";
+import { useSelector } from "react-redux";
 
 const drawerWidth = 240;
 
@@ -83,6 +84,7 @@ function Dashboard() {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
   const [componentePrincipal, setComponentePrincipal] = useState(null);
+  const { userAuthenticated } = useSelector((state) => state);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -109,6 +111,9 @@ function Dashboard() {
   const handleClickProducts = () => {
     setComponentePrincipal("products");
   };
+  if(!userAuthenticated?.user.isadmin){
+    return <Navigate to={"/home"} replace={true} />
+  }
 
   return (
     <Box sx={{ display: "flex" }}>

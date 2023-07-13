@@ -40,7 +40,7 @@ const FilterAndSort = () => {
   console.log("date", dateFilter);
 
   return (
-    <Box sx={{ flexGrow: 1, backgroundColor: "#222222" }}>
+    <Box sx={{ flexGrow: 1, backgroundColor: "#222222", color: "#fff", padding: 2 }}>
       <Typography
         variant="h6"
         component="label"

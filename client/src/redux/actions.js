@@ -298,6 +298,8 @@ export const logoutUserSessionLocal = () => {
   };
 };
 
+
+//////////////////////////////localstorage
 export const addCarrito = (id) => {
   return {
     type: ADD_CARRITO,
@@ -324,6 +326,8 @@ export const cleanCarrito = () => {
     type: CLEAN_CARRITO,
   };
 };
+///////////////////////////////////
+
 
 export const orderByPrice = (price) => {
   return {
@@ -419,44 +423,29 @@ export const addProductToCart = (user, product, quantity) => {
         },
         body: JSON.stringify({ user, product, quantity }),
       });
-
-      if (response.ok) {
-        const addedProduct = await response.json()
-        //dispatch({ type: 'ADD_PRODUCT_SUCCESS', payload: { user, product, quantity } });
-        dispatch({ type: 'ADD_PRODUCT_SUCCESS', payload: { product: addedProduct } });
-      } else {
-        throw new Error('Failed to add product to cart');
-      }
+      
     } catch (error) {
-      dispatch({ type: 'ADD_PRODUCT_FAILURE', payload: error.message });
+      
     }
   };
 };
 
-export const incrementProductQuantity = (user, product) => {
+export const incrementProductQuantity = (userid, productid, quantity) => {
   return async (dispatch) => {
     try {
-      const response = await axios.put('http://localhost:3001/cart/addProductOne', { user, product });
-      const { updated, msg } = response.data;
+      await axios.put('http://localhost:3001/cart/updateitem', { userid, productid, quantity});
+    
 
-      if (updated) {
-        // La cantidad del producto se incrementó correctamente
-        dispatch({ type: 'INCREMENT_PRODUCT_QUANTITY_SUCCESS', payload: { product, msg } });
-      } else {
-        // Ocurrió un error al incrementar la cantidad del producto
-        dispatch({ type: 'INCREMENT_PRODUCT_QUANTITY_FAILURE', payload: { error: msg } });
-      }
     } catch (error) {
-      // Ocurrió un error en la solicitud
-      dispatch({ type: 'INCREMENT_PRODUCT_QUANTITY_FAILURE', payload: { error: error.message } });
+     
     }
   };
 };
 
-export const removeFromCart = (idProduct, idUser) => {
+export const removeFromCart = (userid, productid,) => {
   return async (dispatch) => {
     try {
-      const response = await fetch(`/api/removeProductInCart/${idProduct}/${idUser}`, {
+      const response = await fetch(`/api/removeProductInCart/${productid}/${userid}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'

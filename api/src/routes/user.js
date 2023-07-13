@@ -22,8 +22,9 @@ server.get("/", (req, res, next) => {
 //CREAR USUARIO
 
 server.post("/", (req, res, next) => {
-  const { name, lastName, email, password, phone,isactive,isadmin} = req.body;
+  const { id,name, lastName, email, password, phone,isactive,isadmin} = req.body;
   User.create({
+    id,
     name,
     lastName,
     email,
@@ -38,7 +39,14 @@ server.post("/", (req, res, next) => {
       const to = email; // Dirección de correo electrónico del destinatario
       const subject = "¡Registro exitoso!"; // Asunto del correo
       const html = welcomeEmail; // Contenido en HTML del cuerpo del correo
-      sendEmail(from, to, subject, html);
+      try {
+        sendEmail(from, to, subject, html)
+
+      }catch(e){
+        console.log("el email no se envio")
+      }
+
+      
 
       return res.json(usuario);
     })

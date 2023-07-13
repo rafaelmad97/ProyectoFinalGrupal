@@ -1,10 +1,11 @@
 const router = require("express").Router()
 const cors = require("cors");
-const { RemoveProductInCart, GetCartByAUser, AddProduct } = require("../controllers/Cart");
+const { RemoveProductInCart, GetCartByAUser, AddProduct, UpdateProductCart } = require("../controllers/Cart");
 
 router.use(cors())
 
 router.route("/add-product").post(AddProduct)
+router.route("/updateitem").put(UpdateProductCart)
 router.route("/remove-product").delete(RemoveProductInCart)
 router.route("/user/:id").get(GetCartByAUser)
 

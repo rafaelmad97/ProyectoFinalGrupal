@@ -15,14 +15,15 @@ import {
   Dialog,
 } from "@mui/material";
 import GoogleIcon from "@mui/icons-material/Google";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
 import { string, object} from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import "./Login.css";
 import { loginLocallyUser } from "../../redux/actions";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+
 
 const shemmaLogin = object({
   email: string()
@@ -33,6 +34,7 @@ const shemmaLogin = object({
 
 const Login = () => {
   const dispatcher = useDispatch();
+  const { userAuthenticated } = useSelector((state) => state);
   const [Dialogo, setDialogo] = useState({
     open: false,
     title: "",
@@ -81,6 +83,10 @@ const Login = () => {
       Nav("/home");
     }
   };
+
+  if(userAuthenticated?.user !== undefined){
+    return <Navigate to={"/home"} replace={true} />
+  }
 
   return (
     <Container fixed>
