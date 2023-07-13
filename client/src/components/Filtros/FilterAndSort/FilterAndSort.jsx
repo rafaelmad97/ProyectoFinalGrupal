@@ -44,7 +44,14 @@ const FilterAndSort = () => {
   console.log("date", dateFilter);
 
   return (
-    <Box sx={{ flexGrow: 1, backgroundColor: "#f44336" }}>
+    <Box
+      sx={{
+        flexGrow: 1,
+        backgroundColor: "#222222",
+        color: "#fff",
+        padding: 2,
+      }}
+    >
       <Typography
         variant="h6"
         component="label"
@@ -59,7 +66,7 @@ const FilterAndSort = () => {
         onClose={handleClose}
         elevation={1}
       >
-        {allCategorys?.map((cat) => (
+        {[...allCategorys].map((cat) => (
           <MenuItem
             value={cat.name}
             key={cat.id}

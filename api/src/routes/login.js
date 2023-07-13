@@ -16,7 +16,13 @@ function serializeUser(user, done) {
 
 async function deserializeUser(id, done) {
   await User.findByPk(id)
-    .then((user) => done(null, user))
+    .then((user) =>
+
+
+      done(null, user)
+    
+  
+    )
     .catch((err) => {
       done(err, false);
     });
@@ -30,6 +36,7 @@ router.route("/").post((req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) return res.status(500).json(err);
     if (!user) return res.status(404).json({ message: "Login Failed" });
+    if(!user.isactive) return res.status(400).json({message: "EL usuario esta deshabilitado"})
     req.logIn(user, (err) => {
       if (err) return res.status(500).json(err);
       return res.status(200).json({ message: "Login with exite" });

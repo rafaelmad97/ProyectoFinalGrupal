@@ -21,7 +21,9 @@ import {
   FILTER_BY_DATE,
   ORDER_BY_DATE,
   VIEW_REVIEW,
-  
+  CLEAN_FILTER_CATEGORY,
+  CLEAN_DETAIL,
+
 } from "./types";
 
 export const getAllProducts = () => {
@@ -111,17 +113,26 @@ export const detailProducts = (id) => {
   };
 };
 
+export const cleanDetail = () => {
+  return {
+    type: CLEAN_DETAIL
+  }
+}
+
 export function addProducts(payload) {
   return async function (dispatch) {
+    const newFormData = new FormData()
+    newFormData.append("image", payload.imagen)
+    newFormData.append("name", payload.name)
+    newFormData.append("price", payload.price)
+    newFormData.append("stock", payload.stock)
+    newFormData.append("isactive", payload.isactive)
+    newFormData.append("categoryId", payload.categoryId)
+    newFormData.append("description", payload.description)
     try {
       const response = await axios.post(
         "http://localhost:3001/products",
-        payload,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+        newFormData
       );
 
       dispatch({
@@ -136,15 +147,18 @@ export function addProducts(payload) {
 
 export function editProducts(payload) {
   return async function (dispatch) {
+    const newFormData = new FormData()
+    newFormData.append("image", payload.imagen)
+    newFormData.append("name", payload.name)
+    newFormData.append("price", payload.price)
+    newFormData.append("stock", payload.stock)
+    newFormData.append("isactive", payload.isactive)
+    newFormData.append("categoryId", payload.categoryId)
+    newFormData.append("description", payload.description)
     try {
       const response = await axios.put(
         `http://localhost:3001/products/${payload.id}`,
-        payload,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+        newFormData
       );
 
     } catch (error) {
@@ -222,7 +236,7 @@ export const loginLocallyUser = (email, password) => {
       )
       .then((res) => res.data)
       .catch((e) => {
-        throw new Error(e);
+        throw new Error(e.message);
       })
       .finally();
   };
@@ -290,6 +304,8 @@ export const logoutUserSessionLocal = () => {
   };
 };
 
+
+//////////////////////////////localstorage
 export const addCarrito = (id) => {
   return {
     type: ADD_CARRITO,
@@ -316,29 +332,37 @@ export const cleanCarrito = () => {
     type: CLEAN_CARRITO,
   };
 };
+///////////////////////////////////
+
 
 export const orderByPrice = (price) => {
   return {
-      type: ORDER_BY_PRICE,
-      payload: price
+    type: ORDER_BY_PRICE,
+    payload: price
   }
 }
 
 export const filterByCategory = (categorys) => {
-  return async function(dispatch){
-      try {
-          const response = await axios.get(`http://localhost:3001/filters/products?category=${categorys}`);
-          const category = response.data;
-          dispatch({
-              type: FILTER_BY_CATEGORY,
-              payload: category
-          })
-      } catch (error) {
-          dispatch({
-              type: ERROR,
-              payload: error
-          })
-      }
+  return async function (dispatch) {
+    try {
+      const response = await axios.get(`http://localhost:3001/filters/products?category=${categorys}`);
+      const category = response.data;
+      dispatch({
+        type: FILTER_BY_CATEGORY,
+        payload: category
+      })
+    } catch (error) {
+      dispatch({
+        type: ERROR,
+        payload: error
+      })
+    }
+  }
+}
+
+export const cleanFilterCategory = () => {
+  return {
+    type: CLEAN_FILTER_CATEGORY
   }
 }
 
@@ -406,43 +430,28 @@ export const addProductToCart = (user, product, quantity) => {
         body: JSON.stringify({ user, product, quantity }),
       });
 
-      if (response.ok) {
-        const addedProduct = await response.json()
-        //dispatch({ type: 'ADD_PRODUCT_SUCCESS', payload: { user, product, quantity } });
-        dispatch({ type: 'ADD_PRODUCT_SUCCESS', payload: { product: addedProduct } });
-      } else {
-        throw new Error('Failed to add product to cart');
-      }
     } catch (error) {
-      dispatch({ type: 'ADD_PRODUCT_FAILURE', payload: error.message });
+
     }
   };
 };
 
-export const incrementProductQuantity = (user, product) => {
+export const incrementProductQuantity = (userid, productid, quantity) => {
   return async (dispatch) => {
     try {
-      const response = await axios.put('http://localhost:3001/cart/addProductOne', { user, product });
-      const { updated, msg } = response.data;
+      await axios.put('http://localhost:3001/cart/updateitem', { userid, productid, quantity });
 
-      if (updated) {
-        // La cantidad del producto se incrementó correctamente
-        dispatch({ type: 'INCREMENT_PRODUCT_QUANTITY_SUCCESS', payload: { product, msg } });
-      } else {
-        // Ocurrió un error al incrementar la cantidad del producto
-        dispatch({ type: 'INCREMENT_PRODUCT_QUANTITY_FAILURE', payload: { error: msg } });
-      }
+
     } catch (error) {
-      // Ocurrió un error en la solicitud
-      dispatch({ type: 'INCREMENT_PRODUCT_QUANTITY_FAILURE', payload: { error: error.message } });
+
     }
   };
 };
 
-export const removeFromCart = (idProduct, idUser) => {
+export const removeFromCart = (userid, productid,) => {
   return async (dispatch) => {
     try {
-      const response = await fetch(`/api/removeProductInCart/${idProduct}/${idUser}`, {
+      const response = await fetch(`/api/removeProductInCart/${productid}/${userid}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'
@@ -460,5 +469,45 @@ export const removeFromCart = (idProduct, idUser) => {
       console.error('Error en la solicitud:', error.message);
       // Realizar acciones adicionales si es necesario
     }
+<<<<<<< HEAD
   };
 };
+=======
+  }
+}
+export const removeFromCart = (userid) => {
+  return async (dispatch) => {
+    try {
+      await axios.post("http://localhost:3001/cart/removeAllProduct", {userid})
+    } catch (error) {
+      
+    }
+  }
+}
+
+
+export const getCartUser = (userid) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.get(`http://localhost:3001/cart/user/${userid}`);
+      return response.data
+
+    } catch (error) {
+      
+    }
+  }
+}
+
+export function deleteProducts(payload) {
+  var id = payload;
+  var url = `http://localhost:3001/products/delete/${id}`
+
+  const borrar = axios({
+      method: 'delete',
+      url: url,
+      headers: {
+          'Content-Type': 'application/json'
+      }
+  })
+}
+>>>>>>> 38dba5fbfc937becbd547eb4ecc47660bfad3dff

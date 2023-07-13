@@ -118,6 +118,8 @@ export const NavBar = () => {
     Nav("/home");
   };
 
+
+
   const handleLogin = () => {
     Nav("/login");
   };
@@ -201,7 +203,13 @@ export const NavBar = () => {
               "aria-labelledby": "basic-button",
             }}
           >
+
+            {userAuthenticated?.user.isadmin &&
+          <MenuItem onClick={()=> Nav("/dashboard")}>
+            Dashboard
+            </MenuItem>}
             <MenuItem onClick={handleLogout}>Cerrar Sesion</MenuItem>
+
           </Menu>
         </Toolbar>
       </AppBar>
@@ -240,7 +248,7 @@ export const NavBar = () => {
         </CardContent>
       </Dialog>
     </Box>
-    <FilterAndSort/>
+    {/* <FilterAndSort/> */}
   </>
   );
 };

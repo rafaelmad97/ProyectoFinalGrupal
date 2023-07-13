@@ -1,5 +1,4 @@
-
-// import React from 'react'
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -7,18 +6,16 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import { addCarrito, filterByDate, orderByPrice } from "../../redux/actions";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-import { Grid, Pagination } from "@mui/material";
-import { Box } from "@mui/system";
-import { useState } from "react";
+import { addCarrito } from "../../redux/actions";
+import { useDispatch, useSelector } from "react-redux";
+import { Grid, Pagination, Box } from "@mui/material";
+import FilterAndSort from "./FilterAndSort/FilterAndSort";
 
 const Novedades = () => {
   const dispatch = useDispatch();
   const dateFilter = useSelector((state) => state.dateFilter);
   const [page, setPage] = useState(1);
-  const [cardsPerPage, setCardsPerPage] = useState(6);
+  const [cardsPerPage] = useState(6);
 
   const handleChange = (event, value) => {
     setPage(value);
@@ -37,9 +34,9 @@ const Novedades = () => {
           style={{ width: "100%", maxHeight: "300px" }}
         />
       </Box>
-
+      <FilterAndSort/>
       <Grid container direction="row" spacing={1}>
-        {dateFilter?.map((cat) => {
+        {currentCards.map((cat) => {
           return (
             <Grid item xs={12} md={4} xl={4} key={cat.id}>
               <Card elevation={4} sx={{ maxWidth: 345, margin: "10px" }}>

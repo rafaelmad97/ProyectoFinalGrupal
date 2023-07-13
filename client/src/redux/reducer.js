@@ -19,6 +19,8 @@ import {
   ORDER_BY_DATE,
   VIEW_REVIEW,
   ADD_REVIEW,
+  CLEAN_FILTER_CATEGORY,
+  CLEAN_DETAIL,
 } from "./types";
 
 const initialState = {
@@ -76,6 +78,12 @@ const reducer = (state = initialState, actions) => {
         productDetail: actions.payload,
       };
 
+    case CLEAN_DETAIL:
+      return {
+        ...state,
+        productDetail: {}
+      }
+
     case SEARCH_PRODUCT:
       return {
         ...state,
@@ -101,6 +109,20 @@ const reducer = (state = initialState, actions) => {
             ...state,
             myCarrito: [...state.myCarrito, { ...newCar, quantity: 1 }],
           };
+
+    case "LOAD_CARRITO":
+      const products = state.allProducts.filter(({id})=>Array(actions.payload).flat(Infinity).find((item)=>item.productId === id) !== undefined)
+      console.log(Array(actions.payload));
+      return {
+        ...state,
+        myCarrito: products.map((product)=>{
+          const quantity = [...actions.payload].find(({productId})=>productId === product.id)?.Quantity;
+          return {
+            ...product,
+            quantity: quantity
+          }
+        })
+      }
 
     case DELETE_ONE_ITEM_CARRITO:
       const deleteOneItem = state.myCarrito.find(
@@ -165,6 +187,12 @@ const reducer = (state = initialState, actions) => {
           categoryFilter: actions.payload,
           copyCategoryFilter: actions.payload,
         };
+
+      case CLEAN_FILTER_CATEGORY:
+        return {
+          ...state,
+          categoryFilter: [],
+        }
   
       case ORDER_BY_PRICE:
         const orderByPrice = state.copyCategoryFilter.sort((a, b) => {
