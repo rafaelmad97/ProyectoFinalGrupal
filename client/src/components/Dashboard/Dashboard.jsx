@@ -23,7 +23,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import { Carrito, Login } from "../../views";
 import { yellow } from "@mui/material/colors";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { NavLink, Navigate } from "react-router-dom";
+import { NavLink, Navigate, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { height } from "@mui/system";
 import TableProducts from "./TableProducts/TableProducts";
@@ -85,6 +85,7 @@ function Dashboard() {
   const [open, setOpen] = useState(false);
   const [componentePrincipal, setComponentePrincipal] = useState(null);
   const { userAuthenticated } = useSelector((state) => state);
+  const navigate = useNavigate();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -93,6 +94,10 @@ function Dashboard() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  const clickHome = () => {
+    navigate("/home")
+  }
 
   const renderComponentePrincipal = () => {
     switch (componentePrincipal) {
@@ -132,11 +137,10 @@ function Dashboard() {
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             Dashboard
           </Typography>
-          <NavLink to="/home" style={{ marginLeft: "20px" }}>
-            <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1}}>
+            <Typography onClick={clickHome} variant="h6" noWrap component="div" sx={{ flexGrow: 1}}>
               Home
             </Typography>
-          </NavLink>
+          
           <IconButton
             color="inherit"
             aria-label="open drawer"

@@ -61,13 +61,13 @@ module.exports = {
 
     //eliminar algun producto del carrito de algun usuario en especifico
     RemoveProductInCart: async (req, res) => {
-        const { idProduct, idUser } = req.body
+        const { productid, userid } = req.body
 
         try {
             await Cart.destroy( {
                 where: {
-                 UserId: idUser,
-                 productId: idProduct
+                 UserId: userid,
+                 productId: productid
                 }
               });
             res.status(200).json(req.body);
@@ -77,12 +77,12 @@ module.exports = {
     },
 
     RemoveProducts: async (req, res) => {
-        const { idUser } = req.body
+        const { userid } = req.body
 
         try {
             await Cart.destroy( {
                 where: {
-                 UserId: idUser,
+                 UserId: userid,
                 }
               });
             res.status(200).json(req.body);

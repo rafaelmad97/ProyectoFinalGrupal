@@ -31,6 +31,7 @@ import {
   orderByPrice,
   editProducts,
   getAllProducts,
+  getAllCategorys,
 } from "../../../redux/actions";
 import { schemmaProducto } from "./FormModal";
 import { FormProvider, useForm } from "react-hook-form";
@@ -60,6 +61,7 @@ function TableProducts() {
 
   useEffect(() => {
     dispatch(getAllProducts());
+    dispatch(getAllCategorys());
   }, []);
 
   const handleOrderPrice = (event) => {
@@ -226,7 +228,7 @@ function TableProducts() {
                   <TableCell>$/{item.price}.00</TableCell>
                   <TableCell>{item.stock}</TableCell>
                   <TableCell>
-                    {allCategorys.find((cat) => cat.id === item.categoryId)?.name}
+                    {[...allCategorys].find((cat) => cat.id === item.categoryId)?.name}
                   </TableCell>
 
                   <TableCell>
