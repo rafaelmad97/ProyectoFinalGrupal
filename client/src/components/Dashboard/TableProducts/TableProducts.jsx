@@ -21,17 +21,13 @@ import {
   DialogTitle,
 } from "@mui/material";
 
-import SearchIcon from "@mui/icons-material/Search";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import FormModal from "./FormModal";
 import {
-  getByName,
-  orderByDate,
-  orderByPrice,
   editProducts,
   getAllProducts,
-  deleteProduct,
+  getAllCategorys,
 } from "../../../redux/actions";
 import { schemmaProducto } from "./FormModal";
 import { FormProvider, useForm } from "react-hook-form";
@@ -42,10 +38,9 @@ function TableProducts() {
   const { allProducts, allCategorys } = useSelector((state) => state);
   const [open, setOpen] = useState(false);
   const [openEdit, setEdit] = useState(false);
+  const [reloadProducts, setReloadProducts] = useState(false);
   const dispatch = useDispatch();
-  const [searchValue, setSearchValue] = useState("");
-  const [orderPrice, setOrderPrice] = useState("");
-  const [orderDate, setOrderDate] = useState("");
+  
 
   const Formulario = useForm({
     defaultValues: {
@@ -61,27 +56,10 @@ function TableProducts() {
 
   useEffect(() => {
     dispatch(getAllProducts());
-  }, []);
+    dispatch(getAllCategorys());
+  }, [getAllProducts]);
 
-  const handleOrderPrice = (event) => {
-    dispatch(orderByPrice(event.target.value));
-    setOrderPrice(event.target.value);
-  };
-
-  const handleOrderDate = (event) => {
-    dispatch(orderByDate(event.target.value));
-    setOrderDate(event.target.value);
-  };
-
-  const handleSearchChange = (event) => {
-    setSearchValue(event.target.value);
-  };
-
-  const handleSearchSubmit = (event) => {
-    event.preventDefault();
-    dispatch(getByName(searchValue));
-    setSearchValue("");
-  };
+  
 
   const handleOpen = () => {
     setOpen(true);
@@ -90,16 +68,23 @@ function TableProducts() {
     setOpen(false);
     Formulario.reset();
   };
-
+  
   const handleUpdateProduct = (product) => {
     Formulario.reset({ ...product });
     setEdit(true);
   };
-
+  
   const handleCloseUpdateProduct = () => {
     setEdit(false);
     Formulario.reset();
+    setReloadProducts(true)
   };
+
+  // const handleDeleteProduct = (productId) => {
+  //   dispatch(removeProduct(product.id))
+  //   .then(() => setReloadProducts(true)) // Establece el estado para recargar los productos
+  //     .catch((error) => console.log(error));
+  // }
 
   const handleSubmit = (data) => {
     Promise.resolve(dispatch(editProducts(data)))
@@ -108,11 +93,15 @@ function TableProducts() {
       .finally();
   };
 
+  useEffect(() => {
+    dispatch(getAllProducts());
+    dispatch(getAllCategorys());
 
-  const handleDeleteProduct = (product) => {
-    dispatch(deleteProduct(product.id));
-    
-  };
+    if (reloadProducts) {
+      setReloadProducts(false); // Resetea el estado de recarga
+    }
+  }, [dispatch, reloadProducts]);
+
 
   return (
     <Container fixed>
@@ -145,64 +134,7 @@ function TableProducts() {
             </Button>
             <FormModal open={open} handleClose={handleClose} />
 
-            <form
-              onSubmit={handleSearchSubmit}
-              style={{ marginLeft: "100px", marginRight: "10px" }}
-            >
-              <TextField
-                label="Search"
-                value={searchValue}
-                onChange={handleSearchChange}
-                variant="outlined"
-                size="small"
-                sx={{ width: "150px", fontSize: "15px" }}
-              />
-              <IconButton type="submit">
-                <SearchIcon />
-              </IconButton>
-            </form>
-
-            <div
-              style={{
-                marginLeft: "20px",
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <label
-                htmlFor="select-order"
-                style={{ marginRight: "10px", color: "black" }}
-              >
-                <h3>Ordenar por fecha:</h3>
-              </label>
-              <select
-                id="select-order"
-                value={orderDate}
-                onChange={(event) => handleOrderDate(event)}
-                style={{ marginRight: "20px" }}
-              >
-                <option value="">Seleccionar</option>
-                <option value="asc">Ascendente</option>
-                <option value="desc">Descendente</option>
-              </select>
-
-              <label
-                htmlFor="select-order"
-                style={{ marginRight: "10px", color: "black" }}
-              >
-                <h3>Ordenar por precio:</h3>
-              </label>
-              <select
-                id="select-order"
-                value={orderPrice}
-                onChange={(event) => handleOrderPrice(event)}
-                style={{ marginRight: "10px" }}
-              >
-                <option value="">Seleccionar</option>
-                <option value="asc">Ascendente</option>
-                <option value="desc">Descendente</option>
-              </select>
-            </div>
+           
           </div>
 
           <Table sx={{ margin: "10px" }}>
@@ -216,7 +148,7 @@ function TableProducts() {
                 <TableCell>Categoria</TableCell>
                 <TableCell>Editar</TableCell>
                 <TableCell>Eliminar</TableCell>
-                <TableCell>Habilitar/Desabilitar</TableCell>
+              
               </TableRow>
             </TableHead>
             <TableBody>
@@ -234,7 +166,7 @@ function TableProducts() {
                   <TableCell>$/{item.price}.00</TableCell>
                   <TableCell>{item.stock}</TableCell>
                   <TableCell>
-                    {allCategorys.find((cat) => cat.id === item.categoryId)?.name}
+                    {[...allCategorys].find((cat) => cat.id === item.categoryId)?.name}
                   </TableCell>
 
                   <TableCell>
@@ -246,7 +178,7 @@ function TableProducts() {
                   </TableCell>
                   <TableCell>
                     <div>
-                      <IconButton onClick={() => handleDeleteProduct(item)}>
+                      <IconButton onClick={()=>handleDeleteProduct(item)} >
                         <DeleteIcon />
                       </IconButton>
                     </div>

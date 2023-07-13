@@ -110,6 +110,20 @@ const reducer = (state = initialState, actions) => {
             myCarrito: [...state.myCarrito, { ...newCar, quantity: 1 }],
           };
 
+    case "LOAD_CARRITO":
+      const products = state.allProducts.filter(({id})=>Array(actions.payload).flat(Infinity).find((item)=>item.productId === id) !== undefined)
+      console.log(Array(actions.payload));
+      return {
+        ...state,
+        myCarrito: products.map((product)=>{
+          const quantity = [...actions.payload].find(({productId})=>productId === product.id)?.Quantity;
+          return {
+            ...product,
+            quantity: quantity
+          }
+        })
+      }
+
     case DELETE_ONE_ITEM_CARRITO:
       const deleteOneItem = state.myCarrito.find(
         (item) => item.id === actions.payload
