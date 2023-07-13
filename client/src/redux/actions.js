@@ -469,5 +469,45 @@ export const removeFromCart = (userid, productid,) => {
       console.error('Error en la solicitud:', error.message);
       // Realizar acciones adicionales si es necesario
     }
+<<<<<<< HEAD
   };
 };
+=======
+  }
+}
+export const removeFromCart = (userid) => {
+  return async (dispatch) => {
+    try {
+      await axios.post("http://localhost:3001/cart/removeAllProduct", {userid})
+    } catch (error) {
+      
+    }
+  }
+}
+
+
+export const getCartUser = (userid) => {
+  return async (dispatch) => {
+    try {
+      const response = await axios.get(`http://localhost:3001/cart/user/${userid}`);
+      return response.data
+
+    } catch (error) {
+      
+    }
+  }
+}
+
+export function deleteProducts(payload) {
+  var id = payload;
+  var url = `http://localhost:3001/products/delete/${id}`
+
+  const borrar = axios({
+      method: 'delete',
+      url: url,
+      headers: {
+          'Content-Type': 'application/json'
+      }
+  })
+}
+>>>>>>> 38dba5fbfc937becbd547eb4ecc47660bfad3dff
