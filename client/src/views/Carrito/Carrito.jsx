@@ -42,7 +42,7 @@ function Carrito() {
 
   const handleIncrement = (productId) => {
     const product = myCarrito.find((product) => product.id === productId)
-    dispatch(addCarrito(productId));
+     dispatch(addCarrito(productId));
     dispatch(incrementProductQuantity(userAuthenticated?.user.id,  product.quantity+1))
   };
 

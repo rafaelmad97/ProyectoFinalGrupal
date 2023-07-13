@@ -22,6 +22,7 @@ import { useEffect } from "react";
 import UserInfo from "./UserInfo";
 
 export const shemmaUsuario = object({
+  
   name: string().required("Este campo es requerido"),
   lastName: string().required("Este campo es requerido"),
   email: string().email().required("Este campo es requerido"),
@@ -48,6 +49,7 @@ const FormUsers = () => {
 
   const Formulario = useForm({
     defaultValues: {
+      id: 0,
       name: "",
       lastName: "",
       email: "",

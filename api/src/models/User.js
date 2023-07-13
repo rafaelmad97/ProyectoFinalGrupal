@@ -6,10 +6,9 @@ module.exports = (sequelize) => {
     .define(
       "User",
       {
-        id:{
-        type: DataTypes.DOUBLE,
-        primaryKey: true,
-        autoincrement: true,
+        id: {
+          type: DataTypes.FLOAT,
+          primaryKey: true,
         },
         name: {
           type: DataTypes.TEXT,
@@ -60,16 +59,15 @@ module.exports = (sequelize) => {
 
         phone: {
           type: DataTypes.STRING,
-      
         },
 
         isactive: {
           type: DataTypes.BOOLEAN,
-         }, 
+        },
 
-         isadmin: {
+        isadmin: {
           type: DataTypes.BOOLEAN,
-         }, 
+        },
       },
       { freezeTableName: true, timestamps: false }
     )

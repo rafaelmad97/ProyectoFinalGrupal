@@ -21,10 +21,12 @@ server.get("/", (req, res, next) => {
 
 //CREAR USUARIO
 
-server.post("/", (req, res, next) => {
+server.post("/",async  (req, res, next) => {
   const { id,name, lastName, email, password, phone,isactive,isadmin} = req.body;
-  User.create({
-    id,
+  const value = await User.count()
+  console.log(value+1)
+  await User.create({
+    id:(value+1),
     name,
     lastName,
     email,

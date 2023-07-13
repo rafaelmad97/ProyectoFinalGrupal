@@ -18,16 +18,19 @@ const googleStrategy = new GoogleStrategy(
 
       const user = await User.findByPk(profile.id)
       if(user===null) {
-        User.create({
-          id: profile.id,
-          name: profile.displayName,
-          lastName: "google",
-          email: profile.emails[0]?.value,
-          password: "google123",
-          phone: "google",
-          isactive: true,
-          isadmin: false,
-        })
+       
+
+         await  User.create({
+            id: Number(profile.id),
+            name: profile.displayName,
+            lastName: "google",
+            email: profile.emails[0]?.value,
+            password: "google123",
+            phone: "google",
+            isactive: true,
+            isadmin: false,
+          })
+        
       }
       cb(null, {
         accessToken,
