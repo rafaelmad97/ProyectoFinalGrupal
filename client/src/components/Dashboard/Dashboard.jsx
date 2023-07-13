@@ -1,4 +1,3 @@
-
 import * as React from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
@@ -23,7 +22,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import { Carrito, Login } from "../../views";
 import { yellow } from "@mui/material/colors";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { NavLink, Navigate } from "react-router-dom";
+import { NavLink, Navigate, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { height } from "@mui/system";
 import TableProducts from "./TableProducts/TableProducts";
@@ -85,6 +84,7 @@ function Dashboard() {
   const [open, setOpen] = useState(false);
   const [componentePrincipal, setComponentePrincipal] = useState(null);
   const { userAuthenticated } = useSelector((state) => state);
+  const navigate = useNavigate();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -92,6 +92,10 @@ function Dashboard() {
 
   const handleDrawerClose = () => {
     setOpen(false);
+  };
+
+  const clickHome = () => {
+    navigate("/home");
   };
 
   const renderComponentePrincipal = () => {
@@ -111,8 +115,8 @@ function Dashboard() {
   const handleClickProducts = () => {
     setComponentePrincipal("products");
   };
-  if(!userAuthenticated?.user.isadmin){
-    return <Navigate to={"/home"} replace={true} />
+  if (!userAuthenticated?.user.isadmin) {
+    return <Navigate to={"/home"} replace={true} />;
   }
 
   return (
@@ -132,11 +136,29 @@ function Dashboard() {
           <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
             Dashboard
           </Typography>
-          <NavLink to="/home" style={{ marginLeft: "20px" }}>
-            <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1}}>
+          <Box
+            sx={{
+              flexGrow: 0, // Ajustar el tamaño del contenedor
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-end", // Alinear a la derecha
+              cursor: "pointer",
+              padding: "4px", // Ajustar el espacio interno
+            }}
+          >
+            <Typography
+              onClick={clickHome}
+              variant="h6"
+              noWrap
+              component="div"
+              sx={{
+                fontSize: "1.2rem", // Ajustar el tamaño de la fuente
+              }}
+            >
               Home
             </Typography>
-          </NavLink>
+          </Box>
+
           <IconButton
             color="inherit"
             aria-label="open drawer"

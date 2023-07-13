@@ -1,20 +1,26 @@
-
-
 import * as React from "react";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
-import { addCarrito, cleanDetail, detailProducts, getReviews } from "../../redux/actions";
+import { addCarrito, addReview, cleanDetail, detailProducts, getReviews } from "../../redux/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Container } from "@mui/system";
 import styles from "./Detail.module.css";
-import { IconButton, Rating, Grid } from "@mui/material";
+import { IconButton, Rating, Grid, TextField, Button } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { string, object, number} from "yup";
+import { Controller, useForm } from "react-hook-form";
+
+export const shemmaReviews = object({
+  start: number().required("Este campo es requerido"),
+  descrition: string().required("Este campo es requerido"),
+});
 
 function Detail() {
   const dispatch = useDispatch();
@@ -25,6 +31,14 @@ function Detail() {
   const [rating, setRating] = useState(0);
 
   console.log("detail", product);
+
+  const Formulario_Reviews = useForm({
+    defaultValues: {
+      start: 0,
+      description: "",
+    },
+    resolver: yupResolver(shemmaReviews),
+  });
   
   const fetchReviews = () => {
     try {
@@ -49,6 +63,19 @@ function Detail() {
   const handleRatingChange = (newRating) => {
     setRating(newRating);
   };
+
+
+  const onSubmitReview = (data) => {
+    const { rating, description } = data;
+    const newReview = {
+      rating,
+      description,
+    };
+    dispatch(addReview(id, newReview));
+    Formulario_Reviews.reset(); // Reinicia el formulario después de enviar la reseña
+    setRating(0);
+  };
+  
 
   return (
     <div>
@@ -92,16 +119,42 @@ function Detail() {
       </Grid>
     </Grid>
   </Container>
+  <Container className={styles.container}>
+        <Typography gutterBottom variant="h6" component="div">
+          Opiniones del producto
+        </Typography>
+        <form onSubmit={Formulario_Reviews.handleSubmit(onSubmitReview)}>
+          <Controller
+            name="rating"
+            control={Formulario_Reviews.control}
+            render={({ field }) => (
+              <Rating
+                name="rating"
+                value={field.value}
+                onChange={(event, newRating) => handleRatingChange(newRating)}
+              />
+            )}
+          />
+          <Controller
+            name="description"
+            control={Formulario_Reviews.control}
+            render={({ field, fieldState }) => (
+              <TextField
+                label="Descripción"
+                type="text"
+                {...field}
+                error={Boolean(fieldState.error)}
+                helperText={fieldState.error?.message}
+                fullWidth
+              />
+            )}
+          />
+          <Button type= "submit" sx={{backgroundColor: "#222222", color:"#ffffff"}} >Enviar Reseña</Button>
+        </form>
+      </Container>
 
   <Container className={styles.container}>
-      <Typography gutterBottom variant="h6" component="div">
-                  Opiniones del producto
-                </Typography>
-                <Rating
-                  name="rating"
-                  value={rating}
-                  onChange={(event, newRating) => handleRatingChange(newRating)}
-                />
+     
     <Card sx={{ height: "100%", marginTop: "16px" }}>
       {reviews.length > 0 ? (
         reviews.map((review) => (

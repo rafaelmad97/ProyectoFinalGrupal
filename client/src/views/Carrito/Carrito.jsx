@@ -22,6 +22,8 @@ import {
   deleteAllItemCarrito,
   deleteOneItemCarrito,
   incrementProductQuantity,
+  removeFromCart,
+  removeFromOneCart,
 } from "../../redux/actions";
 import DeleteIcon from "@mui/icons-material/Delete";
 import axios from "axios";
@@ -42,15 +44,28 @@ function Carrito() {
 
   const handleIncrement = (productId) => {
     const product = myCarrito.find((product) => product.id === productId)
-     dispatch(addCarrito(productId));
-    dispatch(incrementProductQuantity(userAuthenticated?.user.id,  product.quantity+1))
+    dispatch(addCarrito(productId));
+    dispatch(incrementProductQuantity(userAuthenticated?.user.id, productId,  product?.quantity+1))
+    console.log(productId);
   };
 
   const handleDecrement = (productId) => {
+    const product = myCarrito.find((product) => product.id === productId)
     dispatch(deleteOneItemCarrito(productId));
+    dispatch(incrementProductQuantity(userAuthenticated?.user.id, productId,  product?.quantity-1))
   };
 
-  console.log(myCarrito);
+  const habdelDeleteOneCarrito = (productId) => {
+    alert("Estas seguro que quieres borrar el elemento del carrito")
+    dispatch(deleteAllItemCarrito(productId))
+    dispatch(removeFromOneCart(userAuthenticated?.user.id, productId))
+  }
+
+  const handleDeleteCarrito = () => {
+    alert("Estas por eliminar tu carrito")
+    dispatch(cleanCarrito())
+    dispatch(removeFromCart(userAuthenticated?.user.id))
+  }
 
   //pago de mercado pago
   const realizarCompra = async () => {
@@ -114,7 +129,8 @@ function Carrito() {
                   <TableCell>
                     <div>
                       <IconButton
-                        onClick={() => {alert("Estas seguro que quieres borrar el elemento del carrito"); dispatch(deleteAllItemCarrito(car.id))}}
+                        //onClick={() => {alert("Estas seguro que quieres borrar el elemento del carrito"); dispatch(deleteAllItemCarrito(car.id))}}
+                        onClick={()=> habdelDeleteOneCarrito(car.id)}
                       >
                         <DeleteIcon />
                       </IconButton>
@@ -163,7 +179,8 @@ function Carrito() {
                   </Grid>
                   <Grid item>
                     <Button
-                      onClick={() => {alert("Estas por eliminar tu carrito"); dispatch(cleanCarrito())}}
+                      //onClick={() => {alert("Estas por eliminar tu carrito"); dispatch(cleanCarrito())}}
+                      onClick={()=>handleDeleteCarrito()}
                       variant="contained"
                     >
                       Limpiar Carrito

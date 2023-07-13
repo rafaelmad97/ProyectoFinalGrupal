@@ -26,8 +26,8 @@ const Cards = (props) => {
   };
 
   return (
-    <Card elevation={4} sx={{ maxWidth: 345 }}>
-      <CardMedia component="img" alt={name} image={urlImage} className="img" />
+    <Card elevation={4} sx={{ maxWidth: 345, height:550 }}>
+      <CardMedia component="img" alt={name} image={urlImage} className="img" sx={{ }} />
       <CardContent>
         <Typography gutterBottom variant="h5" component="div">
           {name}
