@@ -23,7 +23,7 @@ import {
   VIEW_REVIEW,
   CLEAN_FILTER_CATEGORY,
   CLEAN_DETAIL,
-  
+
 } from "./types";
 
 export const getAllProducts = () => {
@@ -121,15 +121,18 @@ export const cleanDetail = () => {
 
 export function addProducts(payload) {
   return async function (dispatch) {
+    const newFormData = new FormData()
+    newFormData.append("image", payload.imagen)
+    newFormData.append("name", payload.name)
+    newFormData.append("price", payload.price)
+    newFormData.append("stock", payload.stock)
+    newFormData.append("isactive", payload.isactive)
+    newFormData.append("categoryId", payload.categoryId)
+    newFormData.append("description", payload.description)
     try {
       const response = await axios.post(
         "http://localhost:3001/products",
-        payload,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+        newFormData
       );
 
       dispatch({
@@ -144,15 +147,18 @@ export function addProducts(payload) {
 
 export function editProducts(payload) {
   return async function (dispatch) {
+    const newFormData = new FormData()
+    newFormData.append("image", payload.imagen)
+    newFormData.append("name", payload.name)
+    newFormData.append("price", payload.price)
+    newFormData.append("stock", payload.stock)
+    newFormData.append("isactive", payload.isactive)
+    newFormData.append("categoryId", payload.categoryId)
+    newFormData.append("description", payload.description)
     try {
       const response = await axios.put(
         `http://localhost:3001/products/${payload.id}`,
-        payload,
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+        newFormData
       );
 
     } catch (error) {
@@ -331,26 +337,26 @@ export const cleanCarrito = () => {
 
 export const orderByPrice = (price) => {
   return {
-      type: ORDER_BY_PRICE,
-      payload: price
+    type: ORDER_BY_PRICE,
+    payload: price
   }
 }
 
 export const filterByCategory = (categorys) => {
-  return async function(dispatch){
-      try {
-          const response = await axios.get(`http://localhost:3001/filters/products?category=${categorys}`);
-          const category = response.data;
-          dispatch({
-              type: FILTER_BY_CATEGORY,
-              payload: category
-          })
-      } catch (error) {
-          dispatch({
-              type: ERROR,
-              payload: error
-          })
-      }
+  return async function (dispatch) {
+    try {
+      const response = await axios.get(`http://localhost:3001/filters/products?category=${categorys}`);
+      const category = response.data;
+      dispatch({
+        type: FILTER_BY_CATEGORY,
+        payload: category
+      })
+    } catch (error) {
+      dispatch({
+        type: ERROR,
+        payload: error
+      })
+    }
   }
 }
 
@@ -423,9 +429,9 @@ export const addProductToCart = (user, product, quantity) => {
         },
         body: JSON.stringify({ user, product, quantity }),
       });
-      
+
     } catch (error) {
-      
+
     }
   };
 };
@@ -433,11 +439,11 @@ export const addProductToCart = (user, product, quantity) => {
 export const incrementProductQuantity = (userid, productid, quantity) => {
   return async (dispatch) => {
     try {
-      await axios.put('http://localhost:3001/cart/updateitem', { userid, productid, quantity});
-    
+      await axios.put('http://localhost:3001/cart/updateitem', { userid, productid, quantity });
+
 
     } catch (error) {
-     
+
     }
   };
 };

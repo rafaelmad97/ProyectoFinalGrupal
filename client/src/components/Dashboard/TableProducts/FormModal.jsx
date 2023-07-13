@@ -1,5 +1,3 @@
-
-
 import React, { useEffect } from "react";
 import {
   Button,
@@ -18,15 +16,16 @@ import {
   DialogActions,
 } from "@mui/material";
 import { useForm, Controller, FormProvider } from "react-hook-form";
-import {object, string, number} from "yup";
- import { yupResolver } from "@hookform/resolvers/yup";
+import { object, string, number } from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useDispatch, useSelector } from "react-redux";
 import { addProducts, getAllCategorys } from "../../../redux/actions";
 import InformacionProducto from "./InformacionProducto";
 
 export const schemmaProducto = object({
   name: string().required("Este campo es requerido"),
-  urlImage: string().url().required("Este campo es requerido"),
+  urlImage: string() /*.url()*/
+    .required("Este campo es requerido"),
   description: string().required("Este campo es requerido"),
   stock: number().required("Este campo es requerido"),
   price: number().required("Este campo es requerido"),
@@ -34,7 +33,6 @@ export const schemmaProducto = object({
 
 const FormModal = ({ open, handleClose }) => {
   const dispatch = useDispatch();
-  
 
   useEffect(() => {
     dispatch(getAllCategorys());
@@ -42,7 +40,7 @@ const FormModal = ({ open, handleClose }) => {
 
   const Formulario = useForm({
     defaultValues: {
-      id:1,
+      id: 1,
       name: "",
       urlImage: "",
       description: "",
@@ -61,22 +59,19 @@ const FormModal = ({ open, handleClose }) => {
       .catch(() => console.log("error no registrado"));
   };
 
-  const handleCloseCreate = () =>{
-    handleClose()
-  }
+  const handleCloseCreate = () => {
+    handleClose();
+  };
 
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Create Products</DialogTitle>
       <DialogContent>
-     
- 
-            <Grid container direction="row" spacing={1}>
-              <FormProvider {...Formulario}>
-                <InformacionProducto />
-              </FormProvider>
-            </Grid>
-   
+        <Grid container direction="row" spacing={1}>
+          <FormProvider {...Formulario}>
+            <InformacionProducto />
+          </FormProvider>
+        </Grid>
       </DialogContent>
       <DialogActions>
         <Button variant="outlined" onClick={handleClose}>

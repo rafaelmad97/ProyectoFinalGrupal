@@ -3,6 +3,7 @@ const { Product, Category, Product_Category } = require("../db.js");
 const cors = require("cors");
 const Sequelize = require("sequelize");
 const { Op } = require("sequelize");
+const { sendImage } = require("../config/cloudinary.js")
 
 server.use(cors());
 
@@ -49,13 +50,24 @@ server.get("/:id", (req, res, next) => {
 });
 
 // Crear producto
-server.post("/", (req, res, next) => {
-  Product.create({
+server.post("/", async (req, res, next) => {
+
+  const image = req.files ? req.files['image'] : req.body.urlImage
+  let imageUrl
+
+
+  if (req.files) {
+    const data = await sendImage(req.files.image.tempFilePath)
+    imageUrl = data.url
+  } else imageUrl = image
+
+
+  await Product.create({
     name: req.body.name,
     description: req.body.description,
     price: req.body.price,
     stock: req.body.stock,
-    urlImage: req.body.urlImage,
+    urlImage: imageUrl,
     categoryId: req.body.categoryId,
     isactive: req.body.isactive
   })
@@ -71,10 +83,18 @@ server.put("/:id", async (req, res, next) => {
 
   const result = await Product.findByPk(id);
 
+  const image = req.files ? req.files['image'] : req.body.urlImage
+  let imageUrl
+
+  if (req.files) {
+    const data = await sendImage(req.files.image.tempFilePath)
+    imageUrl = data.url
+  } else imageUrl = image
+
   if (result !== null) {
     try {
-      await result.update(req.body, { where: { id: id } });
-      res.status(200).json(req.body);
+      await result.update({ ...req.body, urlImage: imageUrl }, { where: { id: id } });
+      res.status(200).json({ ...req.body, urlImage: imageUrl });
     } catch (e) {
       res.status(400).json(e.message);
     }

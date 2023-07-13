@@ -7,6 +7,8 @@ const morgan = require("morgan");
 const routes = require("./routes/index.js");
 const passport = require("passport");
 
+const fileUpload = require("express-fileupload")
+
 const session = require("express-session");
 
 const { Product } = require("./db.js");
@@ -46,6 +48,11 @@ server.use((req, res, next) => {
 
 server.use(passport.initialize());
 server.use(passport.session());
+
+server.use(fileUpload({
+  useTempFiles: true,
+  tempFileDir: "./uploads"
+}))
 
 // server.use(express.static('public'));
 server.use("/", routes);
