@@ -23,12 +23,7 @@ import {
   VIEW_REVIEW,
   CLEAN_FILTER_CATEGORY,
   CLEAN_DETAIL,
-<<<<<<< HEAD
 
-=======
-  ADD_REVIEW,
-  
->>>>>>> 8665e6591f2d8cbf0ffb146f5c4be7f0a9f4e6c5
 } from "./types";
 
 export const getAllProducts = () => {
@@ -254,19 +249,11 @@ export const fetchUserSessionGoogle = () => {
         withCredentials: true,
       })
 
-      .then((res) =>{
-
+      .then((res) =>
         dispatch({
           type: LOGIN_GOOGLE,
           payload: res.data,
         })
-      Promise.resolve(dispatch(getCartUser(res.data.user.id))).then((data)=>{
-        dispatch({
-          type: "LOAD_CARRITO",
-          payload: data,
-        })
-      })
-      }
       )
       .finally();
   };
@@ -278,18 +265,11 @@ export const fetchUserSessionLocally = () => {
       .get("http://localhost:3001/login/authenticated", {
         withCredentials: true,
       })
-      .then((res) => {
+      .then((res) =>
         dispatch({
           type: LOGIN_LOCAL,
           payload: res.data,
         })
-        Promise.resolve(dispatch(getCartUser(res.data.user.id))).then((data)=>{
-          dispatch({
-            type: "LOAD_CARRITO",
-            payload: data,
-          })
-        })
-      }
       );
   };
 };
@@ -468,35 +448,26 @@ export const incrementProductQuantity = (userid, productid, quantity) => {
   };
 };
 
-export const removeFromOneCart = (userid, productid) => {
+export const removeFromCart = (userid, productid,) => {
   return async (dispatch) => {
     try {
-      await axios.post("http://localhost:3001/cart/remove-product", {userid, productid})
+      const response = await fetch(`/api/removeProductInCart/${productid}/${userid}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        console.log('Producto eliminado del carrito:', data.msg);
+        // Realizar acciones adicionales si es necesario
+      } else {
+        throw new Error('Error al eliminar el producto del carrito');
+      }
     } catch (error) {
-      
+      console.error('Error en la solicitud:', error.message);
+      // Realizar acciones adicionales si es necesario
     }
-  }
-}
-export const removeFromCart = (userid) => {
-  return async (dispatch) => {
-    try {
-      await axios.post("http://localhost:3001/cart/removeAllProduct", {userid})
-    } catch (error) {
-      
-    }
-  }
-}
-
-
-export const getCartUser = (userid) => {
-  return async (dispatch) => {
-    try {
-      const response = await axios.get(`http://localhost:3001/cart/user/${userid}`);
-      return response.data
-
-    } catch (error) {
-      
-    }
-  }
-}
-
+  };
+};
