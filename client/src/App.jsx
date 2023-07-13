@@ -10,6 +10,7 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import { useSelector } from "react-redux";
 
 
+
 function App() {
   const location = useLocation();
   
@@ -35,7 +36,7 @@ function App() {
           <Route path="/carrito" element={<Carrito />} />
           <Route path="/filtros" element={<Filtros />} />
           <Route path="/novedades" element={<Novedades />} />
-          
+         
 
           <Route path="/dashboard" element={ <Dashboard />} />
         
