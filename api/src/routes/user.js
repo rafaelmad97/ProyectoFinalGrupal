@@ -1,7 +1,12 @@
 const server = require("express").Router();
 const cors = require("cors");
 const { User } = require("../db");
-
+const sendEmail = require("../controllers/Email");
+const { EMAILACCOUNT } = process.env;
+const welcomeEmail = require("../email-templates/welcome");
+const paymentEmail = require("../email-templates/payment");
+const changePEmail = require("../email-templates/changePassword");
+const bcrypt = require("bcrypt");
 server.use(cors());
 
 //TRAER TODOS LOS USUARIOS
@@ -16,17 +21,35 @@ server.get("/", (req, res, next) => {
 
 //CREAR USUARIO
 
-server.post("/", (req, res, next) => {
-  const { name, lastName, email, password, phone, rol } = req.body;
-  User.create({
+server.post("/",async  (req, res, next) => {
+  const { id,name, lastName, email, password, phone,isactive,isadmin} = req.body;
+  const value = await User.count()
+  console.log(value+1)
+  await User.create({
+    id:(value+1),
     name,
     lastName,
     email,
     password,
     phone,
-    rol,
+    isactive,
+    isadmin,
   })
     .then((usuario) => {
+      // Envía el correo de notificación al usuario registrado
+      const from = EMAILACCOUNT;
+      const to = email; // Dirección de correo electrónico del destinatario
+      const subject = "¡Registro exitoso!"; // Asunto del correo
+      const html = welcomeEmail; // Contenido en HTML del cuerpo del correo
+      try {
+        sendEmail(from, to, subject, html)
+
+      }catch(e){
+        console.log("el email no se envio")
+      }
+
+      
+
       return res.json(usuario);
     })
     .catch(next);
@@ -52,17 +75,63 @@ server.get("/:email", (req, res, next) => {
     .catch("error");
 });
 
+//ACTUALIZAR CONTRASEÑA
+
+server.put("/password/:id", (req, res) => {
+  const { id } = req.params;
+  const { password, newPassword, email } = req.body;
+
+  User.findByPk(id)
+    .then((user) => {
+      if (!user) {
+        return res.status(404).json({ message: "Usuario no encontrado" });
+      }
+
+      if (!bcrypt.compareSync(password, user.password)) {
+        return res
+          .status(401)
+          .json({ message: "Contraseña actual incorrecta" });
+      }
+
+      const salt = bcrypt.genSaltSync(10);
+      const hashedPassword = bcrypt.hashSync(newPassword, salt);
+
+      User.update({ password: hashedPassword }, { where: { id: user.id } })
+        .then(() => {
+          res
+            .status(200)
+            .json({ message: "Contraseña actualizada correctamente" });
+          // Envía el correo de actualizacion al usuario
+          const from = EMAILACCOUNT;
+          const to = email; // Dirección de correo electrónico del destinatario
+          const subject = "¡Cambio de contraseña exitoso!"; // Asunto del correo
+          const html = changePEmail; // Contenido en HTML del cuerpo del correo
+          sendEmail(from, to, subject, html);
+        })
+
+        .catch((error) => {
+          console.error(error);
+          res.status(500).json({ message: "Error al cambiar la contraseña" });
+        });
+    })
+    .catch((error) => {
+      console.error(error);
+      res.status(500).json({ message: "Error al buscar el usuario" });
+    });
+});
+
 //ACTUALIZAR USUARIO
 
 server.put("/:id", (req, res, next) => {
-  const { name, lastName, email, password, phone, rol } = req.body;
+  const { name, lastName, email, password, phone , isactive, isadmin} = req.body;
   var userUpdate = {
     name,
     lastName,
     email,
     password,
     phone,
-    rol,
+    isactive,
+    isadmin
   };
 
   User.findOne({
@@ -101,7 +170,6 @@ server.delete("/:id", (req, res, next) => {
       res.send(error.message);
     });
 });
-
 
 //AGREGAR ITEM AL CARRITO
 

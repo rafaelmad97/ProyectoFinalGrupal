@@ -1,2 +1,6 @@
 
+src/config/config.json
 node_modules
+migrations
+*.exe
+upload

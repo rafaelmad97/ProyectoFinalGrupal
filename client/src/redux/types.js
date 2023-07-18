@@ -1,4 +1,3 @@
-
 export const ALL_PRODUCTS = "ALL_PRODUCTS";
 export const ERROR = "ERROR";
 export const GET_PRODUCTS = "GET_PRODUCTS";
@@ -6,3 +5,20 @@ export const ADD_PRODUCT = "ADD_PRODUCT";
 export const ALL_CATEGORY = "ALL_CATEGORY";
 export const ADD_USER = "ADD_USER";
 export const ALL_USER = "ALL_USER";
+export const SEARCH_PRODUCT = "SEARCH_PRODUCT";
+export const ADD_CARRITO = "ADD_CARRITO";
+export const DELETE_ONE_ITEM_CARRITO = "DELETE_ONE_ITEM_CARRITO";
+export const DELETE_ALL_ITEMS_CARRITO = "DELETE_ALL_ITEMS_CARRITO";
+export const CLEAN_CARRITO = "CLEAN_CARRITO";
+export const LOGIN_LOCAL = "LOGIN_LOCAL";
+export const LOGIN_GOOGLE = "LOGIN_GOOGLE";
+export const LOGOUT = "LOGOUT";
+export const ORDER_BY_PRICE = "ORDER_BY_PRICE";
+export const FILTER_BY_CATEGORY = "FILTER_BY_CATEGORY";
+export const FILTER_BY_DATE = "FILTER_BY_DATE";
+export const ORDER_BY_DATE = "ORDER_BY_DATE";
+export const VIEW_REVIEW = "VIEW_REVIEW";
+export const ADD_REVIEW = "ADD_REVIEW";
+export const CLEAN_FILTER_CATEGORY = "CLEAN_FILTER_CATEGORY";
+export const CLEAN_DETAIL = "CLEAN_DETAIL";
+

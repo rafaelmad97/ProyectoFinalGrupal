@@ -6,6 +6,10 @@ module.exports = (sequelize) => {
     .define(
       "User",
       {
+        id: {
+          type: DataTypes.FLOAT,
+          primaryKey: true,
+        },
         name: {
           type: DataTypes.TEXT,
           allowNull: false,
@@ -55,14 +59,15 @@ module.exports = (sequelize) => {
 
         phone: {
           type: DataTypes.STRING,
-          unique: true,
         },
 
-        // rol: {
-        //   type: DataTypes.ENUM,
-        //   values: ["user", "admin"],
-        //   defaultValue: "user",
-        // },
+        isactive: {
+          type: DataTypes.BOOLEAN,
+        },
+
+        isadmin: {
+          type: DataTypes.BOOLEAN,
+        },
       },
       { freezeTableName: true, timestamps: false }
     )
